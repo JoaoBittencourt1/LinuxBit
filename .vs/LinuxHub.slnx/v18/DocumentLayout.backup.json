@@ -1,0 +1,138 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\joaov\\source\\repos\\LinuxHub\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E19D4702-F1BA-4A29-AF5B-1CE58EAF3DDB}|LinuxHub\\LinuxHub.csproj|c:\\users\\joaov\\source\\repos\\linuxhub\\linuxhub\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{E19D4702-F1BA-4A29-AF5B-1CE58EAF3DDB}|LinuxHub\\LinuxHub.csproj|solutionrelative:linuxhub\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E19D4702-F1BA-4A29-AF5B-1CE58EAF3DDB}|LinuxHub\\LinuxHub.csproj|c:\\users\\joaov\\source\\repos\\linuxhub\\linuxhub\\models\\isoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E19D4702-F1BA-4A29-AF5B-1CE58EAF3DDB}|LinuxHub\\LinuxHub.csproj|solutionrelative:linuxhub\\models\\isoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E19D4702-F1BA-4A29-AF5B-1CE58EAF3DDB}|LinuxHub\\LinuxHub.csproj|c:\\users\\joaov\\source\\repos\\linuxhub\\linuxhub\\models\\bootservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E19D4702-F1BA-4A29-AF5B-1CE58EAF3DDB}|LinuxHub\\LinuxHub.csproj|solutionrelative:linuxhub\\models\\bootservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E19D4702-F1BA-4A29-AF5B-1CE58EAF3DDB}|LinuxHub\\LinuxHub.csproj|c:\\users\\joaov\\source\\repos\\linuxhub\\linuxhub\\models\\diskservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E19D4702-F1BA-4A29-AF5B-1CE58EAF3DDB}|LinuxHub\\LinuxHub.csproj|solutionrelative:linuxhub\\models\\diskservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E19D4702-F1BA-4A29-AF5B-1CE58EAF3DDB}|LinuxHub\\LinuxHub.csproj|c:\\users\\joaov\\source\\repos\\linuxhub\\linuxhub\\models\\distro.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E19D4702-F1BA-4A29-AF5B-1CE58EAF3DDB}|LinuxHub\\LinuxHub.csproj|solutionrelative:linuxhub\\models\\distro.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E19D4702-F1BA-4A29-AF5B-1CE58EAF3DDB}|LinuxHub\\LinuxHub.csproj|c:\\users\\joaov\\source\\repos\\linuxhub\\linuxhub\\linuxhub.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{E19D4702-F1BA-4A29-AF5B-1CE58EAF3DDB}|LinuxHub\\LinuxHub.csproj|solutionrelative:linuxhub\\linuxhub.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E19D4702-F1BA-4A29-AF5B-1CE58EAF3DDB}|LinuxHub\\LinuxHub.csproj|c:\\users\\joaov\\source\\repos\\linuxhub\\linuxhub\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E19D4702-F1BA-4A29-AF5B-1CE58EAF3DDB}|LinuxHub\\LinuxHub.csproj|solutionrelative:linuxhub\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IsoService.cs",
+              "DocumentMoniker": "C:\\Users\\joaov\\source\\repos\\LinuxHub\\LinuxHub\\Models\\IsoService.cs",
+              "RelativeDocumentMoniker": "LinuxHub\\Models\\IsoService.cs",
+              "ToolTip": "C:\\Users\\joaov\\source\\repos\\LinuxHub\\LinuxHub\\Models\\IsoService.cs",
+              "RelativeToolTip": "LinuxHub\\Models\\IsoService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T20:34:45.633Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "BootService.cs",
+              "DocumentMoniker": "C:\\Users\\joaov\\source\\repos\\LinuxHub\\LinuxHub\\Models\\BootService.cs",
+              "RelativeDocumentMoniker": "LinuxHub\\Models\\BootService.cs",
+              "ToolTip": "C:\\Users\\joaov\\source\\repos\\LinuxHub\\LinuxHub\\Models\\BootService.cs",
+              "RelativeToolTip": "LinuxHub\\Models\\BootService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T20:34:03.95Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DiskService.cs",
+              "DocumentMoniker": "C:\\Users\\joaov\\source\\repos\\LinuxHub\\LinuxHub\\Models\\DiskService.cs",
+              "RelativeDocumentMoniker": "LinuxHub\\Models\\DiskService.cs",
+              "ToolTip": "C:\\Users\\joaov\\source\\repos\\LinuxHub\\LinuxHub\\Models\\DiskService.cs",
+              "RelativeToolTip": "LinuxHub\\Models\\DiskService.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAlwBAAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T20:33:34.143Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Distro.cs",
+              "DocumentMoniker": "C:\\Users\\joaov\\source\\repos\\LinuxHub\\LinuxHub\\Models\\Distro.cs",
+              "RelativeDocumentMoniker": "LinuxHub\\Models\\Distro.cs",
+              "ToolTip": "C:\\Users\\joaov\\source\\repos\\LinuxHub\\LinuxHub\\Models\\Distro.cs",
+              "RelativeToolTip": "LinuxHub\\Models\\Distro.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAYAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T20:32:27.901Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "LinuxHub",
+              "DocumentMoniker": "C:\\Users\\joaov\\source\\repos\\LinuxHub\\LinuxHub\\LinuxHub.csproj",
+              "RelativeDocumentMoniker": "LinuxHub\\LinuxHub.csproj",
+              "ToolTip": "C:\\Users\\joaov\\source\\repos\\LinuxHub\\LinuxHub\\LinuxHub.csproj",
+              "RelativeToolTip": "LinuxHub\\LinuxHub.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-12-02T20:29:35.762Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\joaov\\source\\repos\\LinuxHub\\LinuxHub\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "LinuxHub\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\joaov\\source\\repos\\LinuxHub\\LinuxHub\\MainWindow.xaml",
+              "RelativeToolTip": "LinuxHub\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-12-02T20:28:12.077Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\joaov\\source\\repos\\LinuxHub\\LinuxHub\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "LinuxHub\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\joaov\\source\\repos\\LinuxHub\\LinuxHub\\MainWindow.xaml.cs",
+              "RelativeToolTip": "LinuxHub\\MainWindow.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T20:28:10.637Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
