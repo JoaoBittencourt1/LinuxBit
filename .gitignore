@@ -1,0 +1,24 @@
+# Visual Studio
+.vs/
+
+# Build outputs
+bin/
+obj/
+
+# Temporary files
+*.user
+*.suo
+*.cache
+*.vsp
+*.pdb
+*.dbmdl
+
+# VS Cache
+*.futdcache.v2
+*.dtbcache.v2
+
+# WPF generated files
+*.g.cs
+*.g.i.cs
+*.baml
+*.g.resources

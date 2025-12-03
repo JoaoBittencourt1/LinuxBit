@@ -1,19 +1,64 @@
 ﻿<Window x:Class="LinuxHub.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="LinuxHub" Height="480" Width="820" Background="#1c1c1c" WindowStartupLocation="CenterScreen">
-    <Grid Margin="20">
-        <TextBlock Text="LinuxHub" 
-                   Foreground="White" 
-                   FontSize="32" 
-                   FontWeight="Bold"
-                   VerticalAlignment="Top"/>
+        Title="LinuxHub" Height="500" Width="900" Background="#1c1c1c" WindowStartupLocation="CenterScreen">
 
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button Content="Escolher uma distribuição Linux" Width="320" Height="45" Margin="0 10"/>
-            <Button Content="Instalar sem pendrive" Width="320" Height="45" Margin="0 10"/>
-            <Button Content="Guia Linux" Width="320" Height="45" Margin="0 10"/>
-        </StackPanel>
+    <Grid Margin="10">
+
+        <!-- Título -->
+        <TextBlock Text="LinuxHub"
+                   FontSize="32"
+                   FontWeight="Bold"
+                   Foreground="White"
+                   VerticalAlignment="Top"
+                   Margin="10"/>
+
+        <!-- Abas -->
+        <TabControl Margin="10,70,10,10"
+                    Background="#202020"
+                    Foreground="White"
+                    BorderBrush="#333">
+
+            <!-- ABA 1: DISTROS -->
+            <TabItem Header="Distribuições">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <WrapPanel Margin="10">
+
+                        <!-- Quadradinhos das distros -->
+                        <Border Width="120" Height="120" Background="#333" CornerRadius="8" Margin="10"/>
+                        <Border Width="120" Height="120" Background="#333" CornerRadius="8" Margin="10"/>
+                        <Border Width="120" Height="120" Background="#333" CornerRadius="8" Margin="10"/>
+                        <Border Width="120" Height="120" Background="#333" CornerRadius="8" Margin="10"/>
+                        <Border Width="120" Height="120" Background="#333" CornerRadius="8" Margin="10"/>
+                        <Border Width="120" Height="120" Background="#333" CornerRadius="8" Margin="10"/>
+
+                    </WrapPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- ABA 2: INSTALAÇÃO -->
+            <TabItem Header="Instalação">
+                <Grid Background="#222">
+                    <TextBlock Text="Painel de Instalação"
+                               Foreground="White"
+                               FontSize="20"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </TabItem>
+
+            <!-- ABA 3: GUIA / AJUDA -->
+            <TabItem Header="Ajuda">
+                <Grid Background="#222">
+                    <TextBlock Text="Ajuda"
+                               Foreground="White"
+                               FontSize="20"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
 
     </Grid>
 </Window>
