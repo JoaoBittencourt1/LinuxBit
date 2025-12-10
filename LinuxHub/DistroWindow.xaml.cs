@@ -26,7 +26,7 @@ namespace LinuxHub // nome meio merda mas fazer oq
             DistroImage.Source = new BitmapImage(new System.Uri(imagePath, System.UriKind.RelativeOrAbsolute)); // isso aqui ainda vai quebrar e eu não vou saber como
 
             downloadLink = link; // so link mudar em algum momento o problema não é meu
-            DistroDownload.Text = link;
+            DistroDownload.Text = "Clieque aqui para Baixar!";
         }
 
         private void DistroDownload_Click(object sender, MouseButtonEventArgs e)
