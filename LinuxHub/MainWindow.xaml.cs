@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.Net.WebRequestMethods;
 
 namespace LinuxHub
 {
@@ -107,11 +108,11 @@ namespace LinuxHub
             XubuntuPanel.MouseLeftButtonUp += (s, e) =>
             {
                 string name = "Xubuntu";
-                string description = "teste";
-                string imagePath = "pack://application:,,,/Assets/Images/Xubuntu.png";
-                string downloadLink = "O Xubuntu é uma distribuição Linux leve baseada no Ubuntu, usando o ambiente gráfico XFCE, perfeito para computadores com hardware mais modesto ou antigos. " +
+                string description = "O Xubuntu é uma distribuição Linux leve baseada no Ubuntu, usando o ambiente gráfico XFCE, perfeito para computadores com hardware mais modesto ou antigos. " +
 "Ele oferece uma interface simples, rápida e estável, mantendo a experiência familiar do Ubuntu. " +
 "Xubuntu é ideal para usuários que querem um sistema eficiente, responsivo e econômico em recursos, sem abrir mão da confiabilidade e da comunidade ativa do Ubuntu.";
+                string imagePath = "pack://application:,,,/Assets/Images/Xubuntu.png";
+                string downloadLink = "https://xubuntu.org/download/";
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
                 window.Show();
