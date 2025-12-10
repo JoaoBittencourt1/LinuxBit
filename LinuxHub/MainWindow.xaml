@@ -39,7 +39,7 @@
                         </StackPanel>
 
                         <!-- Mint -->
-                        <StackPanel Width="120" Height="150" Margin="10">
+                        <StackPanel x:Name="MintPanel" Width="120" Height="150" Margin="10">
                             <Border Width="120" Height="120" Background="#333" CornerRadius="8">
                                 <Image Source="pack://application:,,,/Assets/Images/mint.png" Stretch="Uniform"/>
                             </Border>
@@ -54,7 +54,7 @@
                         </StackPanel>
 
                         <!-- Zorin -->
-                        <StackPanel Width="120" Height="150" Margin="10">
+                        <StackPanel x:Name="ZorinPanel" Width="120" Height="150" Margin="10">
                             <Border Width="120" Height="120" Background="#333" CornerRadius="8">
                                 <Image Source="pack://application:,,,/Assets/Images/zorin.png" Stretch="Uniform"/>
                             </Border>
@@ -69,7 +69,7 @@
                         </StackPanel>
 
                         <!-- PopOs -->
-                        <StackPanel Width="120" Height="150" Margin="10">
+                        <StackPanel x:Name="PopPanel" Width="120" Height="150" Margin="10">
                             <Border Width="120" Height="120" Background="#333" CornerRadius="8">
                                 <Image Source="pack://application:,,,/Assets/Images/popos.png" Stretch="Uniform"/>
                             </Border>
@@ -84,7 +84,7 @@
                         </StackPanel>
 
                         <!-- Fedora -->
-                        <StackPanel Width="120" Height="150" Margin="10">
+                        <StackPanel x:Name="FedoraPanel" Width="120" Height="150" Margin="10">
                             <Border Width="120" Height="120" Background="#333" CornerRadius="8">
                                 <Image Source="pack://application:,,,/Assets/Images/fedora.png" Stretch="Uniform"/>
                             </Border>
@@ -99,7 +99,7 @@
                         </StackPanel>
 
                         <!-- Kubuntu -->
-                        <StackPanel Width="120" Height="150" Margin="10">
+                        <StackPanel x:Name="KubuntuPanel" Width="120" Height="150" Margin="10">
                             <Border Width="120" Height="120" Background="#333" CornerRadius="8">
                                 <Image Source="pack://application:,,,/Assets/Images/kubuntu.png" Stretch="Uniform"/>
                             </Border>
@@ -114,7 +114,7 @@
                         </StackPanel>
 
                         <!-- Xubuntu -->
-                        <StackPanel Width="120" Height="150" Margin="10">
+                        <StackPanel x:Name="XubuntuPanel" Width="120" Height="150" Margin="10">
                             <Border Width="120" Height="120" Background="#333" CornerRadius="8">
                                 <Image Source="pack://application:,,,/Assets/Images/xubuntu.png" Stretch="Uniform"/>
                             </Border>
@@ -129,7 +129,7 @@
                         </StackPanel>
 
                         <!-- Manjaro -->
-                        <StackPanel Width="120" Height="150" Margin="10">
+                        <StackPanel x:Name="ManjaroPanel" Width="120" Height="150" Margin="10">
                             <Border Width="120" Height="120" Background="#333" CornerRadius="8">
                                 <Image Source="pack://application:,,,/Assets/Images/manjaro.png" Stretch="Uniform"/>
                             </Border>
@@ -144,7 +144,7 @@
                         </StackPanel>
 
                         <!-- Arch -->
-                        <StackPanel Width="120" Height="150" Margin="10">
+                        <StackPanel x:Name="ArchPanel" Width="120" Height="150" Margin="10">
                             <Border Width="120" Height="120" Background="#333" CornerRadius="8">
                                 <Image Source="pack://application:,,,/Assets/Images/arch.png" Stretch="Uniform"/>
                             </Border>
@@ -159,7 +159,7 @@
                         </StackPanel>
 
                         <!-- EndeavourOS -->
-                        <StackPanel Width="120" Height="150" Margin="10">
+                        <StackPanel x:Name="EndeavourosPanel" Width="120" Height="150" Margin="10">
                             <Border Width="120" Height="120" Background="#333" CornerRadius="8">
                                 <Image Source="pack://application:,,,/Assets/Images/endeavouros.png" Stretch="Uniform"/>
                             </Border>
@@ -174,7 +174,7 @@
                         </StackPanel>
 
                         <!-- Kali Linux -->
-                        <StackPanel Width="120" Height="150" Margin="10">
+                        <StackPanel x:Name="KaliPanel" Width="120" Height="150" Margin="10">
                             <Border Width="120" Height="120" Background="#333" CornerRadius="8">
                                 <Image Source="pack://application:,,,/Assets/Images/kali.png" Stretch="Uniform"/>
                             </Border>
@@ -189,7 +189,7 @@
                         </StackPanel>
 
                         <!-- ChromeOS -->
-                        <StackPanel Width="120" Height="150" Margin="10">
+                        <StackPanel x:Name="ChromeosPanel" Width="120" Height="150" Margin="10">
                             <Border Width="120" Height="120" Background="#333" CornerRadius="8">
                                 <Image Source="pack://application:,,,/Assets/Images/chromeos.png" Stretch="Uniform"/>
                             </Border>
