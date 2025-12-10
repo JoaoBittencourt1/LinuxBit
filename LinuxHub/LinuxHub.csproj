@@ -9,7 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Images\arch.png" />
+    <None Remove="Assets\Images\chromeos.png" />
+    <None Remove="Assets\Images\endeavouros.png" />
+    <None Remove="Assets\Images\fedora.png" />
+    <None Remove="Assets\Images\kali.png" />
+    <None Remove="Assets\Images\kubuntu.png" />
+    <None Remove="Assets\Images\manjaro.png" />
+    <None Remove="Assets\Images\mint.png" />
+    <None Remove="Assets\Images\popos.png" />
     <None Remove="Assets\Images\Ubuntu.png" />
+    <None Remove="Assets\Images\xubuntu.png" />
+    <None Remove="Assets\Images\zorin.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,7 +32,40 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\Images\arch.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\chromeos.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\endeavouros.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\fedora.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\kali.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\kubuntu.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\manjaro.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\mint.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\popos.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Images\Ubuntu.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\xubuntu.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\zorin.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
