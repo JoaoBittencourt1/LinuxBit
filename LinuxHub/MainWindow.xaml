@@ -203,7 +203,7 @@
                             </Border>
                         </StackPanel>
 
-                        
+
                     </WrapPanel>
                 </ScrollViewer>
             </TabItem>
@@ -215,12 +215,24 @@
                     <TextBlock Text="Painel de Instalação" Foreground="White" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
             </TabItem>
-            <!-- ABA 3: GUIA / AJUDA -->
-            <TabItem Header="Ajuda">
-                <Grid Background="#222">
-                    <TextBlock Text="Ajuda" Foreground="White" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <!-- ABA 3: Sobre -->
+            <TabItem Header="Sobre">
+                <Grid Background="#222222">
+                    <Border Padding="20">
+                        <TextBlock 
+                Text="O ícone Tux foi criado originalmente por Larry Ewing usando GIMP, e é usado sob licença aberta." 
+                Foreground="White" 
+                FontSize="18" 
+                TextWrapping="Wrap" 
+                TextAlignment="Center" 
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Top" Margin="3,-10,0,0"/>
+                    </Border>
                 </Grid>
             </TabItem>
+
+
+
 
 
         </TabControl>

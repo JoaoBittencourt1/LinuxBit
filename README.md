@@ -1,4 +1,4 @@
-# LinuxHub
+# LinuxHub ![ícone](LinuxHub/Assets/Icons/favicon(6).ico) ![ícone](LinuxHub/Assets/Icons/favicon(5).ico) ![ícone](LinuxHub/Assets/Icons/favicon(4).ico) ![ícone](LinuxHub/Assets/Icons/favicon(3).ico) ![ícone](LinuxHub/Assets/Icons/favicon(2).ico) ![ícone](LinuxHub/Assets/Icons/favicon(1).ico)
 
 
 LinuxHub é um portal de distros Linux que permite aos usuários explorar diferentes distribuições, conhecer suas principais características, qualidades e defeitos, visualizar imagens e vídeos, e até baixar e instalar as distros diretamente pelo software.

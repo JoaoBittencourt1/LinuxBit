@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\Icons\favicon(6).ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Assets\Icons\" />
+    <Content Include="Assets\Icons\favicon(6).ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Commands\" />
     <Folder Include="Helpers\" />
     <Folder Include="Services\" />
