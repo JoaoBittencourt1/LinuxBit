@@ -9,12 +9,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Images\Ubuntu.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Assets\Icons\" />
-    <Folder Include="Assets\Images\" />
     <Folder Include="Commands\" />
     <Folder Include="Helpers\" />
     <Folder Include="Services\" />
     <Folder Include="Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Images\Ubuntu.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

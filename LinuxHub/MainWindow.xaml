@@ -23,14 +23,117 @@
             <TabItem Header="Distribuições">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <WrapPanel Margin="10">
+                        <!-- Ubuntu -->
+                        <StackPanel Width="120" Height="150" Margin="10">
+                            <Border Width="120" Height="120" Background="#333" CornerRadius="8">
+                                <Image Source="pack://application:,,,/Assets/Images/ubuntu.png" Stretch="Uniform"/>
+                            </Border>
+                            <ProgressBar Height="20" Margin="0,5,0,0"/>
+                        </StackPanel>
 
-                        <!-- Quadradinhos das distros -->
-                        <Border Width="120" Height="120" Background="#333" CornerRadius="8" Margin="10"/>
-                        <Border Width="120" Height="120" Background="#333" CornerRadius="8" Margin="10"/>
-                        <Border Width="120" Height="120" Background="#333" CornerRadius="8" Margin="10"/>
-                        <Border Width="120" Height="120" Background="#333" CornerRadius="8" Margin="10"/>
-                        <Border Width="120" Height="120" Background="#333" CornerRadius="8" Margin="10"/>
-                        <Border Width="120" Height="120" Background="#333" CornerRadius="8" Margin="10"/>
+                        <!-- Mint -->
+                        <StackPanel Width="120" Height="150" Margin="10">
+                            <Border Width="120" Height="120" Background="#333" CornerRadius="8">
+                                <Image Source="Assets/mint.png" Stretch="Uniform"/>
+                            </Border>
+                            <ProgressBar Height="20" Margin="0,5,0,0"/>
+                        </StackPanel>
+
+                        <!-- Zorin -->
+                        <StackPanel Width="120" Height="150" Margin="10">
+                            <Border Width="120" Height="120" Background="#333" CornerRadius="8">
+                                <Image Source="Assets/zorin.png" Stretch="Uniform"/>
+                            </Border>
+                            <ProgressBar Height="20" Margin="0,5,0,0"/>
+                        </StackPanel>
+
+                        <!-- PopOs -->
+                        <StackPanel Width="120" Height="150" Margin="10">
+                            <Border Width="120" Height="120" Background="#333" CornerRadius="8">
+                                <Image Source="Assets/popos.png" Stretch="Uniform"/>
+                            </Border>
+                            <ProgressBar Height="20" Margin="0,5,0,0"/>
+                        </StackPanel>
+
+                        <!-- Fedora -->
+                        <StackPanel Width="120" Height="150" Margin="10">
+                            <Border Width="120" Height="120" Background="#333" CornerRadius="8">
+                                <Image Source="Assets/fedora.png" Stretch="Uniform"/>
+                            </Border>
+                            <ProgressBar Height="20" Margin="0,5,0,0"/>
+                        </StackPanel>
+
+                        <!-- Kubuntu -->
+                        <StackPanel Width="120" Height="150" Margin="10">
+                            <Border Width="120" Height="120" Background="#333" CornerRadius="8">
+                                <Image Source="Assets/kubuntu.png" Stretch="Uniform"/>
+                            </Border>
+                            <ProgressBar Height="20" Margin="0,5,0,0"/>
+                        </StackPanel>
+
+                        <!-- Xubuntu -->
+                        <StackPanel Width="120" Height="150" Margin="10">
+                            <Border Width="120" Height="120" Background="#333" CornerRadius="8">
+                                <Image Source="Assets/xubuntu.png" Stretch="Uniform"/>
+                            </Border>
+                            <ProgressBar Height="20" Margin="0,5,0,0"/>
+                        </StackPanel>
+
+                        <!-- Manjaro -->
+                        <StackPanel Width="120" Height="150" Margin="10">
+                            <Border Width="120" Height="120" Background="#333" CornerRadius="8">
+                                <Image Source="Assets/manjaro.png" Stretch="Uniform"/>
+                            </Border>
+                            <ProgressBar Height="20" Margin="0,5,0,0"/>
+                        </StackPanel>
+
+                        <!-- Arch -->
+                        <StackPanel Width="120" Height="150" Margin="10">
+                            <Border Width="120" Height="120" Background="#333" CornerRadius="8">
+                                <Image Source="Assets/arch.png" Stretch="Uniform"/>
+                            </Border>
+                            <ProgressBar Height="20" Margin="0,5,0,0"/>
+                        </StackPanel>
+
+                        <!-- EndeavourOS -->
+                        <StackPanel Width="120" Height="150" Margin="10">
+                            <Border Width="120" Height="120" Background="#333" CornerRadius="8">
+                                <Image Source="Assets/endeavouros.png" Stretch="Uniform"/>
+                            </Border>
+                            <ProgressBar Height="20" Margin="0,5,0,0"/>
+                        </StackPanel>
+
+                        <!-- Kali Linux -->
+                        <StackPanel Width="120" Height="150" Margin="10">
+                            <Border Width="120" Height="120" Background="#333" CornerRadius="8">
+                                <Image Source="Assets/kali.png" Stretch="Uniform"/>
+                            </Border>
+                            <ProgressBar Height="20" Margin="0,5,0,0"/>
+                        </StackPanel>
+
+                        <!-- NixOS -->
+                        <StackPanel Width="120" Height="150" Margin="10">
+                            <Border Width="120" Height="120" Background="#333" CornerRadius="8">
+                                <Image Source="Assets/nixos.png" Stretch="Uniform"/>
+                            </Border>
+                            <ProgressBar Height="20" Margin="0,5,0,0"/>
+                        </StackPanel>
+
+                        <!-- ChromeOS -->
+                        <StackPanel Width="120" Height="150" Margin="10">
+                            <Border Width="120" Height="120" Background="#333" CornerRadius="8">
+                                <Image Source="Assets/chromeos.png" Stretch="Uniform"/>
+                            </Border>
+                            <ProgressBar Height="20" Margin="0,5,0,0"/>
+                        </StackPanel>
+
+                        <!-- EndeavourOS (repetido) -->
+                        <StackPanel Width="120" Height="150" Margin="10">
+                            <Border Width="120" Height="120" Background="#333" CornerRadius="8">
+                                <Image Source="Assets/endeavouros.png" Stretch="Uniform"/>
+                            </Border>
+                            <ProgressBar Height="20" Margin="0,5,0,0"/>
+                        </StackPanel>
 
                     </WrapPanel>
                 </ScrollViewer>
@@ -39,24 +142,16 @@
             <!-- ABA 2: INSTALAÇÃO -->
             <TabItem Header="Instalação">
                 <Grid Background="#222">
-                    <TextBlock Text="Painel de Instalação"
-                               Foreground="White"
-                               FontSize="20"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"/>
+                    <TextBlock Text="Painel de Instalação" Foreground="White" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
             </TabItem>
-
             <!-- ABA 3: GUIA / AJUDA -->
             <TabItem Header="Ajuda">
                 <Grid Background="#222">
-                    <TextBlock Text="Ajuda"
-                               Foreground="White"
-                               FontSize="20"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"/>
+                    <TextBlock Text="Ajuda" Foreground="White" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
             </TabItem>
+
 
         </TabControl>
 
