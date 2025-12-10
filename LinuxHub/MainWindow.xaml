@@ -24,7 +24,7 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <WrapPanel Margin="10">
                         <!-- Ubuntu -->
-                        <StackPanel Width="120" Height="150" Margin="10">
+                        <StackPanel x:Name="UbuntuPanel" Width="120" Height="150" Margin="10">
                             <Border Width="120" Height="120" Background="#333" CornerRadius="8">
                                 <Image Source="pack://application:,,,/Assets/Images/ubuntu.png" Stretch="Uniform"/>
                             </Border>

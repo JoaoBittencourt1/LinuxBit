@@ -1,0 +1,51 @@
+﻿<Window x:Class="LinuxHub.DistroWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Distribuição" Height="450" Width="800" Background="#1c1c1c" WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Imagem da distro -->
+        <Border Grid.Column="0" Background="#333" CornerRadius="8" Margin="10">
+            <Image x:Name="DistroImage" Stretch="Uniform"/>
+        </Border>
+
+        <!-- Painel de informações -->
+        <StackPanel Grid.Column="1" Margin="20,10" VerticalAlignment="Top">
+            <!-- Nome -->
+            <TextBlock x:Name="DistroName"
+                       Foreground="White"
+                       FontSize="32"
+                       FontWeight="Bold"
+                       Margin="0,0,0,10"/>
+
+            <!-- Descrição -->
+            <TextBlock x:Name="DistroDescription"
+                       Foreground="White"
+                       FontSize="16"
+                       TextWrapping="Wrap"
+                       TextAlignment="Left"
+                       Margin="0,0,0,20"/>
+
+            <!-- Seção de download -->
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Download: "
+                           Foreground="White"
+                           FontSize="16"
+                           VerticalAlignment="Center"/>
+
+                <TextBlock x:Name="DistroDownload"
+                           Foreground="LightBlue"
+                           FontSize="16"
+                           TextDecorations="Underline"
+                           Cursor="Hand"
+                           VerticalAlignment="Center"
+                           MouseLeftButtonUp="DistroDownload_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
