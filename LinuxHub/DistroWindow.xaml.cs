@@ -27,7 +27,7 @@ namespace LinuxHub // nome meio merda mas fazer oq
         {
             var hwnd = new WindowInteropHelper(this).Handle;
             int darkMode = 1;
-
+            // o que isso vai quebrar em alguma versão do windows não ta escrito
             // DWMWA_USE_IMMERSIVE_DARK_MODE = 20 no Win 11  
             DwmSetWindowAttribute(hwnd, 20, ref darkMode, Marshal.SizeOf(typeof(int)));
         }
@@ -86,12 +86,18 @@ namespace LinuxHub // nome meio merda mas fazer oq
             }
             else if (item is string imagePath)
             {
-                CarouselContent.Content = new Image
+                var img = new Image
                 {
                     Source = new BitmapImage(new Uri(imagePath, UriKind.RelativeOrAbsolute)),
-                    Stretch = Stretch.Uniform
+                    Stretch = Stretch.Uniform,
+                    Cursor = Cursors.Hand
                 };
+
+                img.MouseLeftButtonUp += (s, e) => OpenImageFull(imagePath);
+
+                CarouselContent.Content = img;
             }
+
         }
 
 
@@ -112,6 +118,13 @@ namespace LinuxHub // nome meio merda mas fazer oq
         {
             carouselIndex = (carouselIndex - 1 + carouselItems.Count) % carouselItems.Count;
             UpdateCarousel();
+        }
+
+        private void OpenImageFull(string imagePath)
+        {
+            var win = new ImageViewerWindow(imagePath);
+            win.Owner = this;
+            win.ShowDialog();
         }
 
 

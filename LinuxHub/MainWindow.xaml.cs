@@ -73,6 +73,12 @@ namespace LinuxHub
                 string downloadLink = "https://linuxmint.com/download.php"; 
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+
+                window.LoadCarousel(
+                    "pack://application:,,,/Assets/Images/Mint/Mint1.png",  
+                    "pack://application:,,,/Assets/Images/Mint/mint2.png"
+                );
+
                 window.Show();
             };
             ZorinPanel.MouseLeftButtonUp += (s, e) =>
@@ -208,7 +214,7 @@ namespace LinuxHub
                 window.Show();
             };
 
-            // eu escrevi algumas dessas descrições mas a preguiça bateu e botei o gpt pra ralar.
+            // eu escrevi algumas dessas descrições mas a preguiça bateu e botei o gpt pra ralar. ISSO PRA DAR SUPORTE VAI SER UM INFERNO!!!! preguiça hoje trabalho amanha
 
         }
     }

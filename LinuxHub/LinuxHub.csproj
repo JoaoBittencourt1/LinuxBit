@@ -18,6 +18,8 @@
     <None Remove="Assets\Images\kubuntu.png" />
     <None Remove="Assets\Images\manjaro.png" />
     <None Remove="Assets\Images\mint.png" />
+    <None Remove="Assets\Images\Mint\Mint1.png" />
+    <None Remove="Assets\Images\Mint\mint2.png" />
     <None Remove="Assets\Images\popos.png" />
     <None Remove="Assets\Images\Ubuntu.png" />
     <None Remove="Assets\Images\Ubuntu\ubuntu1.jpg" />
@@ -60,6 +62,12 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Images\mint.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Mint\Mint1.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Mint\mint2.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Images\popos.png">
