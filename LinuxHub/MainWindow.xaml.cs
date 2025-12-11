@@ -101,6 +101,13 @@ namespace LinuxHub
                 window.Owner = this;
                 this.Hide();
 
+                window.LoadCarousel(
+                    "pack://application:,,,/Assets/Images/Zorin/zorin1.png",
+                    "pack://application:,,,/Assets/Images/Zorin/zorin2.jpg",
+                    "pack://application:,,,/Assets/Images/Zorin/zorin3.jpg"
+                    
+                );
+
                 window.Show();
             };
             PopPanel.MouseLeftButtonUp += (s, e) =>
