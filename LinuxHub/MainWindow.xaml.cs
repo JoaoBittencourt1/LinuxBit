@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -48,7 +49,8 @@ namespace LinuxHub
                 string downloadLink = "https://ubuntu.com/download/desktop"; // pq karalhos minha net tinha que ficar ruim justo quando testo a porra de um site
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
-                
+                window.Owner = this;   
+                this.Hide();
 
                 window.LoadCarousel(
                     "pack://application:,,,/Assets/Images/Ubuntu/ubuntu1.jpg", // pq NAO ABRE QUANDO EU ABRO NO /UBUNTU/UBUNTU1.JPG MAS ABRE SE EU ABRIR AS IMAGENS DAS DISTROS 
@@ -73,6 +75,8 @@ namespace LinuxHub
                 string downloadLink = "https://linuxmint.com/download.php"; 
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
 
                 window.LoadCarousel(
                     "pack://application:,,,/Assets/Images/Mint/Mint1.png",  
@@ -94,6 +98,9 @@ namespace LinuxHub
                 string downloadLink = "https://zorin.com/os/download/"; 
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
             PopPanel.MouseLeftButtonUp += (s, e) =>
@@ -109,6 +116,9 @@ namespace LinuxHub
                 string downloadLink = "https://system76.com/pop/?srsltid=AfmBOop3UGv4zcy_41dAXa9YAaxUgtsWEs5I928XYaMBB475zcDMxBBj";
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
             FedoraPanel.MouseLeftButtonUp += (s, e) =>
@@ -122,6 +132,9 @@ namespace LinuxHub
                 string downloadLink = "https://www.fedoraproject.org/pt-br/workstation/download";
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
             KubuntuPanel.MouseLeftButtonUp += (s, e) =>
@@ -134,6 +147,9 @@ namespace LinuxHub
                 string downloadLink = "https://kubuntu.org/archives/getkubuntu.html";
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
             XubuntuPanel.MouseLeftButtonUp += (s, e) =>
@@ -146,6 +162,9 @@ namespace LinuxHub
                 string downloadLink = "https://xubuntu.org/download/";
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
             ManjaroPanel.MouseLeftButtonUp += (s, e) => 
@@ -158,6 +177,9 @@ namespace LinuxHub
                 string downloadLink = "https://manjaro.org/products/download/x86";
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
 
@@ -172,6 +194,9 @@ namespace LinuxHub
                 string downloadLink = "https://archlinux.org/download/";
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
 
@@ -185,6 +210,9 @@ namespace LinuxHub
                 string downloadLink = "https://endeavouros.com/";
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
 
@@ -198,6 +226,9 @@ namespace LinuxHub
                 string downloadLink = "https://www.kali.org/get-kali/#kali-installer-images";
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
 
@@ -211,6 +242,9 @@ namespace LinuxHub
                 string downloadLink = "https://chromeos.google/intl/pt_br/products/chromeos-flex/";
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
 

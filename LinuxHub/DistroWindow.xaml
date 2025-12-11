@@ -9,6 +9,21 @@
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
 
+        <!-- Botão de voltar -->
+        <Button x:Name="BackButton"
+        Content="← Voltar"
+        Width="90"
+        Height="34"
+        Padding="6,2"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        Margin="0,0,0,10"
+        Click="BackButton_Click"
+        Background="white"
+        BorderBrush="White"
+        Cursor="Hand"
+        Panel.ZIndex="10"/>
+
         <!-- Imagem da distro -->
         <Border Grid.Column="0" Background="Transparent" CornerRadius="8" Margin="10">
             <Image x:Name="DistroImage" Stretch="Uniform"/>

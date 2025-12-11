@@ -46,6 +46,8 @@ namespace LinuxHub // nome meio merda mas fazer oq
 
             downloadLink = link; // so link mudar em algum momento o problema não é meu
             DistroDownload.Text = "Clieque aqui para Baixar!";
+
+
         }
 
         private void DistroDownload_Click(object sender, MouseButtonEventArgs e)
@@ -66,6 +68,9 @@ namespace LinuxHub // nome meio merda mas fazer oq
                 }
             }
         }
+
+      
+
 
         private void UpdateCarousel()
         {
@@ -126,6 +131,18 @@ namespace LinuxHub // nome meio merda mas fazer oq
             win.Owner = this;
             win.ShowDialog();
         }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.Owner != null)
+            {
+                this.Owner.Show();
+                this.Owner.Activate();
+            }
+
+            this.Close();
+        }
+
 
 
     }
