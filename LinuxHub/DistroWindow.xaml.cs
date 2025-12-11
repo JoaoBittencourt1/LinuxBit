@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -20,9 +22,23 @@ namespace LinuxHub // nome meio merda mas fazer oq
 
         private List<object> carouselItems = new();
         private int carouselIndex = 0;
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            var hwnd = new WindowInteropHelper(this).Handle;
+            int darkMode = 1;
+            // o que isso vai quebrar em alguma versão do windows não ta escrito
+            // DWMWA_USE_IMMERSIVE_DARK_MODE = 20 no Win 11  
+            DwmSetWindowAttribute(hwnd, 20, ref darkMode, Marshal.SizeOf(typeof(int)));
+        }
+
+        [DllImport("dwmapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
         public DistroWindow(string name, string description, string imagePath, string link)
         {
             InitializeComponent();
+
+            Loaded += MainWindow_Loaded;
 
             DistroName.Text = name;
             DistroDescription.Text = description;
@@ -30,6 +46,8 @@ namespace LinuxHub // nome meio merda mas fazer oq
 
             downloadLink = link; // so link mudar em algum momento o problema não é meu
             DistroDownload.Text = "Clieque aqui para Baixar!";
+
+
         }
 
         private void DistroDownload_Click(object sender, MouseButtonEventArgs e)
@@ -51,6 +69,9 @@ namespace LinuxHub // nome meio merda mas fazer oq
             }
         }
 
+      
+
+
         private void UpdateCarousel()
         {
             if (carouselItems.Count == 0)
@@ -70,12 +91,18 @@ namespace LinuxHub // nome meio merda mas fazer oq
             }
             else if (item is string imagePath)
             {
-                CarouselContent.Content = new Image
+                var img = new Image
                 {
                     Source = new BitmapImage(new Uri(imagePath, UriKind.RelativeOrAbsolute)),
-                    Stretch = Stretch.Uniform
+                    Stretch = Stretch.Uniform,
+                    Cursor = Cursors.Hand
                 };
+
+                img.MouseLeftButtonUp += (s, e) => OpenImageFull(imagePath);
+
+                CarouselContent.Content = img;
             }
+
         }
 
 
@@ -97,6 +124,25 @@ namespace LinuxHub // nome meio merda mas fazer oq
             carouselIndex = (carouselIndex - 1 + carouselItems.Count) % carouselItems.Count;
             UpdateCarousel();
         }
+
+        private void OpenImageFull(string imagePath)
+        {
+            var win = new ImageViewerWindow(imagePath);
+            win.Owner = this;
+            win.ShowDialog();
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.Owner != null)
+            {
+                this.Owner.Show();
+                this.Owner.Activate();
+            }
+
+            this.Close();
+        }
+
 
 
     }

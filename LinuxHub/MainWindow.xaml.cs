@@ -1,9 +1,12 @@
-﻿using System.Text;
+﻿using System;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -15,10 +18,24 @@ namespace LinuxHub
     
     public partial class MainWindow : Window
     {
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            var hwnd = new WindowInteropHelper(this).Handle;
+            int darkMode = 1;
+
+            // DWMWA_USE_IMMERSIVE_DARK_MODE = 20 no Win 11  
+            DwmSetWindowAttribute(hwnd, 20, ref darkMode, Marshal.SizeOf(typeof(int)));
+        }
+
+        [DllImport("dwmapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
         public MainWindow()
         {
             // esse codigo logo logo vai ficar um saco de dar suporte, tenho que dar um jeito de arrumar isso
             InitializeComponent();
+
+            Loaded += MainWindow_Loaded;
 
             UbuntuPanel.MouseLeftButtonUp += (s, e) =>
             {
@@ -32,7 +49,8 @@ namespace LinuxHub
                 string downloadLink = "https://ubuntu.com/download/desktop"; // pq karalhos minha net tinha que ficar ruim justo quando testo a porra de um site
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
-                
+                window.Owner = this;   
+                this.Hide();
 
                 window.LoadCarousel(
                     "pack://application:,,,/Assets/Images/Ubuntu/ubuntu1.jpg", // pq NAO ABRE QUANDO EU ABRO NO /UBUNTU/UBUNTU1.JPG MAS ABRE SE EU ABRIR AS IMAGENS DAS DISTROS 
@@ -57,6 +75,14 @@ namespace LinuxHub
                 string downloadLink = "https://linuxmint.com/download.php"; 
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
+                window.LoadCarousel(
+                    "pack://application:,,,/Assets/Images/Mint/Mint1.png",  
+                    "pack://application:,,,/Assets/Images/Mint/mint2.png"
+                );
+
                 window.Show();
             };
             ZorinPanel.MouseLeftButtonUp += (s, e) =>
@@ -72,6 +98,9 @@ namespace LinuxHub
                 string downloadLink = "https://zorin.com/os/download/"; 
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
             PopPanel.MouseLeftButtonUp += (s, e) =>
@@ -87,6 +116,9 @@ namespace LinuxHub
                 string downloadLink = "https://system76.com/pop/?srsltid=AfmBOop3UGv4zcy_41dAXa9YAaxUgtsWEs5I928XYaMBB475zcDMxBBj";
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
             FedoraPanel.MouseLeftButtonUp += (s, e) =>
@@ -100,6 +132,9 @@ namespace LinuxHub
                 string downloadLink = "https://www.fedoraproject.org/pt-br/workstation/download";
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
             KubuntuPanel.MouseLeftButtonUp += (s, e) =>
@@ -112,6 +147,9 @@ namespace LinuxHub
                 string downloadLink = "https://kubuntu.org/archives/getkubuntu.html";
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
             XubuntuPanel.MouseLeftButtonUp += (s, e) =>
@@ -124,6 +162,9 @@ namespace LinuxHub
                 string downloadLink = "https://xubuntu.org/download/";
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
             ManjaroPanel.MouseLeftButtonUp += (s, e) => 
@@ -136,6 +177,9 @@ namespace LinuxHub
                 string downloadLink = "https://manjaro.org/products/download/x86";
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
 
@@ -150,6 +194,9 @@ namespace LinuxHub
                 string downloadLink = "https://archlinux.org/download/";
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
 
@@ -163,6 +210,9 @@ namespace LinuxHub
                 string downloadLink = "https://endeavouros.com/";
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
 
@@ -176,6 +226,9 @@ namespace LinuxHub
                 string downloadLink = "https://www.kali.org/get-kali/#kali-installer-images";
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
 
@@ -189,10 +242,13 @@ namespace LinuxHub
                 string downloadLink = "https://chromeos.google/intl/pt_br/products/chromeos-flex/";
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                window.Owner = this;
+                this.Hide();
+
                 window.Show();
             };
 
-            // eu escrevi algumas dessas descrições mas a preguiça bateu e botei o gpt pra ralar.
+            // eu escrevi algumas dessas descrições mas a preguiça bateu e botei o gpt pra ralar. ISSO PRA DAR SUPORTE VAI SER UM INFERNO!!!! preguiça hoje trabalho amanha
 
         }
     }
