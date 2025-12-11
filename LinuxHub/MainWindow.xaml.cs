@@ -37,8 +37,10 @@ namespace LinuxHub
 
             Loaded += MainWindow_Loaded;
 
+
             UbuntuPanel.MouseLeftButtonUp += (s, e) =>
             {
+
                 string name = "Ubuntu";
                 string description = "O Ubuntu é uma das distribuições Linux mais populares e amigáveis, sendo altamente recomendada para iniciantes. " +
                          "Sua interface gráfica moderna lembra um pouco o MacOS, oferecendo um ambiente intuitivo e agradável. " +
@@ -307,6 +309,7 @@ namespace LinuxHub
 
             // eu escrevi algumas dessas descrições mas a preguiça bateu e botei o gpt pra ralar. ISSO PRA DAR SUPORTE VAI SER UM INFERNO!!!! preguiça hoje trabalho amanha
 
-        }
+
     }
+}
 }
