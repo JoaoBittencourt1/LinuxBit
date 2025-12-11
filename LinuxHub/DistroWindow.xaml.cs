@@ -17,6 +17,9 @@ namespace LinuxHub // nome meio merda mas fazer oq
     {
 
         private string downloadLink;
+
+        private List<object> carouselItems = new();
+        private int carouselIndex = 0;
         public DistroWindow(string name, string description, string imagePath, string link)
         {
             InitializeComponent();
@@ -47,5 +50,54 @@ namespace LinuxHub // nome meio merda mas fazer oq
                 }
             }
         }
+
+        private void UpdateCarousel()
+        {
+            if (carouselItems.Count == 0)
+                return;
+
+            var item = carouselItems[carouselIndex];
+
+            if (item is string path && path.EndsWith(".mp4"))
+            {
+                CarouselContent.Content = new MediaElement
+                {
+                    Source = new Uri(path, UriKind.RelativeOrAbsolute),
+                    LoadedBehavior = MediaState.Manual,
+                    UnloadedBehavior = MediaState.Stop,
+                    Stretch = Stretch.Uniform
+                };
+            }
+            else if (item is string imagePath)
+            {
+                CarouselContent.Content = new Image
+                {
+                    Source = new BitmapImage(new Uri(imagePath, UriKind.RelativeOrAbsolute)),
+                    Stretch = Stretch.Uniform
+                };
+            }
+        }
+
+
+        public void LoadCarousel(params object[] items)
+        {
+            carouselItems = items.ToList();
+            carouselIndex = 0;
+            UpdateCarousel();
+        }
+
+        private void CarouselNext_Click(object sender, RoutedEventArgs e)
+        {
+            carouselIndex = (carouselIndex + 1) % carouselItems.Count;
+            UpdateCarousel();
+        }
+
+        private void CarouselPrev_Click(object sender, RoutedEventArgs e)
+        {
+            carouselIndex = (carouselIndex - 1 + carouselItems.Count) % carouselItems.Count;
+            UpdateCarousel();
+        }
+
+
     }
 }

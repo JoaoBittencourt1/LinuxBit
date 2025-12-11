@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\Icons\favicon(2).ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,12 +20,17 @@
     <None Remove="Assets\Images\mint.png" />
     <None Remove="Assets\Images\popos.png" />
     <None Remove="Assets\Images\Ubuntu.png" />
+    <None Remove="Assets\Images\Ubuntu\ubuntu1.jpg" />
+    <None Remove="Assets\Images\Ubuntu\ubuntu2.png" />
     <None Remove="Assets\Images\xubuntu.png" />
     <None Remove="Assets\Images\zorin.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Assets\Icons\" />
+    <Content Include="Assets\Icons\favicon(2).ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Commands\" />
     <Folder Include="Helpers\" />
     <Folder Include="Services\" />
@@ -60,6 +66,12 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Images\Ubuntu.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Ubuntu\ubuntu1.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Ubuntu\ubuntu2.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Images\xubuntu.png">
