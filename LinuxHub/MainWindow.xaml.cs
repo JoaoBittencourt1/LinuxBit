@@ -32,6 +32,15 @@ namespace LinuxHub
                 string downloadLink = "https://ubuntu.com/download/desktop"; // pq karalhos minha net tinha que ficar ruim justo quando testo a porra de um site
 
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
+                
+
+                window.LoadCarousel(
+                    "pack://application:,,,/Assets/Images/Ubuntu/ubuntu1.jpg", // pq NAO ABRE QUANDO EU ABRO NO /UBUNTU/UBUNTU1.JPG MAS ABRE SE EU ABRIR AS IMAGENS DAS DISTROS 
+                    "pack://application:,,,/Assets/Images/Ubuntu/ubuntu2.png"
+                );
+
+            
+
                 window.Show();
             };
 
