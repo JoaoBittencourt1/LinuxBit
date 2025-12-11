@@ -126,6 +126,13 @@ namespace LinuxHub
                 window.Owner = this;
                 this.Hide();
 
+                window.LoadCarousel(
+                    "pack://application:,,,/Assets/Images/PopOs/pop1.png",
+                    "pack://application:,,,/Assets/Images/PopOs/pop2.png"
+                    // "pack://application:,,,/Assets/Images/PopOs/pop3.jpg" imagem ta cagada, vou trocar dps!
+
+                );
+
                 window.Show();
             };
             FedoraPanel.MouseLeftButtonUp += (s, e) =>
@@ -142,6 +149,13 @@ namespace LinuxHub
                 window.Owner = this;
                 this.Hide();
 
+                window.LoadCarousel(
+                    "pack://application:,,,/Assets/Images/Fedora/fedora1.jpg",
+                    "pack://application:,,,/Assets/Images/Fedora/fedora2.jpg",
+                    "pack://application:,,,/Assets/Images/Fedora/fedora3.jpg"
+                    
+                );
+
                 window.Show();
             };
             KubuntuPanel.MouseLeftButtonUp += (s, e) =>
@@ -156,6 +170,10 @@ namespace LinuxHub
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
                 window.Owner = this;
                 this.Hide();
+
+                window.LoadCarousel(
+                    "pack://application:,,,/Assets/Images/Kubuntu/Kubuntu1.png"
+                );
 
                 window.Show();
             };
@@ -172,6 +190,10 @@ namespace LinuxHub
                 window.Owner = this;
                 this.Hide();
 
+                window.LoadCarousel(
+                    "pack://application:,,,/Assets/Images/Xubuntu/xubuntu.png"
+                );
+
                 window.Show();
             };
             ManjaroPanel.MouseLeftButtonUp += (s, e) => 
@@ -186,6 +208,11 @@ namespace LinuxHub
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
                 window.Owner = this;
                 this.Hide();
+
+                window.LoadCarousel(
+                    "pack://application:,,,/Assets/Images/Manjaro/manjaro1.jpg",
+                    "pack://application:,,,/Assets/Images/Manjaro/manjaro2.jpg"
+                );
 
                 window.Show();
             };
@@ -204,6 +231,13 @@ namespace LinuxHub
                 window.Owner = this;
                 this.Hide();
 
+                window.LoadCarousel(
+                    "pack://application:,,,/Assets/Images/Arch/arch1.png",
+                    "pack://application:,,,/Assets/Images/Arch/arch2.png",
+                    "pack://application:,,,/Assets/Images/Arch/arch3.png",
+                    "pack://application:,,,/Assets/Images/Arch/arch4.png"
+                );
+
                 window.Show();
             };
 
@@ -219,6 +253,12 @@ namespace LinuxHub
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
                 window.Owner = this;
                 this.Hide();
+
+                window.LoadCarousel(
+                    "pack://application:,,,/Assets/Images/End/end1.jpg",
+                    "pack://application:,,,/Assets/Images/End/end2.png",
+                    "pack://application:,,,/Assets/Images/End/end3.jpeg"
+                );
 
                 window.Show();
             };
@@ -236,6 +276,11 @@ namespace LinuxHub
                 window.Owner = this;
                 this.Hide();
 
+                window.LoadCarousel(
+                    "pack://application:,,,/Assets/Images/Kali/kali1.jpg",
+                    "pack://application:,,,/Assets/Images/Kali/kali2.jpg"
+                );
+
                 window.Show();
             };
 
@@ -251,6 +296,11 @@ namespace LinuxHub
                 DistroWindow window = new DistroWindow(name, description, imagePath, downloadLink);
                 window.Owner = this;
                 this.Hide();
+
+                window.LoadCarousel(
+                    "pack://application:,,,/Assets/Images/Chrome/Chrome2.png",
+                    "pack://application:,,,/Assets/Images/Chrome/Chromeos.jpg"
+                );
 
                 window.Show();
             };
