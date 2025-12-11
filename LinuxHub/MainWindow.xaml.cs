@@ -1,9 +1,11 @@
-﻿using System.Text;
+﻿using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -15,10 +17,24 @@ namespace LinuxHub
     
     public partial class MainWindow : Window
     {
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            var hwnd = new WindowInteropHelper(this).Handle;
+            int darkMode = 1;
+
+            // DWMWA_USE_IMMERSIVE_DARK_MODE = 20 no Win 11  
+            DwmSetWindowAttribute(hwnd, 20, ref darkMode, Marshal.SizeOf(typeof(int)));
+        }
+
+        [DllImport("dwmapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
         public MainWindow()
         {
             // esse codigo logo logo vai ficar um saco de dar suporte, tenho que dar um jeito de arrumar isso
             InitializeComponent();
+
+            Loaded += MainWindow_Loaded;
 
             UbuntuPanel.MouseLeftButtonUp += (s, e) =>
             {

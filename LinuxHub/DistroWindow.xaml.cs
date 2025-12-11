@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -20,9 +22,23 @@ namespace LinuxHub // nome meio merda mas fazer oq
 
         private List<object> carouselItems = new();
         private int carouselIndex = 0;
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            var hwnd = new WindowInteropHelper(this).Handle;
+            int darkMode = 1;
+
+            // DWMWA_USE_IMMERSIVE_DARK_MODE = 20 no Win 11  
+            DwmSetWindowAttribute(hwnd, 20, ref darkMode, Marshal.SizeOf(typeof(int)));
+        }
+
+        [DllImport("dwmapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
         public DistroWindow(string name, string description, string imagePath, string link)
         {
             InitializeComponent();
+
+            Loaded += MainWindow_Loaded;
 
             DistroName.Text = name;
             DistroDescription.Text = description;
