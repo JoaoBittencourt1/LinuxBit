@@ -7,6 +7,8 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using Microsoft.Win32;
 using System.IO;
+using System.Management;
+
 
 
 namespace LinuxHub
@@ -33,9 +35,22 @@ namespace LinuxHub
             var hwnd = new WindowInteropHelper(this).Handle;
             int darkMode = 1;
 
-            // DWMWA_USE_IMMERSIVE_DARK_MODE = 20 (Windows 11)
             DwmSetWindowAttribute(hwnd, 20, ref darkMode, Marshal.SizeOf(typeof(int)));
+
+            LoadPartitions();
+
+            // Exemplo de uso do UEFI
+            if (!IsUefi())
+            {
+                MessageBox.Show(
+                    "Seu sistema NÃO está em modo UEFI.\nInstalação automática pode não funcionar.",
+                    "Aviso",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+            }
         }
+
 
         [DllImport("dwmapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         static extern int DwmSetWindowAttribute(
@@ -250,6 +265,24 @@ namespace LinuxHub
             }
         };
 
+        private bool ValidarIso(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                return false;
+
+            if (!File.Exists(path))
+                return false;
+
+            var info = new FileInfo(path);
+
+            return info.Length > 700 * 1024 * 1024; // > 700MB
+        }
+
+        private bool IsUefi()
+        {
+            return Directory.Exists(@"C:\Windows\Boot\EFI");
+        }
+
         private void UserNameBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             UserNamePlaceholder.Visibility =
@@ -266,6 +299,7 @@ namespace LinuxHub
                 : Visibility.Hidden;
         }
 
+
         private void BrowseIso_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog
@@ -275,26 +309,122 @@ namespace LinuxHub
                 CheckFileExists = true
             };
 
-            if (dialog.ShowDialog() == true)
+            if (dialog.ShowDialog() != true)
+                return;
+
+            var isoPath = dialog.FileName;
+
+            if (!ValidarIso(isoPath))
             {
-                string isoPath = dialog.FileName;
+                MessageBox.Show(
+                    "ISO inválida ou muito pequena.\nSelecione uma ISO Linux válida.",
+                    "Erro",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
 
-                
-                if (Path.GetExtension(isoPath).ToLower() != ".iso")
-                {
-                    MessageBox.Show("Arquivo inválido. Selecione uma imagem ISO.",
-                                    "Erro",
-                                    MessageBoxButton.OK,
-                                    MessageBoxImage.Error);
-                    return;
-                }
-
-                IsoPathTextBox.Text = isoPath;
-
-               
-                selectedIsoPath = isoPath;
+                selectedIsoPath = null;
+                IsoPathTextBox.Text = string.Empty;
+                return;
             }
+
+            selectedIsoPath = isoPath;
+            IsoPathTextBox.Text = isoPath;
         }
+
+        //private void LoadDisks()
+        //{
+        //    DiskComboBox.Items.Clear();
+        //    using var searcher = new ManagementObjectSearcher(
+        //        "SELECT Index, Model, Size FROM Win32_DiskDrive"
+        //    );
+
+        //    foreach (ManagementObject disk in searcher.Get())
+        //    {
+        //        if (disk["Size"] == null)
+        //            continue;
+
+        //       var diskInfo = new DiskInfo
+        //       {
+        //           Index = Convert.ToInt32(disk["Index"]),
+        //           Model = disk["Model"]?.ToString() ?? "Desconhecido",
+        //           SizeBytes = Convert.ToInt64(disk["Size"])
+        //       };
+
+        //       DiskComboBox.Items.Add(diskInfo);
+        //   }
+
+        //   if (DiskComboBox.Items.Count > 0)
+        //       DiskComboBox.SelectedIndex = 0;
+        //}
+
+        private void LoadPartitions()
+        {
+            DiskComboBox.Items.Clear();
+
+            ManagementObjectSearcher partitionSearcher;
+
+            try
+            {
+                partitionSearcher = new ManagementObjectSearcher(
+                    "SELECT DeviceID, DiskIndex, Index, Size, Type FROM Win32_DiskPartition"
+                );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao acessar informações de disco:\n" + ex.Message);
+                return;
+            }
+
+            foreach (ManagementObject partition in partitionSearcher.Get())
+            {
+                try
+                {
+                    int diskIndex = Convert.ToInt32(partition["DiskIndex"]);
+                    int partIndex = Convert.ToInt32(partition["Index"]);
+                    long size = Convert.ToInt64(partition["Size"]);
+
+                    string deviceId = partition["DeviceID"].ToString();
+
+                    string drive = null;
+                    string fs = null;
+                    bool isSystem = false;
+
+                    // Buscar volumes associados (nem toda partição tem!)
+                    using var logicalSearcher = new ManagementObjectSearcher(
+                        $"ASSOCIATORS OF {{Win32_DiskPartition.DeviceID=\"{deviceId}\"}} " +
+                        "WHERE AssocClass=Win32_LogicalDiskToPartition"
+                    );
+
+                    foreach (ManagementObject logical in logicalSearcher.Get())
+                    {
+                        drive = logical["DeviceID"]?.ToString();
+                        fs = logical["FileSystem"]?.ToString();
+                        isSystem = logical["BootVolume"] != null && (bool)logical["BootVolume"];
+                    }
+
+                    DiskComboBox.Items.Add(new PartitionInfo
+                    {
+                        DiskIndex = diskIndex,
+                        PartitionIndex = partIndex,
+                        DriveLetter = drive,
+                        FileSystem = fs ?? "Sem sistema de arquivos",
+                        SizeBytes = size,
+                        IsSystem = isSystem
+                    });
+                }
+                catch
+                {
+                    // Ignora partições problemáticas (EFI, MSR, Recovery)
+                    continue;
+                }
+            }
+
+            if (DiskComboBox.Items.Count > 0)
+                DiskComboBox.SelectedIndex = 0;
+        }
+
+
 
 
 

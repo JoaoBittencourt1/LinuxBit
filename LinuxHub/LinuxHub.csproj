@@ -64,6 +64,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Management" Version="10.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Assets\Images\arch.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
