@@ -211,10 +211,149 @@
 
             <!-- ABA 2: INSTALAÇÃO -->
             <TabItem Header="Instalação">
-                <Grid Background="#222">
-                    <TextBlock Text="Painel de Instalação" Foreground="White" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </Grid>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid Margin="20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Título -->
+                        <TextBlock Text="Configuração de Instalação"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       Margin="0,0,0,20"/>
+
+                        <!-- Distro Selecionada -->
+                        <GroupBox Header="Distribuição Selecionada"
+                      Grid.Row="1"
+                      Foreground="White"
+                      BorderBrush="#444"
+                      Margin="0,0,0,15">
+                            <StackPanel Orientation="Horizontal" Margin="10">
+                                <Image Width="40" Height="40" Source="pack://application:,,,/Assets/Images/ubuntu.png"/>
+                                <TextBlock Text="Ubuntu 22.04 LTS"
+                               VerticalAlignment="Center"
+                               Foreground="White"
+                               FontSize="14"
+                               Margin="10,0,0,0"/>
+                            </StackPanel>
+                        </GroupBox>
+
+                        <!-- ISO -->
+                        <GroupBox Header="Imagem ISO"
+                      Grid.Row="2"
+                      Foreground="White"
+                      BorderBrush="#444"
+                      Margin="0,0,0,15">
+                            <StackPanel Margin="10">
+                                <RadioButton Content="Baixar automaticamente (recomendado)"
+                                 Foreground="White"
+                                 IsChecked="True"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                    <RadioButton Content="Selecionar ISO manualmente"
+                                     Foreground="White"
+                                     VerticalAlignment="Center"/>
+                                    <Button Content="Procurar"
+                                Width="100"
+                                Margin="10,0,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+
+                        <!-- Tipo de Instalação -->
+                        <GroupBox Header="Tipo de Instalação"
+                      Grid.Row="3"
+                      Foreground="White"
+                      BorderBrush="#444"
+                      Margin="0,0,0,15">
+                            <StackPanel Margin="10">
+                                <RadioButton Content="Substituir Windows (apagar tudo)"
+                                 Foreground="White"
+                                 IsChecked="True"/>
+                                <RadioButton Content="Instalar em dual boot"
+                                 Foreground="White"
+                                 Margin="0,6,0,0"/>
+                            </StackPanel>
+                        </GroupBox>
+
+                        <!-- Disco e Partição -->
+                        <GroupBox Header="Disco e Particionamento"
+                      Grid.Row="4"
+                      Foreground="White"
+                      BorderBrush="#444"
+                      Margin="0,0,0,15">
+                            <StackPanel Margin="10">
+
+                                <TextBlock Text="Disco de destino"
+                               Foreground="White"/>
+                                <ComboBox Margin="0,6,0,12">
+                                    <ComboBoxItem Content="Disco 0 - 512GB SSD"/>
+                                    <ComboBoxItem Content="Disco 1 - 1TB HDD"/>
+                                </ComboBox>
+
+                                <TextBlock Text="Tamanho reservado para Linux"
+                               Foreground="White"/>
+                                <Slider Minimum="50"
+                            Maximum="500"
+                            Value="200"
+                            TickFrequency="50"
+                            IsSnapToTickEnabled="True"/>
+                                <TextBlock Text="200 GB"
+                               Foreground="#aaa"
+                               HorizontalAlignment="Right"/>
+                            </StackPanel>
+                        </GroupBox>
+
+                        <!-- Usuário -->
+                        <Grid>
+                            <TextBox x:Name="UserNameBox"
+             Background="#333"
+             Foreground="White"
+             BorderBrush="#555"
+             Padding="8"
+             TextChanged="UserNameBox_TextChanged"/>
+
+                            <TextBlock Text="Nome de usuário"
+               Foreground="#888"
+               Margin="10,0,0,0"
+               VerticalAlignment="Center"
+               IsHitTestVisible="False"
+               Visibility="Visible"
+               x:Name="UserNamePlaceholder"/>
+                        </Grid>
+
+                        <!-- Aviso + Botão -->
+                        <StackPanel Grid.Row="6" Margin="0,20,0,0">
+                            <Border Background="#402020"
+                        BorderBrush="#aa3333"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="10">
+                                <TextBlock Text="⚠ Todos os dados do disco selecionado poderão ser APAGADOS. Faça backup antes de continuar."
+                               Foreground="White"
+                               TextWrapping="Wrap"/>
+                            </Border>
+
+                            <Button Content="Instalar Linux"
+                        Height="45"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Background="#2ecc71"
+                        Foreground="Black"
+                        Margin="0,15,0,0"/>
+                        </StackPanel>
+
+                    </Grid>
+                </ScrollViewer>
             </TabItem>
+
             <!-- ABA 3: Sobre -->
             <TabItem Header="Sobre">
                 <Grid Background="#222222">
