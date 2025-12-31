@@ -251,6 +251,14 @@ namespace LinuxHub
                 : Visibility.Hidden;
         }
 
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            PasswordPlaceholder.Visibility =
+                string.IsNullOrEmpty(PasswordBox.Password)
+                ? Visibility.Visible
+                : Visibility.Hidden;
+        }
+
 
         #endregion
     }
