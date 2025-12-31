@@ -1,13 +1,14 @@
 ﻿using LinuxHub.Models;
+using Microsoft.Win32;
 using System;
+using System.Collections.Concurrent;
+using System.IO;
+using System.Management;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
-using Microsoft.Win32;
-using System.IO;
-using System.Management;
 
 
 
@@ -17,6 +18,8 @@ namespace LinuxHub
     {
 
         private string selectedIsoPath;
+
+        private InstallMode currentMode = InstallMode.Replace;
 
 
         public MainWindow()
@@ -38,6 +41,8 @@ namespace LinuxHub
             DwmSetWindowAttribute(hwnd, 20, ref darkMode, Marshal.SizeOf(typeof(int)));
 
             LoadPartitions();
+            LoadDisks();
+
 
             // Exemplo de uso do UEFI
             if (!IsUefi())
@@ -332,65 +337,67 @@ namespace LinuxHub
             IsoPathTextBox.Text = isoPath;
         }
 
-        //private void LoadDisks()
-        //{
-        //    DiskComboBox.Items.Clear();
-        //    using var searcher = new ManagementObjectSearcher(
-        //        "SELECT Index, Model, Size FROM Win32_DiskDrive"
-        //    );
+        private void LoadDisks()
+        {
+            DiskComboBox.Items.Clear();
+            using var searcher = new ManagementObjectSearcher(
+                "SELECT Index, Model, Size FROM Win32_DiskDrive"
+            );
 
-        //    foreach (ManagementObject disk in searcher.Get())
-        //    {
-        //        if (disk["Size"] == null)
-        //            continue;
+           foreach (ManagementObject disk in searcher.Get())
+            {
+                if (disk["Size"] == null)
+                    continue;
 
-        //       var diskInfo = new DiskInfo
-        //       {
-        //           Index = Convert.ToInt32(disk["Index"]),
-        //           Model = disk["Model"]?.ToString() ?? "Desconhecido",
-        //           SizeBytes = Convert.ToInt64(disk["Size"])
-        //       };
+               var diskInfo = new DiskInfo
+               {
+                   Index = Convert.ToInt32(disk["Index"]),
+                   Model = disk["Model"]?.ToString() ?? "Desconhecido",
+                   SizeBytes = Convert.ToInt64(disk["Size"])
+               };
 
-        //       DiskComboBox.Items.Add(diskInfo);
-        //   }
+               DiskComboBox.Items.Add(diskInfo);
+           }
 
-        //   if (DiskComboBox.Items.Count > 0)
-        //       DiskComboBox.SelectedIndex = 0;
-        //}
+           if (DiskComboBox.Items.Count > 0)
+               DiskComboBox.SelectedIndex = 0;
+        }
 
         private void LoadPartitions()
         {
-            DiskComboBox.Items.Clear();
+            PartitionComboBox.Items.Clear();
 
-            ManagementObjectSearcher partitionSearcher;
+            ManagementObjectSearcher searcher;
 
             try
             {
-                partitionSearcher = new ManagementObjectSearcher(
-                    "SELECT DeviceID, DiskIndex, Index, Size, Type FROM Win32_DiskPartition"
+                searcher = new ManagementObjectSearcher(
+                    "SELECT DeviceID, DiskIndex, Index, Size FROM Win32_DiskPartition"
                 );
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao acessar informações de disco:\n" + ex.Message);
+                MessageBox.Show("Erro ao acessar discos:\n" + ex.Message);
                 return;
             }
 
-            foreach (ManagementObject partition in partitionSearcher.Get())
+            foreach (ManagementObject partition in searcher.Get())
             {
                 try
                 {
+                    long size = Convert.ToInt64(partition["Size"]);
                     int diskIndex = Convert.ToInt32(partition["DiskIndex"]);
                     int partIndex = Convert.ToInt32(partition["Index"]);
-                    long size = Convert.ToInt64(partition["Size"]);
-
                     string deviceId = partition["DeviceID"].ToString();
+
+                    // ignora partições pequenas (EFI, MSR, Recovery)
+                    if (size < 30L * 1024 * 1024 * 1024)
+                        continue;
 
                     string drive = null;
                     string fs = null;
                     bool isSystem = false;
 
-                    // Buscar volumes associados (nem toda partição tem!)
                     using var logicalSearcher = new ManagementObjectSearcher(
                         $"ASSOCIATORS OF {{Win32_DiskPartition.DeviceID=\"{deviceId}\"}} " +
                         "WHERE AssocClass=Win32_LogicalDiskToPartition"
@@ -403,27 +410,69 @@ namespace LinuxHub
                         isSystem = logical["BootVolume"] != null && (bool)logical["BootVolume"];
                     }
 
-                    DiskComboBox.Items.Add(new PartitionInfo
+                    // nunca permitir partição de boot
+                    if (isSystem)
+                        continue;
+
+                    PartitionComboBox.Items.Add(new PartitionInfo
                     {
                         DiskIndex = diskIndex,
                         PartitionIndex = partIndex,
                         DriveLetter = drive,
-                        FileSystem = fs ?? "Sem sistema de arquivos",
+                        FileSystem = fs ?? "Desconhecido",
                         SizeBytes = size,
                         IsSystem = isSystem
                     });
                 }
                 catch
                 {
-                    // Ignora partições problemáticas (EFI, MSR, Recovery)
                     continue;
                 }
             }
 
-            if (DiskComboBox.Items.Count > 0)
-                DiskComboBox.SelectedIndex = 0;
+            if (PartitionComboBox.Items.Count > 0)
+                PartitionComboBox.SelectedIndex = 0;
         }
 
+
+        private void ReplaceRadio_Checked(object sender, RoutedEventArgs e)
+        {
+            currentMode = InstallMode.Replace;
+
+            DiskGroup.Visibility = Visibility.Visible;
+            PartitionGroup.Visibility = Visibility.Collapsed;
+
+            LoadDisks();
+        }
+
+        private void DualBootRadio_Checked(object sender, RoutedEventArgs e)
+        {
+            currentMode = InstallMode.DualBoot;
+
+            DiskGroup.Visibility = Visibility.Collapsed;
+            PartitionGroup.Visibility = Visibility.Visible;
+
+            LoadPartitions();
+        }
+
+        private void InstallTypeChanged(object sender, RoutedEventArgs e)
+        {
+            if (DiskGroup == null || PartitionGroup == null)
+                return;
+
+            if (sender == DualBootRadio)
+            {
+                DiskGroup.Visibility = Visibility.Collapsed;
+                PartitionGroup.Visibility = Visibility.Visible;
+                LoadPartitions();
+            }
+            else
+            {
+                DiskGroup.Visibility = Visibility.Visible;
+                PartitionGroup.Visibility = Visibility.Collapsed;
+                LoadDisks();
+            }
+        }
 
 
 
