@@ -5,11 +5,18 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using Microsoft.Win32;
+using System.IO;
+
 
 namespace LinuxHub
 {
     public partial class MainWindow : Window
     {
+
+        private string selectedIsoPath;
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -258,6 +265,37 @@ namespace LinuxHub
                 ? Visibility.Visible
                 : Visibility.Hidden;
         }
+
+        private void BrowseIso_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog
+            {
+                Title = "Selecionar imagem ISO",
+                Filter = "Imagem ISO (*.iso)|*.iso",
+                CheckFileExists = true
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                string isoPath = dialog.FileName;
+
+                
+                if (Path.GetExtension(isoPath).ToLower() != ".iso")
+                {
+                    MessageBox.Show("Arquivo inválido. Selecione uma imagem ISO.",
+                                    "Erro",
+                                    MessageBoxButton.OK,
+                                    MessageBoxImage.Error);
+                    return;
+                }
+
+                IsoPathTextBox.Text = isoPath;
+
+               
+                selectedIsoPath = isoPath;
+            }
+        }
+
 
 
         #endregion

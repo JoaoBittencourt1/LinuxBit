@@ -272,16 +272,18 @@
                                     </Grid.ColumnDefinitions>
 
                                     <TextBox x:Name="IsoPathTextBox"
-                     Grid.Column="0"
-                     Height="32"
-                     Background="#333"
-                     Foreground="White"
-                     BorderBrush="#555"
-                     Padding="8"
-                     IsReadOnly="True"
-                     Text="Nenhuma ISO selecionada"/>
+         Grid.Column="0"
+         Height="32"
+         Background="#333"
+         Foreground="White"
+         BorderBrush="#555"
+         Padding="8"
+         IsReadOnly="True"
+         Text="Nenhuma ISO selecionada"/>
+
 
                                     <Button Content="Procurar"
+                                              Click="BrowseIso_Click"
                     Grid.Column="1"
                     Height="32"
                     Margin="8,0,0,0"/>
