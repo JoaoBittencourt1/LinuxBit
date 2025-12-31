@@ -367,72 +367,35 @@ namespace LinuxHub
         {
             PartitionComboBox.Items.Clear();
 
-            ManagementObjectSearcher searcher;
-
-            try
-            {
-                searcher = new ManagementObjectSearcher(
-                    "SELECT DeviceID, DiskIndex, Index, Size FROM Win32_DiskPartition"
-                );
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erro ao acessar discos:\n" + ex.Message);
-                return;
-            }
+            using var searcher = new ManagementObjectSearcher(
+                "SELECT DeviceID, DiskIndex, Index, Size, Type, BootPartition FROM Win32_DiskPartition"
+            );
 
             foreach (ManagementObject partition in searcher.Get())
             {
-                try
-                {
-                    long size = Convert.ToInt64(partition["Size"]);
-                    int diskIndex = Convert.ToInt32(partition["DiskIndex"]);
-                    int partIndex = Convert.ToInt32(partition["Index"]);
-                    string deviceId = partition["DeviceID"].ToString();
+                long size = Convert.ToInt64(partition["Size"] ?? 0);
 
-                    // ignora partições pequenas (EFI, MSR, Recovery)
-                    if (size < 30L * 1024 * 1024 * 1024)
-                        continue;
-
-                    string drive = null;
-                    string fs = null;
-                    bool isSystem = false;
-
-                    using var logicalSearcher = new ManagementObjectSearcher(
-                        $"ASSOCIATORS OF {{Win32_DiskPartition.DeviceID=\"{deviceId}\"}} " +
-                        "WHERE AssocClass=Win32_LogicalDiskToPartition"
-                    );
-
-                    foreach (ManagementObject logical in logicalSearcher.Get())
-                    {
-                        drive = logical["DeviceID"]?.ToString();
-                        fs = logical["FileSystem"]?.ToString();
-                        isSystem = logical["BootVolume"] != null && (bool)logical["BootVolume"];
-                    }
-
-                    // nunca permitir partição de boot
-                    if (isSystem)
-                        continue;
-
-                    PartitionComboBox.Items.Add(new PartitionInfo
-                    {
-                        DiskIndex = diskIndex,
-                        PartitionIndex = partIndex,
-                        DriveLetter = drive,
-                        FileSystem = fs ?? "Desconhecido",
-                        SizeBytes = size,
-                        IsSystem = isSystem
-                    });
-                }
-                catch
-                {
+                // Ignora partições muito pequenas (EFI, MSR, Recovery)
+                if (size < 20L * 1024 * 1024 * 1024)
                     continue;
-                }
+
+                bool isBoot = partition["BootPartition"] != null && (bool)partition["BootPartition"];
+                string type = partition["Type"]?.ToString() ?? "";
+
+                PartitionComboBox.Items.Add(new PartitionInfo
+                {
+                    DiskIndex = Convert.ToInt32(partition["DiskIndex"]),
+                    PartitionIndex = Convert.ToInt32(partition["Index"]),
+                    SizeBytes = size,
+                    Type = type,
+                    IsSystem = isBoot
+                });
             }
 
             if (PartitionComboBox.Items.Count > 0)
                 PartitionComboBox.SelectedIndex = 0;
         }
+
 
 
         private void ReplaceRadio_Checked(object sender, RoutedEventArgs e)
