@@ -1,4 +1,5 @@
 ﻿using LinuxHub.Models;
+using LinuxHub.Services;
 using Microsoft.Win32;
 using System;
 using System.Collections.Concurrent;
@@ -9,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media.Imaging;
 
 
 
@@ -335,6 +337,8 @@ namespace LinuxHub
 
             selectedIsoPath = isoPath;
             IsoPathTextBox.Text = isoPath;
+
+            AtualizarDistroUI(isoPath);
         }
 
         private void LoadDisks()
@@ -437,8 +441,18 @@ namespace LinuxHub
             }
         }
 
+        private readonly DistroDetector _distroDetector = new();
 
+        private void AtualizarDistroUI(string isoPath)
+        {
+            var distro = _distroDetector.Detect(isoPath);
 
+            DistroText.Text = distro.Name;
+
+            DistroImage.Source = new BitmapImage(
+                new Uri($"pack://application:,,,/{distro.ImagePath}")
+            );
+        }
 
         #endregion
     }
