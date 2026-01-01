@@ -25,7 +25,7 @@
 
             <!--Aba
             ! -->
-            <TabItem Header="Distribuições">
+            <TabItem Header="Distros">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <WrapPanel Margin="10">
                         <!-- Ubuntu -->
@@ -335,7 +335,7 @@
 
 
             <!-- ABA 2: INSTALAÇÃO -->
-            <TabItem Header="Instalação">
+            <TabItem Header="Instalation">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <Grid Margin="20">
 
