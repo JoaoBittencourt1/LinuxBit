@@ -567,6 +567,13 @@
                                                IsHitTestVisible="False"/>
                                 </Grid>
 
+                                <TextBlock x:Name="ConfirmPasswordError"
+                                           Text="As senhas não coincidem"
+                                           Foreground="#FF5C5C"
+                                           FontSize="12"
+                                           Margin="0,0,0,8"
+                                           Visibility="Collapsed"/>
+
                                 <Grid>
                                     <TextBox x:Name="UserPcName"
                                              Background="#333"

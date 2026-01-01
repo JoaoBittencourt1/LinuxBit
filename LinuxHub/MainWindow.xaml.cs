@@ -313,7 +313,18 @@ namespace LinuxHub
                 string.IsNullOrEmpty(ConfirmPasswordBox.Password)
                 ? Visibility.Visible
                 : Visibility.Hidden;
+
+            if (!string.IsNullOrEmpty(ConfirmPasswordBox.Password) &&
+                ConfirmPasswordBox.Password != PasswordBox.Password)
+            {
+                ConfirmPasswordError.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ConfirmPasswordError.Visibility = Visibility.Collapsed;
+            }
         }
+
 
         private void UserPcName_TextChanged(object sender, TextChangedEventArgs e)
         {
