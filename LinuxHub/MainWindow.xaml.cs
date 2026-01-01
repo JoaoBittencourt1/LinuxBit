@@ -307,6 +307,24 @@ namespace LinuxHub
         }
 
 
+        private void ConfirmPasswordBox_ConfirmPasswordChanged(object sender, RoutedEventArgs e)
+        {
+            ConfirmPasswordPlaceholder.Visibility =
+                string.IsNullOrEmpty(ConfirmPasswordBox.Password)
+                ? Visibility.Visible
+                : Visibility.Hidden;
+        }
+
+        private void UserPcName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UserPcNamePlaceholder.Visibility =
+                string.IsNullOrEmpty(UserPcName.Text)
+                ? Visibility.Visible
+                : Visibility.Hidden;
+        }
+
+
+
         private void BrowseIso_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog
