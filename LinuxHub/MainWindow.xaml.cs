@@ -52,7 +52,6 @@ namespace LinuxHub
     Arch(),
     EndeavourOS(),
     Kali(),
-    ChromeOS()
 };
 
             DistroComboBox.ItemsSource = distros;
@@ -133,7 +132,6 @@ namespace LinuxHub
             ArchPanel.MouseLeftButtonUp += (_, _) => OpenDistro(Arch());
             EndeavourosPanel.MouseLeftButtonUp += (_, _) => OpenDistro(EndeavourOS());
             KaliPanel.MouseLeftButtonUp += (_, _) => OpenDistro(Kali());
-            ChromeosPanel.MouseLeftButtonUp += (_, _) => OpenDistro(ChromeOS());
         }
 
         #endregion
@@ -159,6 +157,7 @@ namespace LinuxHub
             Description = "O Linux Mint é focado em usuários vindos do Windows...",
             ImagePath = "pack://application:,,,/Assets/Images/mint.png",
             DownloadLink = "https://linuxmint.com/download.php",
+            DirectDownloadLink = "https://mint.portalidea.com.br/iso/stable/22.2/linuxmint-22.2-cinnamon-64bit.iso",
             CarouselImages = new[]
             {
                 "pack://application:,,,/Assets/Images/Mint/Mint1.png",
@@ -172,6 +171,7 @@ namespace LinuxHub
             Description = "O Zorin OS é moderno, elegante e acessível...",
             ImagePath = "pack://application:,,,/Assets/Images/zorin.png",
             DownloadLink = "https://zorin.com/os/download/",
+            DirectDownloadLink = "https://mirror.umd.edu/zorin/18/Zorin-OS-18-Core-64-bit-r2.iso",
             CarouselImages = new[]
             {
                 "pack://application:,,,/Assets/Images/Zorin/zorin1.png",
@@ -179,13 +179,14 @@ namespace LinuxHub
                 "pack://application:,,,/Assets/Images/Zorin/zorin3.jpg"
             }
         };
-
+        
         private DistroInfo PopOS() => new()
         {
             Name = "Pop!_OS",
             Description = "Distribuição focada em produtividade e desempenho...",
             ImagePath = "pack://application:,,,/Assets/Images/popos.png",
             DownloadLink = "https://system76.com/pop/",
+            DirectDownloadLink = "https://iso.pop-os.org/24.04/amd64/generic/22/pop-os_24.04_amd64_generic_22.iso",
             CarouselImages = new[]
             {
                 "pack://application:,,,/Assets/Images/PopOs/pop1.png",
@@ -199,6 +200,7 @@ namespace LinuxHub
             Description = "Distribuição moderna e inovadora...",
             ImagePath = "pack://application:,,,/Assets/Images/fedora.png",
             DownloadLink = "https://www.fedoraproject.org/pt-br/workstation/download",
+            DirectDownloadLink = "https://download.fedoraproject.org/pub/fedora/linux/releases/43/KDE/x86_64/iso/Fedora-KDE-Desktop-Live-43-1.6.x86_64.iso",
             CarouselImages = new[]
             {
                 "pack://application:,,,/Assets/Images/Fedora/fedora1.jpg",
@@ -213,6 +215,7 @@ namespace LinuxHub
             Description = "Ubuntu com KDE Plasma...",
             ImagePath = "pack://application:,,,/Assets/Images/Kubuntu.png",
             DownloadLink = "https://kubuntu.org/archives/getkubuntu.html",
+            DirectDownloadLink = "https://iso.pop-os.org/24.04/amd64/generic/22/pop-os_24.04_amd64_generic_22.iso", // por algum motivo o kubuntu tava sem link de download :(
             CarouselImages = new[]
             {
                 "pack://application:,,,/Assets/Images/Kubuntu/Kubuntu1.png"
@@ -225,6 +228,7 @@ namespace LinuxHub
             Description = "Distribuição leve baseada no Ubuntu...",
             ImagePath = "pack://application:,,,/Assets/Images/Xubuntu.png",
             DownloadLink = "https://xubuntu.org/download/",
+            DirectDownloadLink = "https://ftp.ussg.iu.edu/linux/xubuntu/releases/25.10/release/xubuntu-25.10-desktop-amd64.iso",
             CarouselImages = new[]
             {
                 "pack://application:,,,/Assets/Images/Xubuntu/xubuntu.png"
@@ -237,6 +241,7 @@ namespace LinuxHub
             Description = "Baseado em Arch com facilidade de uso...",
             ImagePath = "pack://application:,,,/Assets/Images/manjaro.png",
             DownloadLink = "https://manjaro.org/products/download/x86",
+            DirectDownloadLink = "https://download.manjaro.org/xfce/25.0.10/manjaro-xfce-25.0.10-251013-linux612.iso", // botei xfce vou ter que trocar todas desktop enviroment depois
             CarouselImages = new[]
             {
                 "pack://application:,,,/Assets/Images/Manjaro/manjaro1.jpg",
@@ -250,6 +255,7 @@ namespace LinuxHub
             Description = "Distribuição minimalista e altamente personalizável...",
             ImagePath = "pack://application:,,,/Assets/Images/arch.png",
             DownloadLink = "https://archlinux.org/download/",
+            DirectDownloadLink = "https://mirror.adectra.com/archlinux/iso/2026.01.01/archlinux-2026.01.01-x86_64.iso",
             CarouselImages = new[]
             {
                 "pack://application:,,,/Assets/Images/Arch/arch1.png",
@@ -265,6 +271,7 @@ namespace LinuxHub
             Description = "Arch guiado e acessível...",
             ImagePath = "pack://application:,,,/Assets/Images/endeavouros.png",
             DownloadLink = "https://endeavouros.com/",
+            DirectDownloadLink = "https://mirrors.gigenet.com/endeavouros/iso/EndeavourOS_Ganymede-2025.11.24.iso",
             CarouselImages = new[]
             {
                 "pack://application:,,,/Assets/Images/End/end1.jpg",
@@ -279,23 +286,11 @@ namespace LinuxHub
             Description = "Distribuição para segurança ofensiva...",
             ImagePath = "pack://application:,,,/Assets/Images/kali.png",
             DownloadLink = "https://www.kali.org/get-kali/",
+            DirectDownloadLink = "https://cdimage.kali.org/kali-2025.4/kali-linux-2025.4-installer-amd64.iso",
             CarouselImages = new[]
             {
                 "pack://application:,,,/Assets/Images/Kali/kali1.jpg",
                 "pack://application:,,,/Assets/Images/Kali/kali2.jpg"
-            }
-        };
-
-        private DistroInfo ChromeOS() => new()
-        {
-            Name = "Chrome OS",
-            Description = "Sistema leve focado em nuvem...",
-            ImagePath = "pack://application:,,,/Assets/Images/chromeos.png",
-            DownloadLink = "https://chromeos.google/intl/pt_br/products/chromeos-flex/",
-            CarouselImages = new[]
-            {
-                "pack://application:,,,/Assets/Images/Chrome/Chrome2.png",
-                "pack://application:,,,/Assets/Images/Chrome/Chromeos.jpg"
             }
         };
 

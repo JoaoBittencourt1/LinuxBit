@@ -303,30 +303,7 @@
                             </Border>
                         </StackPanel>
 
-                        <!-- ChromeOS -->
-                        <StackPanel x:Name="ChromeosPanel"
-                                    Width="120"
-                                    Height="150"
-                                    Margin="10">
-                            <Border Width="120"
-                                    Height="120"
-                                    Background="#333"
-                                    CornerRadius="8">
-                                <Image Source="pack://application:,,,/Assets/Images/chromeos.png"
-                                       Stretch="Uniform"/>
-                            </Border>
-                            <Border Height="20"
-                                    Margin="0,5,0,0"
-                                    Background="#444"
-                                    CornerRadius="4">
-                                <TextBlock Text="ChromeOS"
-                                           Foreground="White"
-                                           FontSize="12"
-                                           FontWeight="Bold"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center"/>
-                            </Border>
-                        </StackPanel>
+                      
 
 
                     </WrapPanel>
