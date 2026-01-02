@@ -490,7 +490,8 @@
                                            Margin="0,0,0,6"/>
 
                                 <ComboBox x:Name="PartitionComboBox"
-                                          Height="30"/>
+                                          Height="30"
+                                          SelectionChanged="PartitionComboBox_SelectionChanged"/>
 
                                 <TextBlock Text="Espaço reservado para Linux (GB)"
                                            Foreground="White"
@@ -498,19 +499,20 @@
 
                                 <Slider x:Name="LinuxSizeSlider"
                                         Minimum="20"
-                                        Maximum="500"
+                                        Maximum="500" 
                                         Value="100"
                                         TickFrequency="10"
                                         IsSnapToTickEnabled="True"/>
 
-                                <TextBlock Foreground="#aaa"
-                                           HorizontalAlignment="Right"
-                                           Text="{Binding ElementName=LinuxSizeSlider,
-                                  Path=Value,
-                                  StringFormat={}{0} GB}"/>
+                                    <TextBlock Foreground="#aaa"
+                                               HorizontalAlignment="Right"
+                                               Text="{Binding ElementName=LinuxSizeSlider,
+                          Path=Value,
+                          StringFormat={}{0} GB}"/>
 
                             </StackPanel>
                         </GroupBox>
+
 
 
 
@@ -656,13 +658,13 @@
                             </Border>
 
                             <Button Content="Instalar Linux"
-        Height="45"
-        FontSize="16"
-        FontWeight="Bold"
-        Background="#2ecc71"
-        Foreground="Black"
-        Margin="0,15,0,0"
-        Click="InstallButton_Click"/>
+                                    Height="45"
+                                    FontSize="16"
+                                    FontWeight="Bold"
+                                    Background="#2ecc71"
+                                    Foreground="Black"
+                                    Margin="0,15,0,0"
+                                    Click="InstallButton_Click"/>
 
                         </StackPanel>
 

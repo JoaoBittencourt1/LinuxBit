@@ -291,6 +291,22 @@ namespace LinuxHub
             return Directory.Exists(@"C:\Windows\Boot\EFI");
         }
 
+        private void PartitionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (PartitionComboBox.SelectedItem is PartitionInfo part)
+            {
+                // Define o máximo do slider com base no tamanho da partição em GB
+                long sizeGb = part.SizeBytes / (1024 * 1024 * 1024);
+                LinuxSizeSlider.Maximum = Math.Max(sizeGb, LinuxSizeSlider.Minimum);
+
+                // Ajusta o valor atual para não ultrapassar o máximo
+                if (LinuxSizeSlider.Value > LinuxSizeSlider.Maximum)
+                    LinuxSizeSlider.Value = LinuxSizeSlider.Maximum;
+            }
+        }
+
+
+
         private void UserNameBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             UserNamePlaceholder.Visibility =
@@ -499,19 +515,22 @@ namespace LinuxHub
             if (DiskGroup == null || PartitionGroup == null)
                 return;
 
-            if (sender == DualBootRadio)
+            if (DualBootRadio.IsChecked == true)
             {
+                currentMode = InstallMode.DualBoot;
                 DiskGroup.Visibility = Visibility.Collapsed;
                 PartitionGroup.Visibility = Visibility.Visible;
                 LoadPartitions();
             }
-            else
+            else if (ReplaceRadio.IsChecked == true)
             {
+                currentMode = InstallMode.Replace;
                 DiskGroup.Visibility = Visibility.Visible;
                 PartitionGroup.Visibility = Visibility.Collapsed;
                 LoadDisks();
             }
         }
+
 
         private readonly DistroDetector _distroDetector = new();
 
@@ -530,7 +549,7 @@ namespace LinuxHub
         {
             var distro = _distroDetector.Detect(selectedIsoPath);
 
-            return new InstallerConfig
+            var cfg = new InstallerConfig
             {
                 // === Distro ===
                 DistroId = distro.Id,
@@ -542,13 +561,6 @@ namespace LinuxHub
                 // === Install ===
                 BootMode = IsUefi() ? "uefi" : "bios",
                 InstallMode = currentMode == InstallMode.Replace ? "replace" : "dualboot",
-
-                TargetDiskIndex = ((DiskInfo)DiskComboBox.SelectedItem).Index,
-                TargetPartitionIndex =
-                    currentMode == InstallMode.DualBoot
-                        ? ((PartitionInfo)PartitionComboBox.SelectedItem).PartitionIndex
-                        : null,
-
                 EfiPartitionIndex = IsUefi() ? 1 : null,
 
                 // === User ===
@@ -564,7 +576,28 @@ namespace LinuxHub
                 SwapEnabled = true,
                 SwapSizeGb = 8
             };
+
+            // === Discos / Partições ===
+            if (DiskComboBox.SelectedItem is DiskInfo disk)
+                cfg.TargetDiskIndex = disk.Index;
+
+            if (currentMode == InstallMode.DualBoot &&
+                PartitionComboBox.SelectedItem is PartitionInfo part)
+            {
+                cfg.TargetPartitionIndex = part.PartitionIndex;
+                cfg.LinuxPartitionSizeGb = (int)LinuxSizeSlider.Value;
+            }
+            else
+            {
+                cfg.TargetPartitionIndex = null;
+                cfg.LinuxPartitionSizeGb = 0;
+            }
+
+            return cfg;
         }
+
+
+
 
         private void InstallButton_Click(object sender, RoutedEventArgs e)
         {

@@ -23,6 +23,8 @@ namespace LinuxHub.Installer
         public int? TargetPartitionIndex { get; set; }
         public int? EfiPartitionIndex { get; set; }
 
+        public int LinuxPartitionSizeGb { get; set; }
+
         // === User ===
         public string Username { get; set; }
         public string PasswordHash { get; set; }
