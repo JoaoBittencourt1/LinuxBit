@@ -33,6 +33,8 @@ namespace LinuxHub.Installer
                 sb.AppendLine($"LINUX_PARTITION_SIZE_GB={cfg.LinuxPartitionSizeGb}");
 
 
+
+
             sb.AppendLine();
             sb.AppendLine("# === User ===");
             sb.AppendLine($"USERNAME=\"{cfg.Username}\"");
