@@ -310,7 +310,8 @@ namespace LinuxHub
 
         private void IsoOptionChanged(object sender, RoutedEventArgs e)
         {
-            if (ManualSelectRadio == null || AutoDownloadRadio == null || ManualIsoGrid == null || DownloadIsoButton == null || DistroSelectionPanel == null)
+            if (ManualSelectRadio == null || AutoDownloadRadio == null || ManualIsoGrid == null || DownloadIsoButton == null
+                || DistroSelectionPanel == null || DistroDisplayPanel == null)
                 return;
 
             // Mostra ou oculta o grid de seleção manual
@@ -318,7 +319,7 @@ namespace LinuxHub
                                        ? Visibility.Visible
                                        : Visibility.Collapsed;
 
-            // Mostra ou oculta o botão de download automático
+            // Mostra ou oculta o botão de download
             DownloadIsoButton.Visibility = AutoDownloadRadio.IsChecked == true
                                            ? Visibility.Visible
                                            : Visibility.Collapsed;
@@ -330,7 +331,13 @@ namespace LinuxHub
             DistroSelectionPanel.Visibility = AutoDownloadRadio.IsChecked == true
                                               ? Visibility.Visible
                                               : Visibility.Collapsed;
+
+            // Mostra ou oculta a imagem e o texto da distro
+            DistroDisplayPanel.Visibility = AutoDownloadRadio.IsChecked == false
+                                            ? Visibility.Visible
+                                            : Visibility.Collapsed;
         }
+
 
 
 
