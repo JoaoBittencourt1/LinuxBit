@@ -1,66 +1,65 @@
 # LinuxHub  ![ícone](LinuxHub/Assets/Icons/favicon(2).ico) 
 
 
-LinuxHub é um portal de distros Linux que permite aos usuários explorar diferentes distribuições, conhecer suas principais características, qualidades e defeitos, visualizar imagens e vídeos, e até baixar e instalar as distros diretamente pelo software.
-O projeto também inclui um instalador "universal", que possibilita a instalação de várias distribuições sem a necessidade de pendrive. Dependendo da distro, é possível realizar uma pré-configuração ou instalação automatizada predefinida.
-O LinuxHub é ideal para novos usuários que desejam encontrar sua distro ideal, conhecer suas vantagens e desvantagens e realizar o download e instalação de maneira simplificada.
-
+LinuxHub is a Linux distro portal that allows users to explore different distributions, learn about their main features, strengths, and weaknesses, view images and videos, and even download and install distros directly through the software.
+The project also includes a "universal" installer, which enables the installation of multiple distributions without the need for a USB drive. Depending on the distro, it is possible to perform a pre-configuration or predefined automated installation.
+LinuxHub is ideal for new users who want to find their ideal distro, understand its pros and cons, and perform downloads and installations in a simplified way.
 
 --- 
 
-### AVISO IMPORTANTE:
- o projeto esta em construção, ainda apresenta falhas e pode comprometer o computador de qualquer usuario que utilize no momento principalemnte por mexer diretamente no disco/armazenamento do sistema
+### IMPORTANT NOTICE:
+ The project is under development, may still contain bugs, and can potentially compromise any user's computer who uses it, especially because it interacts directly with the system disk/storage.
 
-*USE POR CONTA E RISCO*
+*USE AT YOUR OWN RISK*
 
 ---
 
 ## como usar:
 
-1. clone o repositorio (https, ssh ou githubcli):
+1. Clone the repository (HTTPS, SSH, or GitHub CLI):
 
 ``git clone https://github.com/JoaoBittencourt1/LinuxHub.git``
 
-2. achar o executavel:
+2. Locate the executable:
 
-O arquivo LinuxHub.exe está localizado em:
+The LinuxHub.exe file is located at:
 ``\LinuxHub\bin\Debug\net10.0-windows``
-Ao executar, o projeto deve rodar normalmente.
+When run, the project should start normally.
 
-## Para quem deseja ver o código:
+## For those who want to view the code:
 
-- Recomenda-se utilizar o Visual Studio da Microsoft para compilar e executar o projeto.
+- It is recommended to use Microsoft Visual Studio to compile and run the project.
 
-- Isso facilita a gestão do código, debugging e alterações no projeto, em comparação com editores simples como Vim ou VS Code.
+- This makes code management, debugging, and modifications easier compared to simpler editors like Vim or VS Code.
 
-## Funcionalidades
+## Features
 
-- Explorar todas as distros disponíveis.
+- Explore all available distros.
 
-- Ver resumos, qualidades e defeitos de cada distro.
+- View summaries, strengths, and weaknesses of each distro.
 
-- Visualizar imagens e vídeos das distribuições.
+- View images and videos of distributions.
 
-- Baixar e instalar distros diretamente pelo software.
+- Download and install distros directly through the software.
 
-- Instalador "universal" sem necessidade de pendrive.
+- "Universal" installer without the need for a USB drive.
 
-- Pré-configuração de instalação automatizada para algumas distros.
+- Automated installation pre-configuration for some distros.
 
-## Tecnologias
+## Technologies
 
 - C# / .NET 10
 
-- Interface gráfica Windows Forms / WPF (dependendo da versão usada)
+- Windows Forms / WPF graphical interface (depending on the version used)
 
-- Suporte a download e instalação de distros Linux
+- Support for downloading and installing Linux distros
 
-## Contribuição
+## Contribution
 
-- O projeto está aberto para contribuições!
+- The project is open for contributions!
 
-- Sinta-se à vontade para abrir issues ou enviar pull requests.
+- Feel free to open issues or submit pull requests.
  
-## Licença
+## License
 
-Este projeto não possui uma licença definida atualmente. Uso e contribuições são por conta e risco do usuário.
+This project currently does not have a defined license. Use and contributions are at the user's own risk.
