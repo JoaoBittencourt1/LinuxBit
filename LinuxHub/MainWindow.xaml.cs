@@ -291,6 +291,22 @@ namespace LinuxHub
             return Directory.Exists(@"C:\Windows\Boot\EFI");
         }
 
+        private void PartitionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (PartitionComboBox.SelectedItem is PartitionInfo part)
+            {
+                // Define o máximo do slider com base no tamanho da partição em GB
+                long sizeGb = part.SizeBytes / (1024 * 1024 * 1024);
+                LinuxSizeSlider.Maximum = Math.Max(sizeGb, LinuxSizeSlider.Minimum);
+
+                // Ajusta o valor atual para não ultrapassar o máximo
+                if (LinuxSizeSlider.Value > LinuxSizeSlider.Maximum)
+                    LinuxSizeSlider.Value = LinuxSizeSlider.Maximum;
+            }
+        }
+
+
+
         private void UserNameBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             UserNamePlaceholder.Visibility =
