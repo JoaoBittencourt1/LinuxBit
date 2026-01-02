@@ -437,11 +437,24 @@
                                 </StackPanel>
 
                                 <!-- Barra de progresso -->
-                                <ProgressBar x:Name="DownloadProgressBar"
-                                             Height="20"
-                                             Minimum="0"
-                                             Maximum="100"
-                                             Visibility="Collapsed"/>
+                                <StackPanel Orientation="Horizontal"
+                                        Margin="0,10,0,0"
+                                        VerticalAlignment="Center">
+                                    <ProgressBar x:Name="DownloadProgressBar"
+                                                 Height="20"
+                                                 Width="250"
+                                                 Minimum="0"
+                                                 Maximum="100"
+                                                 Visibility="Collapsed"/>
+
+                                    <TextBlock x:Name="DownloadProgressText"
+                                               Foreground="White"
+                                               Margin="10,0,0,0"
+                                               VerticalAlignment="Center"
+                                               Text="0% | 0s"
+                                               Visibility="Collapsed"/>
+                                </StackPanel>
+
 
                                 <!-- Imagem e texto da distro -->
                                 <StackPanel x:Name="DistroDisplayPanel"

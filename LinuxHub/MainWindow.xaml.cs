@@ -22,6 +22,8 @@ namespace LinuxHub
     public partial class MainWindow : Window
     {
 
+        private List<DistroInfo> distros;
+
         private string selectedIsoPath;
 
         private InstallMode currentMode = InstallMode.Replace;
@@ -36,6 +38,26 @@ namespace LinuxHub
             RegisterDistroClicks();
 
             IsoOptionChanged(null, null);
+
+            distros = new List<DistroInfo>
+{
+    Ubuntu(),
+    Mint(),
+    Zorin(),
+    PopOS(),
+    Fedora(),
+    Kubuntu(),
+    Xubuntu(),
+    Manjaro(),
+    Arch(),
+    EndeavourOS(),
+    Kali(),
+    ChromeOS()
+};
+
+            DistroComboBox.ItemsSource = distros;
+            DistroComboBox.DisplayMemberPath = "Name"; // Mostra só o nome
+            DistroComboBox.SelectedIndex = 0;
         }
 
         #region Window config
@@ -123,6 +145,7 @@ namespace LinuxHub
             Description = "O Ubuntu é uma das distribuições Linux mais populares e amigáveis...",
             ImagePath = "pack://application:,,,/Assets/Images/ubuntu.png",
             DownloadLink = "https://ubuntu.com/download/desktop",
+            DirectDownloadLink = "https://mirror.pop-sc.rnp.br/mirror/ubuntu-releases/24.04.3/ubuntu-24.04.3-desktop-amd64.iso",
             CarouselImages = new[]
             {
                 "pack://application:,,,/Assets/Images/Ubuntu/ubuntu1.jpg",
@@ -347,26 +370,36 @@ namespace LinuxHub
             if (DistroComboBox.SelectedItem is DistroInfo distro)
             {
                 DistroText.Text = distro.Name;
-                DistroImage.Source = new BitmapImage(new Uri($"pack://application:,,,/{distro.ImagePath}"));
+                DistroImage.Source = new BitmapImage(new Uri(distro.ImagePath));
+                DownloadIsoButton.Visibility = ManualSelectRadio.IsChecked == false
+                                               ? Visibility.Visible
+                                               : Visibility.Collapsed;
             }
         }
+
+
 
         private async void DownloadIsoButton_Click(object sender, RoutedEventArgs e)
         {
             if (DistroComboBox.SelectedItem is not DistroInfo distro) return;
 
-            string downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                                               "Downloads", $"{distro.Name}.iso");
+            string downloadPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                "Downloads", $"{distro.Name}.iso"
+            );
 
             DownloadProgressBar.Visibility = Visibility.Visible;
+            DownloadProgressText.Visibility = Visibility.Visible;
 
             using var client = new HttpClient();
-            using var response = await client.GetAsync(distro.DownloadLink, HttpCompletionOption.ResponseHeadersRead);
+            using var response = await client.GetAsync(distro.DirectDownloadLink, HttpCompletionOption.ResponseHeadersRead);
             response.EnsureSuccessStatusCode();
 
             var totalBytes = response.Content.Headers.ContentLength ?? 1L;
             var buffer = new byte[8192];
             long totalRead = 0;
+
+            var startTime = DateTime.Now;
 
             using var stream = await response.Content.ReadAsStreamAsync();
             using var fileStream = File.Create(downloadPath);
@@ -376,14 +409,28 @@ namespace LinuxHub
             {
                 await fileStream.WriteAsync(buffer, 0, bytesRead);
                 totalRead += bytesRead;
-                DownloadProgressBar.Value = (double)totalRead / totalBytes * 100;
+
+                // Porcentagem
+                double percent = (double)totalRead / totalBytes * 100;
+                DownloadProgressBar.Value = percent;
+
+                // Tempo estimado
+                var elapsed = DateTime.Now - startTime;
+                double speed = totalRead / elapsed.TotalSeconds; // bytes/seg
+                double remainingSeconds = (totalBytes - totalRead) / speed;
+                string eta = $"{remainingSeconds:n0}s"; // tempo restante em segundos
+
+                DownloadProgressText.Text = $"{percent:n1}% | {eta}";
             }
 
             IsoPathTextBox.Text = downloadPath;
             DownloadProgressBar.Visibility = Visibility.Collapsed;
+            DownloadProgressText.Visibility = Visibility.Collapsed;
 
             MessageBox.Show($"Download concluído: {downloadPath}", "LinuxHub", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+
 
 
 
@@ -675,9 +722,6 @@ namespace LinuxHub
 
             return cfg;
         }
-
-
-
 
         private void InstallButton_Click(object sender, RoutedEventArgs e)
         {

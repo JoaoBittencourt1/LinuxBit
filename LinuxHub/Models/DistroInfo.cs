@@ -13,6 +13,7 @@ namespace LinuxHub.Models
         public string Description { get; set; }
         public string ImagePath { get; set; }
         public string DownloadLink { get; set; }
+        public string DirectDownloadLink { get; set; }
         public string[] CarouselImages { get; set; }
     }
 }
