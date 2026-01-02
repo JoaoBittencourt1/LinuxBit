@@ -1,18 +1,19 @@
-﻿using LinuxHub.Models;
+﻿using LinuxHub.Helpers;
+using LinuxHub.Installer;
+using LinuxHub.Models;
 using LinuxHub.Services;
 using Microsoft.Win32;
 using System;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Management;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
-using LinuxHub.Installer;
-using LinuxHub.Helpers;
 
 
 
@@ -33,6 +34,8 @@ namespace LinuxHub
             Loaded += MainWindow_Loaded;
 
             RegisterDistroClicks();
+
+            IsoOptionChanged(null, null);
         }
 
         #region Window config
@@ -303,6 +306,76 @@ namespace LinuxHub
                 if (LinuxSizeSlider.Value > LinuxSizeSlider.Maximum)
                     LinuxSizeSlider.Value = LinuxSizeSlider.Maximum;
             }
+        }
+
+        private void IsoOptionChanged(object sender, RoutedEventArgs e)
+        {
+            if (ManualSelectRadio == null || AutoDownloadRadio == null || ManualIsoGrid == null || DownloadIsoButton == null || DistroSelectionPanel == null)
+                return;
+
+            // Mostra ou oculta o grid de seleção manual
+            ManualIsoGrid.Visibility = ManualSelectRadio.IsChecked == true
+                                       ? Visibility.Visible
+                                       : Visibility.Collapsed;
+
+            // Mostra ou oculta o botão de download automático
+            DownloadIsoButton.Visibility = AutoDownloadRadio.IsChecked == true
+                                           ? Visibility.Visible
+                                           : Visibility.Collapsed;
+
+            // Barra de progresso sempre escondida no início
+            DownloadProgressBar.Visibility = Visibility.Collapsed;
+
+            // Mostra ou oculta o bloco de distribuição
+            DistroSelectionPanel.Visibility = AutoDownloadRadio.IsChecked == true
+                                              ? Visibility.Visible
+                                              : Visibility.Collapsed;
+        }
+
+
+
+
+        private void DistroComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DistroComboBox.SelectedItem is DistroInfo distro)
+            {
+                DistroText.Text = distro.Name;
+                DistroImage.Source = new BitmapImage(new Uri($"pack://application:,,,/{distro.ImagePath}"));
+            }
+        }
+
+        private async void DownloadIsoButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (DistroComboBox.SelectedItem is not DistroInfo distro) return;
+
+            string downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                                               "Downloads", $"{distro.Name}.iso");
+
+            DownloadProgressBar.Visibility = Visibility.Visible;
+
+            using var client = new HttpClient();
+            using var response = await client.GetAsync(distro.DownloadLink, HttpCompletionOption.ResponseHeadersRead);
+            response.EnsureSuccessStatusCode();
+
+            var totalBytes = response.Content.Headers.ContentLength ?? 1L;
+            var buffer = new byte[8192];
+            long totalRead = 0;
+
+            using var stream = await response.Content.ReadAsStreamAsync();
+            using var fileStream = File.Create(downloadPath);
+
+            int bytesRead;
+            while ((bytesRead = await stream.ReadAsync(buffer)) > 0)
+            {
+                await fileStream.WriteAsync(buffer, 0, bytesRead);
+                totalRead += bytesRead;
+                DownloadProgressBar.Value = (double)totalRead / totalBytes * 100;
+            }
+
+            IsoPathTextBox.Text = downloadPath;
+            DownloadProgressBar.Visibility = Visibility.Collapsed;
+
+            MessageBox.Show($"Download concluído: {downloadPath}", "LinuxHub", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
 
