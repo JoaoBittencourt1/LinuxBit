@@ -158,6 +158,16 @@ namespace LinuxHub.Services
 
         public DistroInfo Detect(string isoPath)
         {
+            if (string.IsNullOrWhiteSpace(isoPath) || !File.Exists(isoPath))
+            {
+                return new DistroInfo
+                {
+                    Name = "Distribuição desconhecida",
+                    Description = "Não foi possível identificar a distro",
+                    ImagePath = "Assets/Images/linux.png"
+                };
+            }
+
             var fileName = Path.GetFileName(isoPath).ToLower();
 
             foreach (var distro in _distros)
@@ -173,5 +183,6 @@ namespace LinuxHub.Services
                 ImagePath = "Assets/Images/linux.png"
             };
         }
+
     }
 }
