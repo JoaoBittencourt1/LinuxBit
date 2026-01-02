@@ -29,6 +29,10 @@ namespace LinuxHub.Installer
             if (cfg.EfiPartitionIndex.HasValue)
                 sb.AppendLine($"EFI_PARTITION_INDEX={cfg.EfiPartitionIndex}");
 
+            if (cfg.LinuxPartitionSizeGb > 0)
+                sb.AppendLine($"LINUX_PARTITION_SIZE_GB={cfg.LinuxPartitionSizeGb}");
+
+
             sb.AppendLine();
             sb.AppendLine("# === User ===");
             sb.AppendLine($"USERNAME=\"{cfg.Username}\"");

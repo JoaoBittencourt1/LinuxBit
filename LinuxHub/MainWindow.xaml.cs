@@ -541,15 +541,17 @@ namespace LinuxHub
 
                 // === Install ===
                 BootMode = IsUefi() ? "uefi" : "bios",
-                InstallMode = currentMode == InstallMode.Replace ? "replace" : "dualboot",
+                InstallMode = ReplaceRadio.IsChecked == true ? "replace" : "dualboot",
 
-                TargetDiskIndex = ((DiskInfo)DiskComboBox.SelectedItem).Index,
+                TargetDiskIndex = ((DiskInfo)DiskComboBox.SelectedItem)?.Index ?? 0,
                 TargetPartitionIndex =
-                    currentMode == InstallMode.DualBoot
-                        ? ((PartitionInfo)PartitionComboBox.SelectedItem).PartitionIndex
+                    DualBootRadio.IsChecked == true
+                        ? ((PartitionInfo)PartitionComboBox.SelectedItem)?.PartitionIndex
                         : null,
 
                 EfiPartitionIndex = IsUefi() ? 1 : null,
+
+                LinuxPartitionSizeGb = (int)LinuxSizeSlider.Value, // novo campo para o slider
 
                 // === User ===
                 Username = UserNameBox.Text.Trim(),
