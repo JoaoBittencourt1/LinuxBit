@@ -327,13 +327,13 @@
                         </Grid.RowDefinitions>
 
                         <!-- TÍTULO -->
-                        <TextBlock Text="Configuração de Instalação"
+                        <TextBlock Text="installation configuration"
                                    FontSize="22"
                                    FontWeight="Bold"
                                    Foreground="White"
                                    Margin="0,0,0,20"/>
 
-                        <GroupBox Header="Imagem ISO e Distribuição"
+                        <GroupBox Header="Iso Image and Distro"
                                   Grid.Row="1"
                                   Foreground="White"
                                   BorderBrush="#444"
@@ -343,7 +343,7 @@
                             <StackPanel Margin="10">
 
                                 <!-- Título ISO -->
-                                <TextBlock Text="Imagem ISO"
+                                <TextBlock Text="Iso Image"
                                            Foreground="Gray"
                                            FontWeight="SemiBold"
                                            Margin="0,0,0,6"/>
@@ -352,13 +352,13 @@
                                 <StackPanel Orientation="Horizontal"
                                             Margin="0,0,0,10">
                                     <RadioButton x:Name="AutoDownloadRadio"
-                                                 Content="Baixar automaticamente (recomendado)"
+                                                 Content="Download here(It may be slower than downloading from the source)"
                                                  Foreground="White"
                                                  IsChecked="True"
                                                  Checked="IsoOptionChanged"
                                                  Margin="0,0,20,0"/>
                                     <RadioButton x:Name="ManualSelectRadio"
-                                                 Content="Selecionar ISO manualmente"
+                                                 Content="Select ISO manually"
                                                  Foreground="White"
                                                  Checked="IsoOptionChanged"/>
                                 </StackPanel>
@@ -380,9 +380,9 @@
                                              BorderBrush="#555"
                                              Padding="8"
                                              IsReadOnly="True"
-                                             Text="Nenhuma ISO selecionada"/>
+                                             Text="No ISO selected"/>
 
-                                    <Button Content="Procurar"
+                                    <Button Content="Search"
                                             Click="BrowseIso_Click"
                                             Grid.Column="1"
                                             Height="32"
@@ -392,7 +392,7 @@
                                 <!-- Bloco da Distribuição Selecionada -->
                                 <StackPanel x:Name="DistroSelectionPanel"
                                             Margin="0,0,0,10">
-                                    <TextBlock Text="Distribuição Selecionada"
+                                    <TextBlock Text="Selected Distribution"
                                                Foreground="Gray"
                                                FontWeight="SemiBold"
                                                Margin="0,0,0,6"/>
@@ -405,7 +405,7 @@
                                                   SelectionChanged="DistroComboBox_SelectionChanged"/>
 
                                         <Button x:Name="DownloadIsoButton"
-                                                Content="Baixar ISO"
+                                                Content="Download ISO"
                                                 Height="32"
                                                 Margin="10,0,0,0"
                                                 Click="DownloadIsoButton_Click"
@@ -456,7 +456,7 @@
 
 
                         <!-- TIPO DE INSTALAÇÃO -->
-                        <GroupBox Header="Tipo de Instalação"
+                        <GroupBox Header="Installation Type"
                                   Grid.Row="3"
                                   Foreground="White"
                                   BorderBrush="#444"
@@ -465,12 +465,12 @@
                             <StackPanel Margin="10">
 
                                 <RadioButton x:Name="ReplaceRadio"
-                                             Content="Substituir Windows (apagar tudo)"
+                                             Content="Replace Windows (erase everything)"
                                              IsChecked="True"
                                              Checked="InstallTypeChanged"/>
 
                                 <RadioButton x:Name="DualBootRadio"
-                                             Content="Instalar em Dual Boot"
+                                             Content="Install in Dual Boot"
                                              Margin="0,6,0,0"
                                              Checked="InstallTypeChanged"/>
 
@@ -480,7 +480,7 @@
 
                         <!-- DISCO (Substituir Windows) -->
                         <GroupBox x:Name="DiskGroup"
-                                  Header="Disco de destino"
+                                  Header="Target disk"
                                   Grid.Row="4"
                                   Foreground="White"
                                   BorderBrush="#444"
@@ -489,7 +489,7 @@
 
                             <StackPanel Margin="10">
 
-                                <TextBlock Text="Selecione o disco onde o sistema será instalado"
+                                <TextBlock Text="Select the disk where the system will be installed."
                                            Foreground="#ccc"
                                            Margin="0,0,0,6"/>
 
@@ -502,7 +502,7 @@
 
                         <!-- PARTIÇÃO (Dual Boot) -->
                         <GroupBox x:Name="PartitionGroup"
-                                  Header="Partição para Dual Boot"
+                                  Header="Dual Boot Partition"
                                   Grid.Row="4"
                                   Foreground="White"
                                   BorderBrush="#444"
@@ -511,7 +511,7 @@
 
                             <StackPanel Margin="10">
 
-                                <TextBlock Text="Selecione a partição que será reduzida"
+                                <TextBlock Text="Select the partition to be shrunk."
                                            Foreground="#ccc"
                                            Margin="0,0,0,6"/>
 
@@ -519,7 +519,7 @@
                                           Height="30"
                                           SelectionChanged="PartitionComboBox_SelectionChanged"/>
 
-                                <TextBlock Text="Espaço reservado para Linux (GB)"
+                                <TextBlock Text="Space reserved for Linux (GB)"
                                            Foreground="White"
                                            Margin="0,12,0,0"/>
 
@@ -583,7 +583,7 @@
                                              TextChanged="PasswordTextBox_TextChanged"/>
 
                                     <TextBlock x:Name="PasswordPlaceholder"
-                                               Text="Senha"
+                                               Text="Password"
                                                Foreground="#888"
                                                Margin="10,0,0,0"
                                                VerticalAlignment="Center"
@@ -621,7 +621,7 @@
                                              TextChanged="ConfirmPasswordTextBox_TextChanged"/>
 
                                     <TextBlock x:Name="ConfirmPasswordPlaceholder"
-                                               Text="Confirmar senha"
+                                               Text="Confirm Password"
                                                Foreground="#888"
                                                Margin="10,0,0,0"
                                                VerticalAlignment="Center"
@@ -678,12 +678,12 @@
                                     CornerRadius="6"
                                     Padding="10">
                                 <TextBlock
-                                    Text=" Todos os dados do disco selecionado poderão ser APAGADOS. Faça backup antes de continuar."
+                                    Text=" All data on the selected disk may be DELETED. Back up your data before continuing. "
                                     Foreground="White"
                                     TextWrapping="Wrap"/>
                             </Border>
 
-                            <Button Content="Instalar Linux"
+                            <Button Content="Install Linux"
                                     Height="45"
                                     FontSize="16"
                                     FontWeight="Bold"
