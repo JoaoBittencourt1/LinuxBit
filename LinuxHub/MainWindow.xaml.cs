@@ -28,6 +28,7 @@ namespace LinuxHub
 
         private InstallMode currentMode = InstallMode.Replace;
 
+        private CancellationTokenSource _downloadCts;
 
         public MainWindow()
         {
@@ -57,6 +58,8 @@ namespace LinuxHub
             DistroComboBox.ItemsSource = distros;
             DistroComboBox.DisplayMemberPath = "Name"; // Mostra só o nome
             DistroComboBox.SelectedIndex = 0;
+
+            CancelDownloadButton.Visibility = Visibility.Collapsed;
         }
 
         #region Window config
@@ -326,10 +329,13 @@ namespace LinuxHub
             }
         }
 
+        private bool isDownloading = false;
+
         private void IsoOptionChanged(object sender, RoutedEventArgs e)
         {
-            if (ManualSelectRadio == null || AutoDownloadRadio == null || ManualIsoGrid == null || DownloadIsoButton == null
-                || DistroSelectionPanel == null || DistroDisplayPanel == null)
+            if (ManualSelectRadio == null || AutoDownloadRadio == null || ManualIsoGrid == null ||
+                DownloadIsoButton == null || DistroSelectionPanel == null || DistroDisplayPanel == null ||
+                CancelDownloadButton == null)
                 return;
 
             // Mostra ou oculta o grid de seleção manual
@@ -345,7 +351,7 @@ namespace LinuxHub
             // Barra de progresso sempre escondida no início
             DownloadProgressBar.Visibility = Visibility.Collapsed;
 
-            // Mostra ou oculta o bloco de distribuição
+            // Mostra ou oculta o bloco de seleção de distro
             DistroSelectionPanel.Visibility = AutoDownloadRadio.IsChecked == true
                                               ? Visibility.Visible
                                               : Visibility.Collapsed;
@@ -354,7 +360,10 @@ namespace LinuxHub
             DistroDisplayPanel.Visibility = AutoDownloadRadio.IsChecked == false
                                             ? Visibility.Visible
                                             : Visibility.Collapsed;
+
+            
         }
+
 
 
 
@@ -376,54 +385,82 @@ namespace LinuxHub
 
         private async void DownloadIsoButton_Click(object sender, RoutedEventArgs e)
         {
+
+            isDownloading = true;
+
+            // Mostra o botão de cancelar
+            CancelDownloadButton.Visibility = Visibility.Visible;
+
+            // esconde o botão de download 
+            DownloadIsoButton.Visibility = Visibility.Collapsed;
+
+            IsoOptionChanged(null, null);
+
+
             if (DistroComboBox.SelectedItem is not DistroInfo distro) return;
 
-            string downloadPath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                "Downloads", $"{distro.Name}.iso"
+            string baseDir = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "LinuxHub", "ISOs"
             );
+            Directory.CreateDirectory(baseDir);
+            string downloadPath = Path.Combine(baseDir, $"{distro.Name}.iso");
 
             DownloadProgressBar.Visibility = Visibility.Visible;
             DownloadProgressText.Visibility = Visibility.Visible;
 
-            using var client = new HttpClient();
-            using var response = await client.GetAsync(distro.DirectDownloadLink, HttpCompletionOption.ResponseHeadersRead);
-            response.EnsureSuccessStatusCode();
+            _downloadCts = new CancellationTokenSource();
+            var token = _downloadCts.Token;
 
-            var totalBytes = response.Content.Headers.ContentLength ?? 1L;
-            var buffer = new byte[8192];
-            long totalRead = 0;
-
-            var startTime = DateTime.Now;
-
-            using var stream = await response.Content.ReadAsStreamAsync();
-            using var fileStream = File.Create(downloadPath);
-
-            int bytesRead;
-            while ((bytesRead = await stream.ReadAsync(buffer)) > 0)
+            try
             {
-                await fileStream.WriteAsync(buffer, 0, bytesRead);
-                totalRead += bytesRead;
+                using var client = new HttpClient();
+                using var response = await client.GetAsync(distro.DirectDownloadLink, HttpCompletionOption.ResponseHeadersRead, token);
+                response.EnsureSuccessStatusCode();
 
-                // Porcentagem
-                double percent = (double)totalRead / totalBytes * 100;
-                DownloadProgressBar.Value = percent;
+                var totalBytes = response.Content.Headers.ContentLength ?? 1L;
+                var buffer = new byte[8192];
+                long totalRead = 0;
+                var startTime = DateTime.Now;
 
-                // Tempo estimado
-                var elapsed = DateTime.Now - startTime;
-                double speed = totalRead / elapsed.TotalSeconds; // bytes/seg
-                double remainingSeconds = (totalBytes - totalRead) / speed;
-                string eta = $"{remainingSeconds:n0}s"; // tempo restante em segundos
+                using var stream = await response.Content.ReadAsStreamAsync(token);
+                using var fileStream = File.Create(downloadPath);
 
-                DownloadProgressText.Text = $"{percent:n1}% | {eta}";
+                int bytesRead;
+                while ((bytesRead = await stream.ReadAsync(buffer, token)) > 0)
+                {
+                    await fileStream.WriteAsync(buffer, 0, bytesRead, token);
+                    totalRead += bytesRead;
+
+                    // Atualiza progresso
+                    double percent = (double)totalRead / totalBytes * 100;
+                    DownloadProgressBar.Value = percent;
+
+                    var elapsed = DateTime.Now - startTime;
+                    double speed = totalRead / elapsed.TotalSeconds;
+                    double remainingSeconds = (totalBytes - totalRead) / speed;
+                    DownloadProgressText.Text = $"{percent:n1}% | {remainingSeconds:n0}s";
+                }
+
+                selectedIsoPath = downloadPath;
+                AtualizarDistroUI(selectedIsoPath);
+
+                MessageBox.Show($"Download concluído: {downloadPath}", "LinuxHub", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-
-            IsoPathTextBox.Text = downloadPath;
-            DownloadProgressBar.Visibility = Visibility.Collapsed;
-            DownloadProgressText.Visibility = Visibility.Collapsed;
-
-            MessageBox.Show($"Download concluído: {downloadPath}", "LinuxHub", MessageBoxButton.OK, MessageBoxImage.Information);
+            catch (OperationCanceledException)
+            {
+                MessageBox.Show("Download cancelado.", "LinuxHub", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (File.Exists(downloadPath))
+                    File.Delete(downloadPath); // remove arquivo incompleto
+            }
+            finally
+            {
+                DownloadProgressBar.Visibility = Visibility.Collapsed;
+                DownloadProgressText.Visibility = Visibility.Collapsed;
+                _downloadCts = null;
+            }
         }
+
 
 
 
@@ -551,6 +588,20 @@ namespace LinuxHub
             AtualizarDistroUI(isoPath);
         }
 
+        private void CancelDownloadButton_Click(object sender, RoutedEventArgs e)
+        {
+            isDownloading = false;
+
+            // Esconde o botão de cancelar
+            CancelDownloadButton.Visibility = Visibility.Collapsed;
+
+            // Opcional: mostra o botão de download novamente
+            DownloadIsoButton.Visibility = Visibility.Visible;
+
+            _downloadCts?.Cancel();
+        }
+
+
         private void LoadDisks()
         {
             DiskComboBox.Items.Clear();
@@ -658,7 +709,12 @@ namespace LinuxHub
 
         private void AtualizarDistroUI(string isoPath)
         {
-            var distro = _distroDetector.Detect(isoPath);
+            // Detecta a distro e usa "Desconhecida" como fallback caso seja null
+            var distro = _distroDetector.Detect(isoPath) ?? new DistroInfo
+            {
+                Name = "Desconhecida",
+                ImagePath = "Assets/Images/unknown.png"
+            };
 
             DistroText.Text = distro.Name;
 
@@ -666,6 +722,7 @@ namespace LinuxHub
                 new Uri($"pack://application:,,,/{distro.ImagePath}")
             );
         }
+
 
         private InstallerConfig BuildInstallerConfig()
         {

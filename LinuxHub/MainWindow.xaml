@@ -303,7 +303,7 @@
                             </Border>
                         </StackPanel>
 
-                      
+
 
 
                     </WrapPanel>
@@ -410,13 +410,18 @@
                                                 Margin="10,0,0,0"
                                                 Click="DownloadIsoButton_Click"
                                                 Visibility="Collapsed"/>
+
+                                        <Button x:Name="CancelDownloadButton"
+                                                Content="Cancel Download"
+                                                Click="CancelDownloadButton_Click"/>
+
                                     </StackPanel>
                                 </StackPanel>
 
                                 <!-- Barra de progresso -->
                                 <StackPanel Orientation="Horizontal"
-                                        Margin="0,10,0,0"
-                                        VerticalAlignment="Center">
+                                            Margin="0,10,0,0"
+                                            VerticalAlignment="Center">
                                     <ProgressBar x:Name="DownloadProgressBar"
                                                  Height="20"
                                                  Width="250"
