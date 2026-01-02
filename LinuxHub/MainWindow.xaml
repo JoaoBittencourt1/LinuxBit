@@ -538,34 +538,79 @@
                                 </Grid>
 
                                 <Grid Margin="0,0,0,8">
+
                                     <PasswordBox x:Name="PasswordBox"
                                                  Background="#333"
                                                  Foreground="White"
                                                  BorderBrush="#555"
                                                  Padding="8"
                                                  PasswordChanged="PasswordBox_PasswordChanged"/>
+
+                                    <TextBox x:Name="PasswordTextBox"
+                                             Background="#333"
+                                             Foreground="White"
+                                             BorderBrush="#555"
+                                             Padding="8"
+                                             Visibility="Collapsed"
+                                             TextChanged="PasswordTextBox_TextChanged"/>
+
                                     <TextBlock x:Name="PasswordPlaceholder"
-                                               Text="Password"
+                                               Text="Senha"
                                                Foreground="#888"
                                                Margin="10,0,0,0"
                                                VerticalAlignment="Center"
                                                IsHitTestVisible="False"/>
+
+                                    <Button x:Name="TogglePasswordVisibilityBtn"
+                                            Content="👁"
+                                            Width="32"
+                                            Height="32"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,8,0"
+                                            Background="Transparent"
+                                            BorderBrush="{x:Null}"
+                                            Foreground="White"
+                                            Click="TogglePasswordVisibility"/>
                                 </Grid>
 
+
                                 <Grid Margin="0,0,0,8">
+
                                     <PasswordBox x:Name="ConfirmPasswordBox"
                                                  Background="#333"
                                                  Foreground="White"
                                                  BorderBrush="#555"
                                                  Padding="8"
                                                  PasswordChanged="ConfirmPasswordBox_ConfirmPasswordChanged"/>
+
+                                    <TextBox x:Name="ConfirmPasswordTextBox"
+                                             Background="#333"
+                                             Foreground="White"
+                                             BorderBrush="#555"
+                                             Padding="8"
+                                             Visibility="Collapsed"
+                                             TextChanged="ConfirmPasswordTextBox_TextChanged"/>
+
                                     <TextBlock x:Name="ConfirmPasswordPlaceholder"
-                                               Text="Confirm Password"
+                                               Text="Confirmar senha"
                                                Foreground="#888"
                                                Margin="10,0,0,0"
                                                VerticalAlignment="Center"
                                                IsHitTestVisible="False"/>
+
+                                    <Button Content="👁"
+                                            Width="32"
+                                            Height="32"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,8,0"
+                                            Background="Transparent"
+                                            BorderBrush="{x:Null}"
+                                            Foreground="White"
+                                            Click="ToggleConfirmPasswordVisibility"/>
                                 </Grid>
+
 
                                 <TextBlock x:Name="ConfirmPasswordError"
                                            Text="As senhas não coincidem"
@@ -605,18 +650,20 @@
                                     CornerRadius="6"
                                     Padding="10">
                                 <TextBlock
-                                    Text="⚠ Todos os dados do disco selecionado poderão ser APAGADOS. Faça backup antes de continuar."
+                                    Text=" Todos os dados do disco selecionado poderão ser APAGADOS. Faça backup antes de continuar."
                                     Foreground="White"
                                     TextWrapping="Wrap"/>
                             </Border>
 
                             <Button Content="Instalar Linux"
-                                    Height="45"
-                                    FontSize="16"
-                                    FontWeight="Bold"
-                                    Background="#2ecc71"
-                                    Foreground="Black"
-                                    Margin="0,15,0,0"/>
+        Height="45"
+        FontSize="16"
+        FontWeight="Bold"
+        Background="#2ecc71"
+        Foreground="Black"
+        Margin="0,15,0,0"
+        Click="InstallButton_Click"/>
+
                         </StackPanel>
 
                     </Grid>

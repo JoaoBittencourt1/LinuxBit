@@ -11,6 +11,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
+using LinuxHub.Installer;
+using LinuxHub.Helpers;
 
 
 
@@ -112,7 +114,6 @@ namespace LinuxHub
         #endregion
 
         #region Distros (dados)
-
         private DistroInfo Ubuntu() => new()
         {
             Name = "Ubuntu",
@@ -334,6 +335,48 @@ namespace LinuxHub
                 : Visibility.Hidden;
         }
 
+        private void PasswordTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            PasswordBox.Password = PasswordTextBox.Text;
+        }
+
+        private void ConfirmPasswordTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ConfirmPasswordBox.Password = ConfirmPasswordTextBox.Text;
+        }
+
+        private void TogglePasswordVisibility(object sender, RoutedEventArgs e)
+        {
+            if (PasswordBox.Visibility == Visibility.Visible)
+            {
+                PasswordTextBox.Text = PasswordBox.Password;
+                PasswordBox.Visibility = Visibility.Collapsed;
+                PasswordTextBox.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                PasswordBox.Password = PasswordTextBox.Text;
+                PasswordTextBox.Visibility = Visibility.Collapsed;
+                PasswordBox.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void ToggleConfirmPasswordVisibility(object sender, RoutedEventArgs e)
+        {
+            if (ConfirmPasswordBox.Visibility == Visibility.Visible)
+            {
+                ConfirmPasswordTextBox.Text = ConfirmPasswordBox.Password;
+                ConfirmPasswordBox.Visibility = Visibility.Collapsed;
+                ConfirmPasswordTextBox.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ConfirmPasswordBox.Password = ConfirmPasswordTextBox.Text;
+                ConfirmPasswordTextBox.Visibility = Visibility.Collapsed;
+                ConfirmPasswordBox.Visibility = Visibility.Visible;
+            }
+        }
+
 
 
         private void BrowseIso_Click(object sender, RoutedEventArgs e)
@@ -481,6 +524,74 @@ namespace LinuxHub
             DistroImage.Source = new BitmapImage(
                 new Uri($"pack://application:,,,/{distro.ImagePath}")
             );
+        }
+
+        private InstallerConfig BuildInstallerConfig()
+        {
+            var distro = _distroDetector.Detect(selectedIsoPath);
+
+            return new InstallerConfig
+            {
+                // === Distro ===
+                DistroId = distro.Id,
+                DistroName = distro.Name,
+                DistroFamily = distro.Family,
+                DistroVersion = distro.Version,
+                IsoPath = selectedIsoPath,
+
+                // === Install ===
+                BootMode = IsUefi() ? "uefi" : "bios",
+                InstallMode = currentMode == InstallMode.Replace ? "replace" : "dualboot",
+
+                TargetDiskIndex = ((DiskInfo)DiskComboBox.SelectedItem).Index,
+                TargetPartitionIndex =
+                    currentMode == InstallMode.DualBoot
+                        ? ((PartitionInfo)PartitionComboBox.SelectedItem).PartitionIndex
+                        : null,
+
+                EfiPartitionIndex = IsUefi() ? 1 : null,
+
+                // === User ===
+                Username = UserNameBox.Text.Trim(),
+                PasswordHash = CryptoHelper.GenerateSha512Hash(PasswordBox.Password),
+                Hostname = UserPcName.Text.Trim(),
+
+                // === System ===
+                Locale = SystemInfo.GetLocale(),
+                Timezone = SystemInfo.GetTimezone(),
+                Keymap = SystemInfo.GetKeymap(),
+
+                SwapEnabled = true,
+                SwapSizeGb = 8
+            };
+        }
+
+        private void InstallButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // 1. Monta o config com tudo da tela
+                var config = BuildInstallerConfig();
+
+                // 2. Salva o install.conf
+                InstallerConfigWriter.Save(config);
+
+                MessageBox.Show(
+                    "Configuração gerada com sucesso!",
+                    "LinuxHub",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Erro ao gerar instalação",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
         }
 
         #endregion

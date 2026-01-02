@@ -10,115 +10,151 @@ namespace LinuxHub.Services
 {
     public class DistroDetector
     {
-        private readonly Dictionary<string, DistroInfo> _distros =
-            new()
+        private readonly Dictionary<string, DistroInfo> _distros = new()
+{
+    // Ubuntu base
     {
-        // Ubuntu base
+        "ubuntu",
+        new DistroInfo
         {
-            "ubuntu",
-            new DistroInfo
-            {
-                Name = "Ubuntu",
-                ImagePath = "Assets/Images/ubuntu.png",
-            }
-        },
-        {
-            "kubuntu",
-            new DistroInfo
-            {
-                Name = "Kubuntu",
-                ImagePath = "Assets/Images/kubuntu.png",
-            }
-        },
-        {
-            "xubuntu",
-            new DistroInfo
-            {
-                Name = "Xubuntu",
-                ImagePath = "Assets/Images/xubuntu.png",
-            }
-        },
-
-        // Debian based
-        {
-            "mint",
-            new DistroInfo
-            {
-                Name = "Linux Mint",
-                ImagePath = "Assets/Images/mint.png",
-            }
-        },
-        {
-            "zorin",
-            new DistroInfo
-            {
-                Name = "Zorin OS",
-                ImagePath = "Assets/Images/zorin.png",
-            }
-        },
-        {
-            "pop",
-            new DistroInfo
-            {
-                Name = "Pop!_OS",
-                ImagePath = "Assets/Images/popos.png",
-            }
-        },
-
-        // Fedora / Red Hat
-        {
-            "fedora",
-            new DistroInfo
-            {
-                Name = "Fedora",
-                ImagePath = "Assets/Images/fedora.png",
-            }
-        },
-
-        // Arch based
-        {
-            "arch",
-            new DistroInfo
-            {
-                Name = "Arch Linux",
-                ImagePath = "Assets/Images/arch.png",
-            }
-        },
-        {
-            "manjaro",
-            new DistroInfo
-            {
-                Name = "Manjaro",
-                ImagePath = "Assets/Images/manjaro.png",
-            }
-        },
-        {
-            "endeavour",
-            new DistroInfo
-            {
-                Name = "EndeavourOS",
-                ImagePath = "Assets/Images/endeavouros.png",
-            }
-        },
-
-        {
-            "kali",
-            new DistroInfo
-            {
-                Name = "Kali Linux",
-                ImagePath = "Assets/Images/kali.png",
-            }
-        },
-
-        {
-            "chrome",
-            new DistroInfo
-            {
-                Name = "Chrome OS Flex",
-                ImagePath = "Assets/Images/chromeos.png",
-            }
+            Id = "ubuntu",
+            Name = "Ubuntu",
+            Family = "Debian",
+            Version = "24.04.3",
+            ImagePath = "Assets/Images/ubuntu.png",
         }
-    };
+    },
+    {
+        "kubuntu",
+        new DistroInfo
+        {
+            Id = "kubuntu",
+            Name = "Kubuntu",
+            Family = "Ubuntu",
+            Version = "24.04",
+            ImagePath = "Assets/Images/kubuntu.png",
+        }
+    },
+    {
+        "xubuntu",
+        new DistroInfo
+        {
+            Id = "xubuntu",
+            Name = "Xubuntu",
+            Family = "Ubuntu",
+            Version = "24.04",
+            ImagePath = "Assets/Images/xubuntu.png",
+        }
+    },
+
+    // Debian based
+    {
+        "mint",
+        new DistroInfo
+        {
+            Id = "mint",
+            Name = "Linux Mint",
+            Family = "Debian",
+            Version = "21",
+            ImagePath = "Assets/Images/mint.png",
+        }
+    },
+    {
+        "zorin",
+        new DistroInfo
+        {
+            Id = "zorin",
+            Name = "Zorin OS",
+            Family = "Ubuntu",
+            Version = "16",
+            ImagePath = "Assets/Images/zorin.png",
+        }
+    },
+    {
+        "pop",
+        new DistroInfo
+        {
+            Id = "pop",
+            Name = "Pop!_OS",
+            Family = "Ubuntu",
+            Version = "24.04",
+            ImagePath = "Assets/Images/popos.png",
+        }
+    },
+
+    // Fedora / Red Hat
+    {
+        "fedora",
+        new DistroInfo
+        {
+            Id = "fedora",
+            Name = "Fedora",
+            Family = "Red Hat",
+            Version = "40",
+            ImagePath = "Assets/Images/fedora.png",
+        }
+    },
+
+    // Arch based
+    {
+        "arch",
+        new DistroInfo
+        {
+            Id = "arch",
+            Name = "Arch Linux",
+            Family = "Arch",
+            Version = "2025.12.01",
+            ImagePath = "Assets/Images/arch.png",
+        }
+    },
+    {
+        "manjaro",
+        new DistroInfo
+        {
+            Id = "manjaro",
+            Name = "Manjaro",
+            Family = "Arch",
+            Version = "25.0",
+            ImagePath = "Assets/Images/manjaro.png",
+        }
+    },
+    {
+        "endeavour",
+        new DistroInfo
+        {
+            Id = "endeavour",
+            Name = "EndeavourOS",
+            Family = "Arch",
+            Version = "25.0",
+            ImagePath = "Assets/Images/endeavouros.png",
+        }
+    },
+
+    {
+        "kali",
+        new DistroInfo
+        {
+            Id = "kali",
+            Name = "Kali Linux",
+            Family = "Debian",
+            Version = "2025.1",
+            ImagePath = "Assets/Images/kali.png",
+        }
+    },
+
+    {
+        "chrome",
+        new DistroInfo
+        {
+            Id = "chrome",
+            Name = "Chrome OS Flex",
+            Family = "ChromiumOS",
+            Version = "114",
+            ImagePath = "Assets/Images/chromeos.png",
+        }
+    }
+};
+
 
         public DistroInfo Detect(string isoPath)
         {
