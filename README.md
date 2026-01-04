@@ -14,7 +14,7 @@ LinuxHub is ideal for new users who want to find their ideal distro, understand 
 
 ---
 
-## como usar:
+## How to use:
 
 1. Clone the repository (HTTPS, SSH, or GitHub CLI):
 
