@@ -29,6 +29,10 @@ namespace LinuxHub
         private InstallMode currentMode = InstallMode.Replace;
 
         private CancellationTokenSource _downloadCts;
+        
+        private DistroInfo selectedDistro;
+
+
 
         public MainWindow()
         {
@@ -142,17 +146,16 @@ namespace LinuxHub
         #region Distros (dados)
         private DistroInfo Ubuntu() => new()
         {
+            Id = "ubuntu",
             Name = "Ubuntu",
-            Description = "O Ubuntu é uma das distribuições Linux mais populares e amigáveis...",
+            Family = "Debian",
+            Version = "24.04.3",
+            Description = "O Ubuntu é uma das distribuições Linux mais populares...",
             ImagePath = "pack://application:,,,/Assets/Images/ubuntu.png",
             DownloadLink = "https://ubuntu.com/download/desktop",
             DirectDownloadLink = "https://mirror.pop-sc.rnp.br/mirror/ubuntu-releases/24.04.3/ubuntu-24.04.3-desktop-amd64.iso",
-            CarouselImages = new[]
-            {
-                "pack://application:,,,/Assets/Images/Ubuntu/ubuntu1.jpg",
-                "pack://application:,,,/Assets/Images/Ubuntu/ubuntu2.png"
-            }
         };
+
 
         private DistroInfo Mint() => new()
         {
@@ -385,26 +388,29 @@ namespace LinuxHub
 
         private async void DownloadIsoButton_Click(object sender, RoutedEventArgs e)
         {
-
             isDownloading = true;
 
-            // Mostra o botão de cancelar
+            
+            if (DistroComboBox.SelectedItem is not DistroInfo distro)
+                return;
+
+          
+            selectedDistro = distro;
+
+            
             CancelDownloadButton.Visibility = Visibility.Visible;
-
-            // esconde o botão de download 
             DownloadIsoButton.Visibility = Visibility.Collapsed;
-
             IsoOptionChanged(null, null);
-
-
-            if (DistroComboBox.SelectedItem is not DistroInfo distro) return;
 
             string baseDir = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "LinuxHub", "ISOs"
             );
+
             Directory.CreateDirectory(baseDir);
-            string downloadPath = Path.Combine(baseDir, $"{distro.Name}.iso");
+
+            
+            string downloadPath = Path.Combine(baseDir, $"{distro.Id}.iso");
 
             DownloadProgressBar.Visibility = Visibility.Visible;
             DownloadProgressText.Visibility = Visibility.Visible;
@@ -415,7 +421,12 @@ namespace LinuxHub
             try
             {
                 using var client = new HttpClient();
-                using var response = await client.GetAsync(distro.DirectDownloadLink, HttpCompletionOption.ResponseHeadersRead, token);
+                using var response = await client.GetAsync(
+                    distro.DirectDownloadLink,
+                    HttpCompletionOption.ResponseHeadersRead,
+                    token
+                );
+
                 response.EnsureSuccessStatusCode();
 
                 var totalBytes = response.Content.Headers.ContentLength ?? 1L;
@@ -432,7 +443,6 @@ namespace LinuxHub
                     await fileStream.WriteAsync(buffer, 0, bytesRead, token);
                     totalRead += bytesRead;
 
-                    // Atualiza progresso
                     double percent = (double)totalRead / totalBytes * 100;
                     DownloadProgressBar.Value = percent;
 
@@ -443,15 +453,28 @@ namespace LinuxHub
                 }
 
                 selectedIsoPath = downloadPath;
+
+                
                 AtualizarDistroUI(selectedIsoPath);
 
-                MessageBox.Show($"Download concluído: {downloadPath}", "LinuxHub", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(
+                    $"Download concluído: {downloadPath}",
+                    "LinuxHub",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
             }
             catch (OperationCanceledException)
             {
-                MessageBox.Show("Download cancelado.", "LinuxHub", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(
+                    "Download cancelado.",
+                    "LinuxHub",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+
                 if (File.Exists(downloadPath))
-                    File.Delete(downloadPath); // remove arquivo incompleto
+                    File.Delete(downloadPath);
             }
             finally
             {
@@ -460,6 +483,7 @@ namespace LinuxHub
                 _downloadCts = null;
             }
         }
+
 
 
 
@@ -726,7 +750,10 @@ namespace LinuxHub
 
         private InstallerConfig BuildInstallerConfig()
         {
-            var distro = _distroDetector.Detect(selectedIsoPath);
+            var distro =
+    selectedDistro ??
+    _distroDetector.Detect(selectedIsoPath);
+
 
             var cfg = new InstallerConfig
             {
