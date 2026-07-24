@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="Shell_Title" xml:space="preserve">
+    <value>LinuxHub</value>
+  </data>
+  <data name="Shell_NavCatalog" xml:space="preserve">
+    <value>Distros</value>
+  </data>
+  <data name="Shell_NavInstall" xml:space="preserve">
+    <value>Installation</value>
+  </data>
+  <data name="Shell_LanguageTooltip" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Shell_LanguagePtBr" xml:space="preserve">
+    <value>Português (Brasil)</value>
+  </data>
+  <data name="Shell_LanguageEnUs" xml:space="preserve">
+    <value>English (US)</value>
+  </data>
+
+  <data name="CatalogDetail_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="CatalogDetail_DownloadLabel" xml:space="preserve">
+    <value>Download:</value>
+  </data>
+  <data name="CatalogDetail_DownloadLinkText" xml:space="preserve">
+    <value>Click here to download!</value>
+  </data>
+  <data name="CatalogDetail_LinkOpenFailedTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="CatalogDetail_LinkOpenFailedMessage" xml:space="preserve">
+    <value>Could not open the link.</value>
+  </data>
+
+  <data name="Wizard_Title" xml:space="preserve">
+    <value>Installation configuration</value>
+  </data>
+  <data name="Wizard_IsoSectionTitle" xml:space="preserve">
+    <value>ISO image and distro</value>
+  </data>
+  <data name="Wizard_IsoImageLabel" xml:space="preserve">
+    <value>ISO image</value>
+  </data>
+  <data name="Wizard_DownloadHereOption" xml:space="preserve">
+    <value>Download here (may be slower than downloading from the source)</value>
+  </data>
+  <data name="Wizard_SelectManuallyOption" xml:space="preserve">
+    <value>Select ISO manually</value>
+  </data>
+  <data name="Wizard_NoIsoSelected" xml:space="preserve">
+    <value>No ISO selected</value>
+  </data>
+  <data name="Wizard_SearchButton" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Wizard_BrowseIsoDialogTitle" xml:space="preserve">
+    <value>Select ISO image</value>
+  </data>
+  <data name="Wizard_BrowseIsoDialogFilter" xml:space="preserve">
+    <value>ISO image (*.iso)|*.iso</value>
+  </data>
+  <data name="Wizard_SelectedDistributionLabel" xml:space="preserve">
+    <value>Selected distribution</value>
+  </data>
+  <data name="Wizard_DownloadIsoButton" xml:space="preserve">
+    <value>Download ISO</value>
+  </data>
+  <data name="Wizard_CancelDownloadButton" xml:space="preserve">
+    <value>Cancel download</value>
+  </data>
+  <data name="Wizard_NoDistroSelected" xml:space="preserve">
+    <value>No distribution selected</value>
+  </data>
+  <data name="Wizard_InstallTypeTitle" xml:space="preserve">
+    <value>Installation type</value>
+  </data>
+  <data name="Wizard_ReplaceOption" xml:space="preserve">
+    <value>Replace Windows (erase everything)</value>
+  </data>
+  <data name="Wizard_DualBootOption" xml:space="preserve">
+    <value>Install in dual-boot</value>
+  </data>
+  <data name="Wizard_TargetDiskTitle" xml:space="preserve">
+    <value>Target disk</value>
+  </data>
+  <data name="Wizard_TargetDiskHint" xml:space="preserve">
+    <value>Select the disk where the system will be installed.</value>
+  </data>
+  <data name="Wizard_DualBootPartitionTitle" xml:space="preserve">
+    <value>Dual-boot partition</value>
+  </data>
+  <data name="Wizard_DualBootPartitionHint" xml:space="preserve">
+    <value>Select the partition to be shrunk.</value>
+  </data>
+  <data name="Wizard_ReservedSpaceLabel" xml:space="preserve">
+    <value>Space reserved for Linux (GB)</value>
+  </data>
+  <data name="Wizard_UserSectionTitle" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="Wizard_UsernamePlaceholder" xml:space="preserve">
+    <value>User name</value>
+  </data>
+  <data name="Wizard_PasswordPlaceholder" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Wizard_ConfirmPasswordPlaceholder" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="Wizard_PasswordMismatch" xml:space="preserve">
+    <value>Passwords do not match</value>
+  </data>
+  <data name="Wizard_PcNamePlaceholder" xml:space="preserve">
+    <value>PC name</value>
+  </data>
+  <data name="Wizard_WarningBanner" xml:space="preserve">
+    <value>All data on the selected disk may be DELETED. Back up your data before continuing.</value>
+  </data>
+  <data name="Wizard_InstallButton" xml:space="preserve">
+    <value>Install Linux</value>
+  </data>
+  <data name="Wizard_UefiWarningTitle" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="Wizard_UefiWarningMessage" xml:space="preserve">
+    <value>Your system is NOT in UEFI mode.
+Automatic installation may not work.</value>
+  </data>
+  <data name="Wizard_InstallSuccessTitle" xml:space="preserve">
+    <value>LinuxHub</value>
+  </data>
+  <data name="Wizard_InstallSuccessMessage" xml:space="preserve">
+    <value>Installation configuration generated successfully!</value>
+  </data>
+  <data name="Wizard_InstallErrorTitle" xml:space="preserve">
+    <value>Error generating installation</value>
+  </data>
+  <data name="Wizard_IsoInvalidTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Wizard_IsoInvalidMessage" xml:space="preserve">
+    <value>Invalid or too small ISO.
+Select a valid Linux ISO.</value>
+  </data>
+  <data name="Wizard_DownloadCompleted" xml:space="preserve">
+    <value>Download completed: {0}</value>
+  </data>
+  <data name="Wizard_DownloadCancelled" xml:space="preserve">
+    <value>Download cancelled.</value>
+  </data>
+  <data name="Wizard_DownloadErrorTitle" xml:space="preserve">
+    <value>Download error</value>
+  </data>
+</root>

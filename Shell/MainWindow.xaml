@@ -1,0 +1,79 @@
+<ui:FluentWindow x:Class="LinuxHub.Shell.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:loc="clr-namespace:LinuxHub.Common.Localization"
+        Title="{loc:Loc Shell_Title}"
+        Height="640"
+        Width="1040"
+        MinHeight="480"
+        MinWidth="760"
+        WindowBackdropType="Mica"
+        ExtendsContentIntoTitleBar="True"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Title="{loc:Loc Shell_Title}" Grid.Row="0">
+            <ui:TitleBar.TrailingContent>
+                <ui:Button x:Name="LanguageButton"
+                           Appearance="Transparent"
+                           ToolTip="{loc:Loc Shell_LanguageTooltip}"
+                           Click="LanguageButton_Click">
+                    <ui:Button.Icon>
+                        <ui:SymbolIcon Symbol="Translate24"/>
+                    </ui:Button.Icon>
+                    <ui:Button.ContextMenu>
+                        <ContextMenu x:Name="LanguageMenu" Placement="Bottom">
+                            <MenuItem Header="{loc:Loc Shell_LanguagePtBr}" Click="PortugueseMenuItem_Click"/>
+                            <MenuItem Header="{loc:Loc Shell_LanguageEnUs}" Click="EnglishMenuItem_Click"/>
+                        </ContextMenu>
+                    </ui:Button.ContextMenu>
+                </ui:Button>
+            </ui:TitleBar.TrailingContent>
+        </ui:TitleBar>
+
+        <!-- Navegação por troca direta de conteúdo (ContentControl), não pelo
+             gerenciamento interno de conteúdo do NavigationView — mais simples e
+             previsível de verificar do que depender do comportamento interno dele. -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="190"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Margin="8,12,8,8">
+                <ui:Button x:Name="CatalogNavButton"
+                           Content="{loc:Loc Shell_NavCatalog}"
+                           Appearance="Secondary"
+                           HorizontalAlignment="Stretch"
+                           HorizontalContentAlignment="Left"
+                           Height="42"
+                           Margin="0,0,0,6"
+                           Click="CatalogNavButton_Click">
+                    <ui:Button.Icon>
+                        <ui:SymbolIcon Symbol="Grid24"/>
+                    </ui:Button.Icon>
+                </ui:Button>
+
+                <ui:Button x:Name="InstallNavButton"
+                           Content="{loc:Loc Shell_NavInstall}"
+                           Appearance="Transparent"
+                           HorizontalAlignment="Stretch"
+                           HorizontalContentAlignment="Left"
+                           Height="42"
+                           Click="InstallNavButton_Click">
+                    <ui:Button.Icon>
+                        <ui:SymbolIcon Symbol="Desktop24"/>
+                    </ui:Button.Icon>
+                </ui:Button>
+            </StackPanel>
+
+            <ContentControl x:Name="ContentHost" Grid.Column="1"/>
+        </Grid>
+    </Grid>
+</ui:FluentWindow>
