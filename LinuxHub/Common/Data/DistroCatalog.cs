@@ -1,0 +1,214 @@
+using LinuxHub.Common.Models;
+
+namespace LinuxHub.Common.Data
+{
+    /// <summary>
+    /// Fonte única de verdade para as distros suportadas — usada tanto para exibição
+    /// no catálogo quanto para detecção de distro a partir de um nome de arquivo ISO.
+    /// Antes desta consolidação existiam duas listas divergentes (MainWindow e
+    /// DistroDetector); ver design.md do change restructure-feature-based-mvvm.
+    /// </summary>
+    public static class DistroCatalog
+    {
+        public static IReadOnlyList<DistroInfo> All { get; } = new List<DistroInfo>
+        {
+            new()
+            {
+                Id = "ubuntu",
+                Name = "Ubuntu",
+                Family = "Debian",
+                Version = "24.04.3",
+                Description = "O ubuntu é uma das melhores distros para iniciantes, contem uma interface simples e" +
+                    "moderna que possibilita uma facil adaptabilidade do usuario com o sistema. Muit recomendado para novos usuarios.",
+                ImagePath = "pack://application:,,,/Assets/Images/Ubuntu.png",
+                DownloadLink = "https://ubuntu.com/download/desktop",
+                DirectDownloadLink = "https://mirror.pop-sc.rnp.br/mirror/ubuntu-releases/24.04.3/ubuntu-24.04.3-desktop-amd64.iso",
+                CarouselImages = new[]
+                {
+                    "pack://application:,,,/Assets/Images/Ubuntu/ubuntu1.jpg",
+                    "pack://application:,,,/Assets/Images/Ubuntu/ubuntu2.png"
+                }
+            },
+            new()
+            {
+                Id = "mint",
+                Name = "Linux Mint",
+                Family = "Debian",
+                Version = "22.2",
+                Description = "O Linux Mint é focado em usuários vindos do Windows...",
+                ImagePath = "pack://application:,,,/Assets/Images/mint.png",
+                DownloadLink = "https://linuxmint.com/download.php",
+                DirectDownloadLink = "https://mint.portalidea.com.br/iso/stable/22.2/linuxmint-22.2-cinnamon-64bit.iso",
+                CarouselImages = new[]
+                {
+                    "pack://application:,,,/Assets/Images/Mint/Mint1.png",
+                    "pack://application:,,,/Assets/Images/Mint/mint2.png"
+                }
+            },
+            new()
+            {
+                Id = "zorin",
+                Name = "Zorin OS",
+                Family = "Ubuntu",
+                Version = "18",
+                Description = "O Zorin OS é moderno, elegante e acessível...",
+                ImagePath = "pack://application:,,,/Assets/Images/zorin.png",
+                DownloadLink = "https://zorin.com/os/download/",
+                DirectDownloadLink = "https://mirror.umd.edu/zorin/18/Zorin-OS-18-Core-64-bit-r2.iso",
+                CarouselImages = new[]
+                {
+                    "pack://application:,,,/Assets/Images/Zorin/zorin1.png",
+                    "pack://application:,,,/Assets/Images/Zorin/zorin2.jpg",
+                    "pack://application:,,,/Assets/Images/Zorin/zorin3.jpg"
+                }
+            },
+            new()
+            {
+                Id = "pop",
+                Name = "Pop!_OS",
+                Family = "Ubuntu",
+                Version = "24.04",
+                Description = "Distribuição focada em produtividade e desempenho...",
+                ImagePath = "pack://application:,,,/Assets/Images/popos.png",
+                DownloadLink = "https://system76.com/pop/",
+                DirectDownloadLink = "https://iso.pop-os.org/24.04/amd64/generic/22/pop-os_24.04_amd64_generic_22.iso",
+                CarouselImages = new[]
+                {
+                    "pack://application:,,,/Assets/Images/PopOs/pop1.png",
+                    "pack://application:,,,/Assets/Images/PopOs/pop2.png"
+                }
+            },
+            new()
+            {
+                Id = "fedora",
+                Name = "Fedora",
+                Family = "Red Hat",
+                Version = "43",
+                Description = "Distribuição moderna e inovadora...",
+                ImagePath = "pack://application:,,,/Assets/Images/fedora.png",
+                DownloadLink = "https://www.fedoraproject.org/pt-br/workstation/download",
+                DirectDownloadLink = "https://download.fedoraproject.org/pub/fedora/linux/releases/43/KDE/x86_64/iso/Fedora-KDE-Desktop-Live-43-1.6.x86_64.iso",
+                CarouselImages = new[]
+                {
+                    "pack://application:,,,/Assets/Images/Fedora/fedora1.jpg",
+                    "pack://application:,,,/Assets/Images/Fedora/fedora2.jpg",
+                    "pack://application:,,,/Assets/Images/Fedora/fedora3.jpg"
+                }
+            },
+            new()
+            {
+                Id = "kubuntu",
+                Name = "Kubuntu",
+                Family = "Ubuntu",
+                Version = "24.04",
+                Description = "Ubuntu com KDE Plasma...",
+                ImagePath = "pack://application:,,,/Assets/Images/Kubuntu.png",
+                DownloadLink = "https://kubuntu.org/archives/getkubuntu.html",
+                // Link direto do Kubuntu está indisponível na origem; mantido como no código
+                // original (aponta para o instalador do Pop!_OS) — correção de URL está fora
+                // do escopo desta reorganização arquitetural.
+                DirectDownloadLink = "https://iso.pop-os.org/24.04/amd64/generic/22/pop-os_24.04_amd64_generic_22.iso",
+                CarouselImages = new[]
+                {
+                    "pack://application:,,,/Assets/Images/Kubuntu/Kubuntu1.png"
+                }
+            },
+            new()
+            {
+                Id = "xubuntu",
+                Name = "Xubuntu",
+                Family = "Ubuntu",
+                Version = "25.10",
+                Description = "Distribuição leve baseada no Ubuntu...",
+                ImagePath = "pack://application:,,,/Assets/Images/Xubuntu.png",
+                DownloadLink = "https://xubuntu.org/download/",
+                DirectDownloadLink = "https://ftp.ussg.iu.edu/linux/xubuntu/releases/25.10/release/xubuntu-25.10-desktop-amd64.iso",
+                CarouselImages = new[]
+                {
+                    "pack://application:,,,/Assets/Images/Xubuntu/xubuntu.png"
+                }
+            },
+            new()
+            {
+                Id = "manjaro",
+                Name = "Manjaro",
+                Family = "Arch",
+                Version = "25.0.10",
+                Description = "Baseado em Arch com facilidade de uso...",
+                ImagePath = "pack://application:,,,/Assets/Images/manjaro.png",
+                DownloadLink = "https://manjaro.org/products/download/x86",
+                DirectDownloadLink = "https://download.manjaro.org/xfce/25.0.10/manjaro-xfce-25.0.10-251013-linux612.iso",
+                CarouselImages = new[]
+                {
+                    "pack://application:,,,/Assets/Images/Manjaro/manjaro1.jpg",
+                    "pack://application:,,,/Assets/Images/Manjaro/manjaro2.jpg"
+                }
+            },
+            new()
+            {
+                Id = "arch",
+                Name = "Arch Linux",
+                Family = "Arch",
+                Version = "2026.01.01",
+                Description = "Distribuição minimalista e altamente personalizável...",
+                ImagePath = "pack://application:,,,/Assets/Images/arch.png",
+                DownloadLink = "https://archlinux.org/download/",
+                DirectDownloadLink = "https://mirror.adectra.com/archlinux/iso/2026.01.01/archlinux-2026.01.01-x86_64.iso",
+                CarouselImages = new[]
+                {
+                    "pack://application:,,,/Assets/Images/Arch/arch1.png",
+                    "pack://application:,,,/Assets/Images/Arch/arch2.png",
+                    "pack://application:,,,/Assets/Images/Arch/arch3.png",
+                    "pack://application:,,,/Assets/Images/Arch/arch4.png"
+                }
+            },
+            new()
+            {
+                Id = "endeavour",
+                Name = "EndeavourOS",
+                Family = "Arch",
+                Version = "2025.11.24",
+                Description = "Arch guiado e acessível...",
+                ImagePath = "pack://application:,,,/Assets/Images/endeavouros.png",
+                DownloadLink = "https://endeavouros.com/",
+                DirectDownloadLink = "https://mirrors.gigenet.com/endeavouros/iso/EndeavourOS_Ganymede-2025.11.24.iso",
+                CarouselImages = new[]
+                {
+                    "pack://application:,,,/Assets/Images/End/end1.jpg",
+                    "pack://application:,,,/Assets/Images/End/end2.png",
+                    "pack://application:,,,/Assets/Images/End/end3.jpeg"
+                }
+            },
+            new()
+            {
+                Id = "kali",
+                Name = "Kali Linux",
+                Family = "Debian",
+                Version = "2025.4",
+                Description = "Distribuição para segurança ofensiva...",
+                ImagePath = "pack://application:,,,/Assets/Images/kali.png",
+                DownloadLink = "https://www.kali.org/get-kali/",
+                DirectDownloadLink = "https://cdimage.kali.org/kali-2025.4/kali-linux-2025.4-installer-amd64.iso",
+                CarouselImages = new[]
+                {
+                    "pack://application:,,,/Assets/Images/Kali/kali1.jpg",
+                    "pack://application:,,,/Assets/Images/Kali/kali2.jpg"
+                }
+            },
+        };
+
+        /// <summary>
+        /// Identifica a distro a partir do nome de um arquivo ISO, casando o Id de cada
+        /// entrada do catálogo como substring do nome (case-insensitive). Retorna null
+        /// quando nenhuma distro é reconhecida — quem chama decide o fallback.
+        /// </summary>
+        public static DistroInfo? FindByIsoFileName(string fileName)
+        {
+            if (string.IsNullOrWhiteSpace(fileName))
+                return null;
+
+            var lowered = fileName.ToLowerInvariant();
+            return All.FirstOrDefault(distro => lowered.Contains(distro.Id));
+        }
+    }
+}
