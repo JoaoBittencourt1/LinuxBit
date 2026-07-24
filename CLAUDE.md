@@ -10,10 +10,13 @@ SOLID, anti-duplicação e clean code deste projeto. Não são opcionais.
 
 ## Estrutura
 
-- `LinuxHub/Features/<Feature>/{Views,ViewModels,Services}` — código de app,
+O projeto C# fica direto na raiz do repo (`LinuxHub.csproj` na raiz, não numa
+subpasta `LinuxHub/`) — solução de projeto único, sem repo-dentro-de-repo.
+
+- `Features/<Feature>/{Views,ViewModels,Services}` — código de app,
   organizado por feature.
-- `LinuxHub/Common/{Models,Data,Mvvm}` — compartilhado entre features.
-- `LinuxHub/installer/` — scripts/perfis bash que a app gera e grava para o
+- `Common/{Models,Data,Mvvm,Localization}` — compartilhado entre features.
+- `installer/` — scripts/perfis bash que a app gera e grava para o
   instalador Linux-side. Não é código C# da aplicação; não reorganizar junto
   com o resto.
 - `openspec/` — propostas e specs das mudanças de arquitetura/feature.

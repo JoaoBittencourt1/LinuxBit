@@ -1,0 +1,191 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\Icons\favicon(2).ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Images\arch.png" />
+    <None Remove="Assets\Images\Arch\arch1.png" />
+    <None Remove="Assets\Images\Arch\arch2.png" />
+    <None Remove="Assets\Images\Arch\arch3.png" />
+    <None Remove="Assets\Images\Arch\arch4.png" />
+    <None Remove="Assets\Images\chromeos.png" />
+    <None Remove="Assets\Images\Chrome\Chrome2.png" />
+    <None Remove="Assets\Images\Chrome\Chromeos.jpg" />
+    <None Remove="Assets\Images\endeavouros.png" />
+    <None Remove="Assets\Images\End\end1.jpg" />
+    <None Remove="Assets\Images\End\end2.png" />
+    <None Remove="Assets\Images\End\end3.jpeg" />
+    <None Remove="Assets\Images\fedora.png" />
+    <None Remove="Assets\Images\Fedora\fedora1.jpg" />
+    <None Remove="Assets\Images\Fedora\fedora2.jpg" />
+    <None Remove="Assets\Images\Fedora\fedora3.jpg" />
+    <None Remove="Assets\Images\kali.png" />
+    <None Remove="Assets\Images\Kali\kali1.jpg" />
+    <None Remove="Assets\Images\Kali\kali2.jpg" />
+    <None Remove="Assets\Images\kubuntu.png" />
+    <None Remove="Assets\Images\Kubuntu\kubuntu1.png" />
+    <None Remove="Assets\Images\manjaro.png" />
+    <None Remove="Assets\Images\Manjaro\manjaro1.jpg" />
+    <None Remove="Assets\Images\Manjaro\manjaro2.jpg" />
+    <None Remove="Assets\Images\mint.png" />
+    <None Remove="Assets\Images\Mint\Mint1.png" />
+    <None Remove="Assets\Images\Mint\mint2.png" />
+    <None Remove="Assets\Images\popos.png" />
+    <None Remove="Assets\Images\PopOs\pop1.png" />
+    <None Remove="Assets\Images\PopOs\pop2.png" />
+    <None Remove="Assets\Images\PopOs\pop3.jpg" />
+    <None Remove="Assets\Images\Ubuntu.png" />
+    <None Remove="Assets\Images\Ubuntu\ubuntu1.jpg" />
+    <None Remove="Assets\Images\Ubuntu\ubuntu2.png" />
+    <None Remove="Assets\Images\xubuntu.png" />
+    <None Remove="Assets\Images\Xubuntu\xubuntu.png" />
+    <None Remove="Assets\Images\zorin.png" />
+    <None Remove="Assets\Images\Zorin\zorin1.png" />
+    <None Remove="Assets\Images\Zorin\zorin2.jpg" />
+    <None Remove="Assets\Images\Zorin\zorin3.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Icons\favicon(2).ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="installer\core\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Management" Version="10.0.1" />
+    <PackageReference Include="WPF-UI" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Images\arch.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Arch\arch1.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Arch\arch2.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Arch\arch3.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Arch\arch4.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\chromeos.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Chrome\Chrome2.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Chrome\Chromeos.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\endeavouros.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\End\end1.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\End\end2.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\End\end3.jpeg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\fedora.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Fedora\fedora1.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Fedora\fedora2.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Fedora\fedora3.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\kali.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Kali\kali1.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Kali\kali2.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\kubuntu.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Kubuntu\kubuntu1.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\manjaro.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Manjaro\manjaro1.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Manjaro\manjaro2.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\mint.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Mint\Mint1.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Mint\mint2.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\popos.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\PopOs\pop1.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\PopOs\pop2.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\PopOs\pop3.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Ubuntu.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Ubuntu\ubuntu1.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Ubuntu\ubuntu2.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\xubuntu.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Xubuntu\xubuntu.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\zorin.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Zorin\zorin1.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Zorin\zorin2.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Zorin\zorin3.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,51 @@
+using System.Windows.Input;
+using LinuxHub.Common.Data;
+using LinuxHub.Common.Models;
+using LinuxHub.Common.Mvvm;
+
+namespace LinuxHub.Features.Catalog.ViewModels
+{
+    /// <summary>
+    /// Navegação Catalog → Detalhe → Imagem em tela cheia é dirigida por estado
+    /// (não por Window/Frame): a View troca o que exibe conforme
+    /// <see cref="SelectedDistroDetail"/>/<see cref="FullscreenImagePath"/> mudam.
+    /// Ver design.md do change modernize-ui-and-localization.
+    /// </summary>
+    public class CatalogViewModel : ObservableObject
+    {
+        private DistroDetailViewModel? _selectedDistroDetail;
+        private string? _fullscreenImagePath;
+
+        public CatalogViewModel()
+        {
+            Distros = DistroCatalog.All;
+            OpenDistroCommand = new RelayCommand(param => OpenDistro((DistroInfo)param!));
+            CloseFullscreenCommand = new RelayCommand(() => FullscreenImagePath = null);
+        }
+
+        public IReadOnlyList<DistroInfo> Distros { get; }
+
+        public DistroDetailViewModel? SelectedDistroDetail
+        {
+            get => _selectedDistroDetail;
+            private set => SetProperty(ref _selectedDistroDetail, value);
+        }
+
+        public string? FullscreenImagePath
+        {
+            get => _fullscreenImagePath;
+            private set => SetProperty(ref _fullscreenImagePath, value);
+        }
+
+        public ICommand OpenDistroCommand { get; }
+        public ICommand CloseFullscreenCommand { get; }
+
+        private void OpenDistro(DistroInfo distro)
+        {
+            var detail = new DistroDetailViewModel(distro);
+            detail.OpenImageRequested += path => FullscreenImagePath = path;
+            detail.BackRequested += () => SelectedDistroDetail = null;
+            SelectedDistroDetail = detail;
+        }
+    }
+}
