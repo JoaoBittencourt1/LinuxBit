@@ -81,6 +81,15 @@
   <data name="CatalogDetail_Back" xml:space="preserve">
     <value>Back</value>
   </data>
+  <data name="CatalogDetail_CreatedLabel" xml:space="preserve">
+    <value>Created in:</value>
+  </data>
+  <data name="CatalogDetail_MaintainerLabel" xml:space="preserve">
+    <value>Maintained by:</value>
+  </data>
+  <data name="CatalogDetail_BeginnerLabel" xml:space="preserve">
+    <value>For beginners:</value>
+  </data>
   <data name="CatalogDetail_DownloadLabel" xml:space="preserve">
     <value>Download:</value>
   </data>
@@ -92,6 +101,79 @@
   </data>
   <data name="CatalogDetail_LinkOpenFailedMessage" xml:space="preserve">
     <value>Could not open the link.</value>
+  </data>
+
+  <data name="Distro_UnknownName" xml:space="preserve">
+    <value>Unknown distribution</value>
+  </data>
+  <data name="Distro_unknown_Description" xml:space="preserve">
+    <value>Could not identify the distro.</value>
+  </data>
+  <data name="Distro_ubuntu_Description" xml:space="preserve">
+    <value>Ubuntu is the most popular Linux distribution in the world, created to make Linux accessible to everyone. Based on Debian, it offers a polished GNOME desktop, broad hardware compatibility, and one of the largest support communities in the Linux ecosystem. It's the most common entry point for people migrating from Windows or macOS.</value>
+  </data>
+  <data name="Distro_ubuntu_Maintainer" xml:space="preserve">
+    <value>Canonical Ltd.</value>
+  </data>
+  <data name="Distro_mint_Description" xml:space="preserve">
+    <value>Linux Mint started out as a friendlier alternative to Ubuntu, focused on delivering an out-of-the-box experience with no extra setup required. Its Cinnamon desktop mirrors the layout of Windows (start menu, taskbar), easing the transition for new users. It ships with multimedia codecs and proprietary drivers pre-installed.</value>
+  </data>
+  <data name="Distro_mint_Maintainer" xml:space="preserve">
+    <value>Linux Mint Team (Clement Lefebvre)</value>
+  </data>
+  <data name="Distro_zorin_Description" xml:space="preserve">
+    <value>Zorin OS was created by the Zorin brothers with the specific goal of easing the migration of Windows and macOS users to Linux. It lets you switch between interface layouts that mimic Windows, macOS, or Chrome OS, flattening the learning curve. Based on Ubuntu, it inherits its stability and hardware compatibility.</value>
+  </data>
+  <data name="Distro_zorin_Maintainer" xml:space="preserve">
+    <value>Zorin Group</value>
+  </data>
+  <data name="Distro_pop_Description" xml:space="preserve">
+    <value>Pop!_OS is developed by System76, an American manufacturer of Linux-focused laptops and desktops. It's optimized for developers, content creators, and gamers, with excellent NVIDIA and AMD GPU support and an automatic tiling window manager (COSMIC). Based on Ubuntu, it keeps good compatibility with the existing software catalog.</value>
+  </data>
+  <data name="Distro_pop_Maintainer" xml:space="preserve">
+    <value>System76</value>
+  </data>
+  <data name="Distro_fedora_Description" xml:space="preserve">
+    <value>Fedora is sponsored by Red Hat (IBM) and acts as a showcase for the latest technologies in the Linux ecosystem — innovations like systemd and Wayland debuted on Fedora before reaching other distros. It strictly follows free software principles and has a release cycle of roughly 6 months.</value>
+  </data>
+  <data name="Distro_fedora_Maintainer" xml:space="preserve">
+    <value>Fedora Project (sponsored by Red Hat / IBM)</value>
+  </data>
+  <data name="Distro_kubuntu_Description" xml:space="preserve">
+    <value>Kubuntu is the official Ubuntu flavor that swaps GNOME for the KDE Plasma desktop, known for its high degree of visual customization — themes, effects, and window layouts are all adjustable. It keeps the same package base and repositories as Ubuntu, including Snap Store compatibility.</value>
+  </data>
+  <data name="Distro_kubuntu_Maintainer" xml:space="preserve">
+    <value>Kubuntu Council (community, under Canonical's umbrella)</value>
+  </data>
+  <data name="Distro_xubuntu_Description" xml:space="preserve">
+    <value>Xubuntu uses the XFCE desktop, lightweight and low on resource usage, making it ideal for older or lower-spec computers. It's maintained by the Xubuntu community as part of the official Ubuntu family, inheriting the same repositories and package base.</value>
+  </data>
+  <data name="Distro_xubuntu_Maintainer" xml:space="preserve">
+    <value>Xubuntu community (under Canonical's umbrella)</value>
+  </data>
+  <data name="Distro_manjaro_Description" xml:space="preserve">
+    <value>Manjaro delivers the power and rolling-release model of Arch Linux with a simplified graphical installer and its own kernel and driver management tools. It's developed by Manjaro GmbH &amp; Co. KG, with strong support from an international community of contributors.</value>
+  </data>
+  <data name="Distro_manjaro_Maintainer" xml:space="preserve">
+    <value>Manjaro GmbH &amp; Co. KG</value>
+  </data>
+  <data name="Distro_arch_Description" xml:space="preserve">
+    <value>Arch Linux follows the KISS ("Keep It Simple, Stupid") philosophy and a rolling-release model, always delivering the latest packages. It doesn't ship with a desktop environment pre-installed — the user builds the system piece by piece, aided by the renowned Arch Wiki, one of the most complete documentation resources in the whole Linux ecosystem.</value>
+  </data>
+  <data name="Distro_arch_Maintainer" xml:space="preserve">
+    <value>Arch Linux community (founded by Judd Vinet)</value>
+  </data>
+  <data name="Distro_endeavour_Description" xml:space="preserve">
+    <value>EndeavourOS launched in 2019 as the spiritual successor to the discontinued Antergos, aiming to offer Arch Linux with a guided installer while keeping the system as close as possible to vanilla Arch, without the heavy customizations of other derivatives. It's maintained by an international community of volunteers.</value>
+  </data>
+  <data name="Distro_endeavour_Maintainer" xml:space="preserve">
+    <value>EndeavourOS community</value>
+  </data>
+  <data name="Distro_kali_Description" xml:space="preserve">
+    <value>Kali Linux is developed and maintained by Offensive Security, a leading name in cybersecurity training. It's built for penetration testing, security auditing, and digital forensics, shipping with hundreds of specialized tools pre-installed, such as Nmap, Metasploit, and Wireshark.</value>
+  </data>
+  <data name="Distro_kali_Maintainer" xml:space="preserve">
+    <value>Offensive Security</value>
   </data>
 
   <data name="Wizard_Title" xml:space="preserve">
@@ -203,6 +285,15 @@ Automatic installation may not work.</value>
   <data name="Wizard_IsoInvalidMessage" xml:space="preserve">
     <value>Invalid or too small ISO.
 Select a valid Linux ISO.</value>
+  </data>
+  <data name="Wizard_DownloadStarting" xml:space="preserve">
+    <value>Starting download...</value>
+  </data>
+  <data name="Wizard_DownloadProgress" xml:space="preserve">
+    <value>{0} of {1} • {2}/s • {3} left</value>
+  </data>
+  <data name="Wizard_DownloadProgressUnknownTotal" xml:space="preserve">
+    <value>{0} downloaded • {1}/s</value>
   </data>
   <data name="Wizard_DownloadCompleted" xml:space="preserve">
     <value>Download completed: {0}</value>

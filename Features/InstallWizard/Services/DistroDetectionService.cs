@@ -1,5 +1,6 @@
 using System.IO;
 using LinuxHub.Common.Data;
+using LinuxHub.Common.Localization;
 using LinuxHub.Common.Models;
 
 namespace LinuxHub.Features.InstallWizard.Services
@@ -17,8 +18,8 @@ namespace LinuxHub.Features.InstallWizard.Services
 
         private static DistroInfo Unknown() => new()
         {
-            Name = "Distribuição desconhecida",
-            Description = "Não foi possível identificar a distro",
+            Id = "unknown",
+            Name = LocalizationManager.Instance["Distro_UnknownName"],
             // Nota: este asset não existe no projeto hoje (pré-existente ao refactor) —
             // escolher um placeholder real é uma decisão de design fora deste change.
             ImagePath = "pack://application:,,,/Assets/Images/unknown.png"

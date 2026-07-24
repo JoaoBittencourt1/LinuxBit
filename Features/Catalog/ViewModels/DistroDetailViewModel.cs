@@ -1,12 +1,16 @@
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Input;
+using LinuxHub.Common.Localization;
 using LinuxHub.Common.Models;
 using LinuxHub.Common.Mvvm;
 
 namespace LinuxHub.Features.Catalog.ViewModels
 {
-    public class DistroDetailViewModel : ObservableObject
+    public class DistroDetailViewModel : ObservableObject, IDisposable
     {
+        private readonly string _descriptionKey;
+        private readonly string _maintainerKey;
         private int _carouselIndex;
 
         public DistroDetailViewModel(DistroInfo distro)
@@ -14,10 +18,18 @@ namespace LinuxHub.Features.Catalog.ViewModels
             ArgumentNullException.ThrowIfNull(distro);
 
             Name = distro.Name;
-            Description = distro.Description;
+            _descriptionKey = distro.DescriptionKey;
+            _maintainerKey = distro.MaintainerKey;
+            CreatedYear = distro.CreatedYear;
+            BeginnerRating = distro.BeginnerRating;
             ImagePath = distro.ImagePath;
             DownloadLink = distro.DownloadLink;
             CarouselItems = distro.CarouselImages;
+
+            // Description/Maintainer são resolvidos via LocalizationManager (não
+            // hardcoded — ver constitution.md) e precisam avisar a View quando o
+            // idioma muda, já que aqui não é um Binding direto de XAML como o loc:Loc.
+            LocalizationManager.Instance.PropertyChanged += OnLanguageChanged;
 
             NextCommand = new RelayCommand(
                 () => CarouselIndex = (CarouselIndex + 1) % CarouselItems.Count,
@@ -33,7 +45,10 @@ namespace LinuxHub.Features.Catalog.ViewModels
         }
 
         public string Name { get; }
-        public string Description { get; }
+        public string Description => LocalizationManager.Instance[_descriptionKey];
+        public string Maintainer => LocalizationManager.Instance[_maintainerKey];
+        public string CreatedYear { get; }
+        public int BeginnerRating { get; }
         public string ImagePath { get; }
         public string DownloadLink { get; }
         public IReadOnlyList<string> CarouselItems { get; }
@@ -66,6 +81,15 @@ namespace LinuxHub.Features.Catalog.ViewModels
         /// <summary>Falha ao abrir o link de download no navegador — a View decide como reportar.</summary>
         public event Action? DownloadLinkOpenFailed;
 
+        private void OnLanguageChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(LocalizationManager.CurrentCulture))
+                return;
+
+            OnPropertyChanged(nameof(Description));
+            OnPropertyChanged(nameof(Maintainer));
+        }
+
         private void OpenDownloadLink()
         {
             try
@@ -81,5 +105,13 @@ namespace LinuxHub.Features.Catalog.ViewModels
                 DownloadLinkOpenFailed?.Invoke();
             }
         }
+
+        /// <summary>
+        /// Necessário porque o construtor assina LocalizationManager.Instance
+        /// (singleton estático) — sem desinscrever, cada distro aberta vazaria uma
+        /// ViewModel presa ao delegate de PropertyChanged do manager.
+        /// </summary>
+        public void Dispose() =>
+            LocalizationManager.Instance.PropertyChanged -= OnLanguageChanged;
     }
 }
