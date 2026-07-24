@@ -1,14 +1,45 @@
-﻿using System.Configuration;
-using System.Data;
 using System.Windows;
+using LinuxHub.Features.Catalog.ViewModels;
+using LinuxHub.Features.InstallWizard.Services;
+using LinuxHub.Features.InstallWizard.ViewModels;
+using LinuxHub.Shell;
 
 namespace LinuxHub
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// Composition root manual: constrói os services concretos e injeta nas
+    /// ViewModels via construtor. Sem container de DI — ver design.md do change
+    /// restructure-feature-based-mvvm (não se justifica pelo tamanho do app).
     /// </summary>
     public partial class App : Application
     {
-    }
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
 
+            IIsoDownloadService isoDownloadService = new IsoDownloadService();
+            IDistroDetectionService distroDetectionService = new DistroDetectionService();
+            IDiskInventoryService diskInventoryService = new DiskInventoryService();
+            IPartitionInventoryService partitionInventoryService = new PartitionInventoryService();
+            ISystemInfoProvider systemInfoProvider = new SystemInfoProvider();
+            IInstallerConfigWriter installerConfigWriter = new InstallerConfigWriter();
+            var installerConfigBuilder = new InstallerConfigBuilder(systemInfoProvider);
+
+            var catalogViewModel = new CatalogViewModel();
+
+            var isoAcquisitionViewModel = new IsoAcquisitionViewModel(isoDownloadService, distroDetectionService);
+            var targetSelectionViewModel = new TargetSelectionViewModel(diskInventoryService, partitionInventoryService);
+            var accountViewModel = new AccountViewModel();
+            var installWizardViewModel = new InstallWizardViewModel(
+                isoAcquisitionViewModel,
+                targetSelectionViewModel,
+                accountViewModel,
+                installerConfigBuilder,
+                installerConfigWriter);
+
+            var mainWindow = new MainWindow(catalogViewModel, installWizardViewModel);
+            MainWindow = mainWindow;
+            mainWindow.Show();
+        }
+    }
 }

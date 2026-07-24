@@ -57,9 +57,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\" />
     <Folder Include="installer\core\" />
-    <Folder Include="Views\" />
   </ItemGroup>
 
   <ItemGroup>
