@@ -42,9 +42,15 @@ namespace LinuxHub.Features.Catalog.ViewModels
 
         private void OpenDistro(DistroInfo distro)
         {
+            SelectedDistroDetail?.Dispose();
+
             var detail = new DistroDetailViewModel(distro);
             detail.OpenImageRequested += path => FullscreenImagePath = path;
-            detail.BackRequested += () => SelectedDistroDetail = null;
+            detail.BackRequested += () =>
+            {
+                detail.Dispose();
+                SelectedDistroDetail = null;
+            };
             SelectedDistroDetail = detail;
         }
     }

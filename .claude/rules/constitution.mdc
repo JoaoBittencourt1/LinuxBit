@@ -14,6 +14,8 @@ Ele define os padrões obrigatórios de:
 - Princípios SOLID aplicados ao projeto
 - Proibição de duplicação (dados, XAML, services)
 - Limites de tamanho/responsabilidade de arquivo (clean code)
+- Proibição de strings hardcoded voltadas ao usuário (tudo via
+  Common/Localization/Strings*.resx)
 - Testabilidade e separação de lógica de negócio da UI
 - Cuidados de segurança específicos deste app (ele mexe em disco/partições)
 

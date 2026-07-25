@@ -66,6 +66,16 @@ devem respeitar estes princípios. Se um princípio precisar ser quebrado, isso
   workaround). Nunca para descrever o que o código já deixa claro.
 - Sem código morto, sem `catch (Exception) { }` silencioso, sem
   "vou deixar comentado caso precise depois".
+- **Nenhuma string voltada ao usuário é hardcoded em C# ou XAML** — nem em
+  literais soltos, nem em dados estáticos tipo `DistroCatalog`. Todo texto que
+  aparece na UI (labels, mensagens, bio de distro, nomes de botão) vive em
+  `Common/Localization/Strings*.resx`, acessado via `{loc:Loc Chave}` no XAML
+  ou `LocalizationManager.Instance["Chave"]` no C#. Quando o texto depende de
+  um item de dado (ex.: descrição por distro), o dado guarda a **chave** do
+  recurso (`DistroInfo.DescriptionKey`), nunca o texto em si — assim a UI
+  troca de idioma em runtime sem editar o catálogo. Exceção: valores que não
+  são prosa/linguagem (Id, Version, ano, URLs, nomes próprios como "Ubuntu")
+  podem ficar como dado puro.
 
 ## 5. Testabilidade
 

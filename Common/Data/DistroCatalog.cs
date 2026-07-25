@@ -7,6 +7,11 @@ namespace LinuxHub.Common.Data
     /// no catálogo quanto para detecção de distro a partir de um nome de arquivo ISO.
     /// Antes desta consolidação existiam duas listas divergentes (MainWindow e
     /// DistroDetector); ver design.md do change restructure-feature-based-mvvm.
+    ///
+    /// Texto voltado ao usuário (bio/mantenedor) não vive aqui como string literal —
+    /// vive em Common/Localization/Strings*.resx, sob as chaves Distro_{Id}_Description
+    /// e Distro_{Id}_Maintainer (ver DistroInfo.DescriptionKey/MaintainerKey e
+    /// constitution.md, "Nenhuma string hardcoded").
     /// </summary>
     public static class DistroCatalog
     {
@@ -18,8 +23,8 @@ namespace LinuxHub.Common.Data
                 Name = "Ubuntu",
                 Family = "Debian",
                 Version = "24.04.3",
-                Description = "O ubuntu é uma das melhores distros para iniciantes, contem uma interface simples e" +
-                    "moderna que possibilita uma facil adaptabilidade do usuario com o sistema. Muit recomendado para novos usuarios.",
+                CreatedYear = "2004",
+                BeginnerRating = 5,
                 ImagePath = "pack://application:,,,/Assets/Images/Ubuntu.png",
                 DownloadLink = "https://ubuntu.com/download/desktop",
                 DirectDownloadLink = "https://mirror.pop-sc.rnp.br/mirror/ubuntu-releases/24.04.3/ubuntu-24.04.3-desktop-amd64.iso",
@@ -35,7 +40,8 @@ namespace LinuxHub.Common.Data
                 Name = "Linux Mint",
                 Family = "Debian",
                 Version = "22.2",
-                Description = "O Linux Mint é focado em usuários vindos do Windows...",
+                CreatedYear = "2006",
+                BeginnerRating = 5,
                 ImagePath = "pack://application:,,,/Assets/Images/mint.png",
                 DownloadLink = "https://linuxmint.com/download.php",
                 DirectDownloadLink = "https://mint.portalidea.com.br/iso/stable/22.2/linuxmint-22.2-cinnamon-64bit.iso",
@@ -51,7 +57,8 @@ namespace LinuxHub.Common.Data
                 Name = "Zorin OS",
                 Family = "Ubuntu",
                 Version = "18",
-                Description = "O Zorin OS é moderno, elegante e acessível...",
+                CreatedYear = "2008",
+                BeginnerRating = 5,
                 ImagePath = "pack://application:,,,/Assets/Images/zorin.png",
                 DownloadLink = "https://zorin.com/os/download/",
                 DirectDownloadLink = "https://mirror.umd.edu/zorin/18/Zorin-OS-18-Core-64-bit-r2.iso",
@@ -68,7 +75,8 @@ namespace LinuxHub.Common.Data
                 Name = "Pop!_OS",
                 Family = "Ubuntu",
                 Version = "24.04",
-                Description = "Distribuição focada em produtividade e desempenho...",
+                CreatedYear = "2017",
+                BeginnerRating = 3,
                 ImagePath = "pack://application:,,,/Assets/Images/popos.png",
                 DownloadLink = "https://system76.com/pop/",
                 DirectDownloadLink = "https://iso.pop-os.org/24.04/amd64/generic/22/pop-os_24.04_amd64_generic_22.iso",
@@ -84,7 +92,8 @@ namespace LinuxHub.Common.Data
                 Name = "Fedora",
                 Family = "Red Hat",
                 Version = "43",
-                Description = "Distribuição moderna e inovadora...",
+                CreatedYear = "2003",
+                BeginnerRating = 3,
                 ImagePath = "pack://application:,,,/Assets/Images/fedora.png",
                 DownloadLink = "https://www.fedoraproject.org/pt-br/workstation/download",
                 DirectDownloadLink = "https://download.fedoraproject.org/pub/fedora/linux/releases/43/KDE/x86_64/iso/Fedora-KDE-Desktop-Live-43-1.6.x86_64.iso",
@@ -101,7 +110,8 @@ namespace LinuxHub.Common.Data
                 Name = "Kubuntu",
                 Family = "Ubuntu",
                 Version = "24.04",
-                Description = "Ubuntu com KDE Plasma...",
+                CreatedYear = "2005",
+                BeginnerRating = 4,
                 ImagePath = "pack://application:,,,/Assets/Images/Kubuntu.png",
                 DownloadLink = "https://kubuntu.org/archives/getkubuntu.html",
                 // Link direto do Kubuntu está indisponível na origem; mantido como no código
@@ -119,7 +129,8 @@ namespace LinuxHub.Common.Data
                 Name = "Xubuntu",
                 Family = "Ubuntu",
                 Version = "25.10",
-                Description = "Distribuição leve baseada no Ubuntu...",
+                CreatedYear = "2006",
+                BeginnerRating = 4,
                 ImagePath = "pack://application:,,,/Assets/Images/Xubuntu.png",
                 DownloadLink = "https://xubuntu.org/download/",
                 DirectDownloadLink = "https://ftp.ussg.iu.edu/linux/xubuntu/releases/25.10/release/xubuntu-25.10-desktop-amd64.iso",
@@ -134,7 +145,8 @@ namespace LinuxHub.Common.Data
                 Name = "Manjaro",
                 Family = "Arch",
                 Version = "25.0.10",
-                Description = "Baseado em Arch com facilidade de uso...",
+                CreatedYear = "2011",
+                BeginnerRating = 3,
                 ImagePath = "pack://application:,,,/Assets/Images/manjaro.png",
                 DownloadLink = "https://manjaro.org/products/download/x86",
                 DirectDownloadLink = "https://download.manjaro.org/xfce/25.0.10/manjaro-xfce-25.0.10-251013-linux612.iso",
@@ -150,7 +162,8 @@ namespace LinuxHub.Common.Data
                 Name = "Arch Linux",
                 Family = "Arch",
                 Version = "2026.01.01",
-                Description = "Distribuição minimalista e altamente personalizável...",
+                CreatedYear = "2002",
+                BeginnerRating = 1,
                 ImagePath = "pack://application:,,,/Assets/Images/arch.png",
                 DownloadLink = "https://archlinux.org/download/",
                 DirectDownloadLink = "https://mirror.adectra.com/archlinux/iso/2026.01.01/archlinux-2026.01.01-x86_64.iso",
@@ -168,7 +181,8 @@ namespace LinuxHub.Common.Data
                 Name = "EndeavourOS",
                 Family = "Arch",
                 Version = "2025.11.24",
-                Description = "Arch guiado e acessível...",
+                CreatedYear = "2019",
+                BeginnerRating = 2,
                 ImagePath = "pack://application:,,,/Assets/Images/endeavouros.png",
                 DownloadLink = "https://endeavouros.com/",
                 DirectDownloadLink = "https://mirrors.gigenet.com/endeavouros/iso/EndeavourOS_Ganymede-2025.11.24.iso",
@@ -185,7 +199,8 @@ namespace LinuxHub.Common.Data
                 Name = "Kali Linux",
                 Family = "Debian",
                 Version = "2025.4",
-                Description = "Distribuição para segurança ofensiva...",
+                CreatedYear = "2013",
+                BeginnerRating = 1,
                 ImagePath = "pack://application:,,,/Assets/Images/kali.png",
                 DownloadLink = "https://www.kali.org/get-kali/",
                 DirectDownloadLink = "https://cdimage.kali.org/kali-2025.4/kali-linux-2025.4-installer-amd64.iso",

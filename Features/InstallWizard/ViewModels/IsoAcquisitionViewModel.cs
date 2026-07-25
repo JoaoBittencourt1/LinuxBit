@@ -28,6 +28,7 @@ namespace LinuxHub.Features.InstallWizard.ViewModels
         private DistroInfo? _detectedDistro;
         private bool _isDownloading;
         private double _downloadPercent;
+        private bool _isDownloadIndeterminate;
         private string _downloadStatusText = string.Empty;
 
         public IsoAcquisitionViewModel(IIsoDownloadService downloadService, IDistroDetectionService detectionService)
@@ -99,6 +100,14 @@ namespace LinuxHub.Features.InstallWizard.ViewModels
             private set => SetProperty(ref _downloadPercent, value);
         }
 
+        /// <summary>True quando o servidor não informou o tamanho total da ISO —
+        /// a barra de progresso não tem como mostrar percentual real nesse caso.</summary>
+        public bool IsDownloadIndeterminate
+        {
+            get => _isDownloadIndeterminate;
+            private set => SetProperty(ref _isDownloadIndeterminate, value);
+        }
+
         public string DownloadStatusText
         {
             get => _downloadStatusText;
@@ -146,18 +155,41 @@ namespace LinuxHub.Features.InstallWizard.ViewModels
             if (SelectedDistro is not { } distro)
                 return;
 
+            var loc = LocalizationManager.Instance;
+
             IsDownloading = true;
             DownloadPercent = 0;
-            DownloadStatusText = "0% | 0s";
+            IsDownloadIndeterminate = false;
+            DownloadStatusText = loc["Wizard_DownloadStarting"];
 
             _downloadCts = new CancellationTokenSource();
             var progress = new Progress<IsoDownloadProgress>(p =>
             {
-                DownloadPercent = p.PercentComplete;
-                DownloadStatusText = $"{p.PercentComplete:n1}% | {p.RemainingSeconds:n0}s";
-            });
+                DownloadPercent = p.PercentComplete ?? 0;
+                IsDownloadIndeterminate = p.TotalBytes is null;
 
-            var loc = LocalizationManager.Instance;
+                var speedText = $"{FormatBytes(p.BytesPerSecond)}/s";
+
+                if (p.TotalBytes is not { } totalBytes)
+                {
+                    DownloadStatusText = loc.Format(
+                        "Wizard_DownloadProgressUnknownTotal",
+                        FormatBytes(p.BytesReceived),
+                        speedText);
+                    return;
+                }
+
+                var remaining = p.BytesPerSecond > 0
+                    ? TimeSpan.FromSeconds((totalBytes - p.BytesReceived) / p.BytesPerSecond)
+                    : TimeSpan.Zero;
+
+                DownloadStatusText = loc.Format(
+                    "Wizard_DownloadProgress",
+                    FormatBytes(p.BytesReceived),
+                    FormatBytes(totalBytes),
+                    speedText,
+                    FormatDuration(remaining));
+            });
 
             try
             {
@@ -179,6 +211,24 @@ namespace LinuxHub.Features.InstallWizard.ViewModels
                 IsDownloading = false;
                 _downloadCts = null;
             }
+        }
+
+        private static string FormatBytes(double bytes)
+        {
+            const double Mb = 1024 * 1024;
+            const double Gb = Mb * 1024;
+
+            return bytes >= Gb ? $"{bytes / Gb:n1} GB" : $"{Math.Max(0, bytes) / Mb:n0} MB";
+        }
+
+        private static string FormatDuration(TimeSpan duration)
+        {
+            if (duration.TotalHours >= 1)
+                return $"{(int)duration.TotalHours}h {duration.Minutes}m";
+            if (duration.TotalMinutes >= 1)
+                return $"{(int)duration.TotalMinutes}m {duration.Seconds}s";
+
+            return $"{Math.Max(1, duration.Seconds)}s";
         }
     }
 }

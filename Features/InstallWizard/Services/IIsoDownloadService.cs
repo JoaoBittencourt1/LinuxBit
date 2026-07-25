@@ -2,7 +2,19 @@ using LinuxHub.Common.Models;
 
 namespace LinuxHub.Features.InstallWizard.Services
 {
-    public readonly record struct IsoDownloadProgress(double PercentComplete, double RemainingSeconds);
+    /// <summary>
+    /// Velocidade já vem suavizada/amostrada pelo service (ver IsoDownloadService) —
+    /// quem consome não deve recalcular a partir de totais acumulados desde o início,
+    /// isso é o que fazia a estimativa de tempo restante variar de forma errática.
+    /// TotalBytes é null quando o servidor não informa Content-Length; nesse caso não
+    /// há como calcular percentual nem ETA, e a UI deve tratar como progresso indeterminado.
+    /// </summary>
+    public readonly record struct IsoDownloadProgress(long BytesReceived, long? TotalBytes, double BytesPerSecond)
+    {
+        public double? PercentComplete => TotalBytes is > 0
+            ? (double)BytesReceived / TotalBytes.Value * 100
+            : null;
+    }
 
     public interface IIsoDownloadService
     {
