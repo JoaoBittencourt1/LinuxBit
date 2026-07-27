@@ -22,12 +22,12 @@ namespace LinuxHub.Common.Data
                 Id = "ubuntu",
                 Name = "Ubuntu",
                 Family = "Debian",
-                Version = "24.04.3",
+                Version = "24.04.4",
                 CreatedYear = "2004",
                 BeginnerRating = 5,
                 ImagePath = "pack://application:,,,/Assets/Images/Ubuntu.png",
                 DownloadLink = "https://ubuntu.com/download/desktop",
-                DirectDownloadLink = "https://mirror.pop-sc.rnp.br/mirror/ubuntu-releases/24.04.3/ubuntu-24.04.3-desktop-amd64.iso",
+                DirectDownloadLink = "https://releases.ubuntu.com/24.04/ubuntu-24.04.4-desktop-amd64.iso",
                 CarouselImages = new[]
                 {
                     "pack://application:,,,/Assets/Images/Ubuntu/ubuntu1.jpg",
