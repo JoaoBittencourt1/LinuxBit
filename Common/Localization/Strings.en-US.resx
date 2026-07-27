@@ -274,10 +274,10 @@ Automatic installation may not work.</value>
     <value>LinuxHub</value>
   </data>
   <data name="Wizard_InstallSuccessMessage" xml:space="preserve">
-    <value>Installation configuration generated successfully!</value>
+    <value>Preparation complete! Restart your computer and choose the LinuxHub boot entry to continue the installation. The full log is at /var/log/linuxhub-install.log inside the Linux environment.</value>
   </data>
   <data name="Wizard_InstallErrorTitle" xml:space="preserve">
-    <value>Error generating installation</value>
+    <value>Error preparing the installation</value>
   </data>
   <data name="Wizard_IsoInvalidTitle" xml:space="preserve">
     <value>Error</value>
@@ -303,5 +303,32 @@ Select a valid Linux ISO.</value>
   </data>
   <data name="Wizard_DownloadErrorTitle" xml:space="preserve">
     <value>Download error</value>
+  </data>
+  <data name="Wizard_ReplaceSystemDiskBlockedMessage" xml:space="preserve">
+    <value>This disk hosts the running Windows installation and cannot be replaced from here. Choose another disk or use dual-boot mode instead.</value>
+  </data>
+  <data name="Wizard_DiskDetectionErrorMessage" xml:space="preserve">
+    <value>Could not list disks: {0}</value>
+  </data>
+  <data name="Wizard_ConfirmationTitle" xml:space="preserve">
+    <value>Confirm the disk operation</value>
+  </data>
+  <data name="Wizard_ConfirmShrinkSummary" xml:space="preserve">
+    <value>We'll shrink {0} by {1} GB to free up space for Linux.</value>
+  </data>
+  <data name="Wizard_ConfirmReplaceSummary" xml:space="preserve">
+    <value>We'll erase ALL data on {0} during the Linux installation, after rebooting. This operation cannot be undone.</value>
+  </data>
+  <data name="Wizard_ConfirmationTypedHint" xml:space="preserve">
+    <value>Type the word below to confirm:</value>
+  </data>
+  <data name="Wizard_ConfirmReplaceWord" xml:space="preserve">
+    <value>DELETE</value>
+  </data>
+  <data name="Wizard_ConfirmButton" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="Wizard_CancelButton" xml:space="preserve">
+    <value>Cancel</value>
   </data>
 </root>

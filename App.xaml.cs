@@ -25,21 +25,32 @@ namespace LinuxHub
             IDistroDetectionService distroDetectionService = new DistroDetectionService();
             IDiskInventoryService diskInventoryService = new DiskInventoryService();
             IPartitionInventoryService partitionInventoryService = new PartitionInventoryService();
+            IFirmwareService firmwareService = new FirmwareService();
+            IEspLocatorService espLocatorService = new EspLocatorService();
+            IDiskPartitioningService diskPartitioningService = new DiskPartitioningService();
             ISystemInfoProvider systemInfoProvider = new SystemInfoProvider();
             IInstallerConfigWriter installerConfigWriter = new InstallerConfigWriter();
-            var installerConfigBuilder = new InstallerConfigBuilder(systemInfoProvider);
+            var installerConfigBuilder = new InstallerConfigBuilder(systemInfoProvider, espLocatorService);
+
+            IGrubAssetProvider grubAssetProvider = new GrubAssetProvider();
+            IMbrBackupService mbrBackupService = new MbrBackupService();
+            IBootConfigurationService bootConfigurationService = new BootConfigurationService();
+            IBootStagingService bootStagingService = new BootStagingService(
+                espLocatorService, grubAssetProvider, mbrBackupService, bootConfigurationService);
 
             var catalogViewModel = new CatalogViewModel();
 
             var isoAcquisitionViewModel = new IsoAcquisitionViewModel(isoDownloadService, distroDetectionService);
-            var targetSelectionViewModel = new TargetSelectionViewModel(diskInventoryService, partitionInventoryService);
+            var targetSelectionViewModel = new TargetSelectionViewModel(diskInventoryService, partitionInventoryService, firmwareService);
             var accountViewModel = new AccountViewModel();
             var installWizardViewModel = new InstallWizardViewModel(
                 isoAcquisitionViewModel,
                 targetSelectionViewModel,
                 accountViewModel,
                 installerConfigBuilder,
-                installerConfigWriter);
+                installerConfigWriter,
+                diskPartitioningService,
+                bootStagingService);
 
             var mainWindow = new MainWindow(catalogViewModel, installWizardViewModel);
             MainWindow = mainWindow;

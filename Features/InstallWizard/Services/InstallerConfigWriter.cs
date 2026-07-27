@@ -37,8 +37,10 @@ namespace LinuxHub.Features.InstallWizard.Services
 
             sb.AppendLine();
             sb.AppendLine("# === User ===");
+            // Texto puro, não hash — ver InstallerConfig.Password. install.sh apaga este
+            // arquivo ao final da instalação para limitar a janela de exposição.
             sb.AppendLine($"USERNAME=\"{cfg.Username}\"");
-            sb.AppendLine($"PASSWORD_HASH=\"{cfg.PasswordHash}\"");
+            sb.AppendLine($"PASSWORD=\"{cfg.Password}\"");
             sb.AppendLine($"HOSTNAME=\"{cfg.Hostname}\"");
 
             sb.AppendLine();
@@ -46,6 +48,11 @@ namespace LinuxHub.Features.InstallWizard.Services
             sb.AppendLine($"LOCALE=\"{cfg.Locale}\"");
             sb.AppendLine($"KEYMAP=\"{cfg.Keymap}\"");
             sb.AppendLine($"TIMEZONE=\"{cfg.Timezone}\"");
+
+            sb.AppendLine();
+            sb.AppendLine("# === Swap ===");
+            sb.AppendLine($"SWAP_ENABLED={(cfg.SwapEnabled ? "true" : "false")}");
+            sb.AppendLine($"SWAP_SIZE_GB={cfg.SwapSizeGb}");
 
             Directory.CreateDirectory(OutputDirectory);
             File.WriteAllText(Path.Combine(OutputDirectory, OutputFileName), sb.ToString());

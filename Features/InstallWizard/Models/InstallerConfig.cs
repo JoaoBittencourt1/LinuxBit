@@ -20,7 +20,13 @@ namespace LinuxHub.Features.InstallWizard.Models
 
         // === User ===
         public string Username { get; set; } = string.Empty;
-        public string PasswordHash { get; set; } = string.Empty;
+
+        // Texto puro, não hash: o Windows não tem crypt(3) (glibc SHA-512-
+        // crypt) disponível — o hash de senha real é gerado no lado Linux,
+        // via `chpasswd` dentro do chroot (installer/core/lib/user.sh), que
+        // usa o glibc do próprio sistema instalado. install.sh apaga
+        // install.conf ao final para limitar a janela de exposição.
+        public string Password { get; set; } = string.Empty;
         public string Hostname { get; set; } = string.Empty;
 
         // === System ===

@@ -42,11 +42,19 @@ source "$CONF_FILE"
 ######################################
 # BASIC VALIDATION
 ######################################
-[[ -z "${DISTRO:-}" ]] && fatal "DISTRO não definida"
+# Nomes de variável precisam bater exatamente com o que
+# InstallerConfigWriter.Save() grava (Features/InstallWizard/Services/
+# InstallerConfigWriter.cs) — não com o que seria intuitivo aqui.
+[[ -z "${DISTRO_ID:-}" ]] && fatal "DISTRO_ID não definida"
 [[ -z "${INSTALL_MODE:-}" ]] && fatal "INSTALL_MODE não definido"
-[[ -z "${TARGET_DISK:-}" ]] && fatal "TARGET_DISK não definido"
+[[ -z "${TARGET_DISK_INDEX:-}" ]] && fatal "TARGET_DISK_INDEX não definido"
 [[ -z "${USERNAME:-}" ]] && fatal "USERNAME não definido"
-[[ -z "${PASSWORD_HASH:-}" ]] && fatal "PASSWORD_HASH não definido"
+[[ -z "${PASSWORD:-}" ]] && fatal "PASSWORD não definido"
+
+SWAP_SIZE_MB=0
+if [[ "${SWAP_ENABLED:-false}" == "true" ]]; then
+    SWAP_SIZE_MB=$(( ${SWAP_SIZE_GB:-0} * 1024 ))
+fi
 
 ######################################
 # ENV DETECTION
@@ -64,12 +72,6 @@ if [[ "$DETECTED_BOOT" != "$BOOT_MODE" ]]; then
 fi
 
 ######################################
-# DISK SAFETY
-######################################
-log "Disco alvo: $TARGET_DISK"
-lsblk "$TARGET_DISK" >/dev/null || fatal "Disco inválido"
-
-######################################
 # PREPARE INSTALL ROOT
 ######################################
 log "Preparando ambiente de instalação..."
@@ -78,53 +80,62 @@ mkdir -p "$INSTALL_ROOT"
 ######################################
 # DISK SETUP
 ######################################
+# setup_replace/setup_dualboot chamam revalidate_plan (lib/disk.sh) antes de
+# qualquer escrita — resolve TARGET_DISK_INDEX para um device real e aborta
+# se o plano gravado em install.conf não bater mais com o hardware
+# observado (spec linux-install-payload, "Revalidar o plano antes do ponto
+# de não-retorno").
+source core/lib/disk.sh
 if [[ "$INSTALL_MODE" == "replace" ]]; then
     log "Modo: Substituir sistema"
-    source lib/disk.sh
     setup_replace
 else
     log "Modo: Dual boot"
-    [[ -z "${TARGET_PARTITION:-}" ]] && fatal "TARGET_PARTITION não definido"
-    source lib/disk.sh
+    [[ -z "${TARGET_PARTITION_INDEX:-}" ]] && fatal "TARGET_PARTITION_INDEX não definido"
     setup_dualboot
 fi
 
 ######################################
 # MOUNT
 ######################################
-source lib/mount.sh
+source core/lib/mount.sh
 mount_all "$INSTALL_ROOT"
 
 ######################################
 # INSTALL BASE SYSTEM
 ######################################
-DISTRO_SCRIPT="distros/${DISTRO}.sh"
-[[ ! -f "$DISTRO_SCRIPT" ]] && fatal "Distro não suportada: $DISTRO"
+DISTRO_SCRIPT="distros/${DISTRO_ID}.sh"
+[[ ! -f "$DISTRO_SCRIPT" ]] && fatal "Distro não suportada: $DISTRO_ID"
 
-log "Instalando sistema base: $DISTRO"
+log "Instalando sistema base: $DISTRO_ID"
 source "$DISTRO_SCRIPT"
 install_base "$INSTALL_ROOT"
 
 ######################################
 # CHROOT CONFIG
 ######################################
-source lib/chroot.sh
+source core/lib/chroot.sh
 configure_system "$INSTALL_ROOT"
 
 ######################################
 # USER SETUP
 ######################################
-source lib/user.sh
+source core/lib/user.sh
 create_user "$INSTALL_ROOT"
 
 ######################################
 # BOOTLOADER
 ######################################
-source lib/boot.sh
+source core/lib/boot.sh
 install_bootloader "$INSTALL_ROOT"
 
 ######################################
 # FINISH
 ######################################
+# install.conf carrega PASSWORD em texto puro (ver core/lib/user.sh) —
+# apaga o arquivo assim que ele não é mais necessário, para limitar a janela
+# de exposição.
+shred -u "$CONF_FILE" 2>/dev/null || rm -f "$CONF_FILE"
+
 log "Instalação concluída com sucesso"
 log "Pode reiniciar o sistema"

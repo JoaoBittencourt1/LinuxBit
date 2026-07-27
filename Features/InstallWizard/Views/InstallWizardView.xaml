@@ -5,7 +5,8 @@
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              xmlns:loc="clr-namespace:LinuxHub.Common.Localization"
              xmlns:conv="clr-namespace:LinuxHub.Features.InstallWizard.Views.Converters"
-             xmlns:models="clr-namespace:LinuxHub.Common.Models">
+             xmlns:models="clr-namespace:LinuxHub.Common.Models"
+             xmlns:views="clr-namespace:LinuxHub.Features.InstallWizard.Views">
 
     <UserControl.Resources>
         <sys:BooleanToVisibilityConverter x:Key="BoolToVis"/>
@@ -117,7 +118,29 @@
                 <StackPanel>
                     <TextBlock Text="{loc:Loc Wizard_TargetDiskTitle}" FontWeight="SemiBold" Opacity="0.7" Margin="0,0,0,6"/>
                     <TextBlock Text="{loc:Loc Wizard_TargetDiskHint}" Opacity="0.6" TextWrapping="Wrap" Margin="0,0,0,8"/>
-                    <ComboBox ItemsSource="{Binding Target.Disks}" SelectedItem="{Binding Target.SelectedDisk}"/>
+                    <ComboBox ItemsSource="{Binding Target.Disks}" SelectedItem="{Binding Target.SelectedDisk}">
+                        <ComboBox.ItemContainerStyle>
+                            <Style TargetType="ComboBoxItem">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSystemDisk}" Value="True">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
+                    </ComboBox>
+
+                    <ui:InfoBar IsOpen="{Binding Target.HasDiskDetectionError}"
+                                IsClosable="False"
+                                Severity="Error"
+                                Message="{Binding Target.DiskDetectionError}"
+                                Margin="0,8,0,0"/>
+
+                    <ui:InfoBar IsOpen="{Binding Target.IsSelectedDiskBlocked}"
+                                IsClosable="False"
+                                Severity="Error"
+                                Message="{Binding Target.TargetValidationError}"
+                                Margin="0,8,0,0"/>
                 </StackPanel>
             </ui:Card>
 
@@ -180,14 +203,20 @@
                         Message="{loc:Loc Wizard_WarningBanner}"
                         Margin="0,0,0,16"/>
 
-            <ui:Button Content="{loc:Loc Wizard_InstallButton}"
-                       Appearance="Success"
-                       HorizontalAlignment="Stretch"
-                       HorizontalContentAlignment="Center"
-                       Height="44"
-                       FontWeight="Bold"
-                       Margin="0,0,0,24"
-                       Command="{Binding InstallCommand}"/>
+            <Border Visibility="{Binding IsConfirming, Converter={StaticResource BoolToVis}}">
+                <views:ConfirmationView DataContext="{Binding PendingConfirmation}"/>
+            </Border>
+
+            <Border Visibility="{Binding IsNotConfirming, Converter={StaticResource BoolToVis}}">
+                <ui:Button Content="{loc:Loc Wizard_InstallButton}"
+                           Appearance="Success"
+                           HorizontalAlignment="Stretch"
+                           HorizontalContentAlignment="Center"
+                           Height="44"
+                           FontWeight="Bold"
+                           Margin="0,0,0,24"
+                           Command="{Binding InstallCommand}"/>
+            </Border>
 
         </StackPanel>
     </ScrollViewer>

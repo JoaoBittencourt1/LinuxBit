@@ -1,4 +1,3 @@
-using LinuxHub.Common.Helpers;
 using LinuxHub.Common.Models;
 using LinuxHub.Features.InstallWizard.Models;
 
@@ -24,10 +23,12 @@ namespace LinuxHub.Features.InstallWizard.Services
     public sealed class InstallerConfigBuilder
     {
         private readonly ISystemInfoProvider _systemInfo;
+        private readonly IEspLocatorService _espLocator;
 
-        public InstallerConfigBuilder(ISystemInfoProvider systemInfo)
+        public InstallerConfigBuilder(ISystemInfoProvider systemInfo, IEspLocatorService espLocator)
         {
             _systemInfo = systemInfo ?? throw new ArgumentNullException(nameof(systemInfo));
+            _espLocator = espLocator ?? throw new ArgumentNullException(nameof(espLocator));
         }
 
         public InstallerConfig Build(BuildInstallerConfigRequest request)
@@ -44,11 +45,13 @@ namespace LinuxHub.Features.InstallWizard.Services
 
                 BootMode = request.IsUefi ? "uefi" : "bios",
                 InstallMode = request.Mode == InstallMode.Replace ? "replace" : "dualboot",
-                EfiPartitionIndex = request.IsUefi ? 1 : null,
+                EfiPartitionIndex = request.IsUefi && request.TargetDiskIndex.HasValue
+                    ? _espLocator.FindEfiSystemPartitionIndex(request.TargetDiskIndex.Value)
+                    : null,
                 TargetDiskIndex = request.TargetDiskIndex ?? 0,
 
                 Username = request.Username.Trim(),
-                PasswordHash = CryptoHelper.GenerateSha512Hash(request.Password),
+                Password = request.Password,
                 Hostname = request.Hostname.Trim(),
 
                 Locale = _systemInfo.GetLocale(),

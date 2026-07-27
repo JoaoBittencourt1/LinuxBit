@@ -1,31 +1,46 @@
-using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace LinuxHub.Features.InstallWizard.Services
 {
-    public sealed class BootConfigurationService : IBootConfigurationService
+    /// <summary>
+    /// Antes desta implementação, <c>AddBootEntry</c> criava uma entrada BCD do tipo
+    /// <c>bootsector</c> sem device/path — inutilizável (ver tasks.md 3.6). Esta versão
+    /// cria uma entrada <c>osloader</c> de verdade, aponta para o EFI já copiado na ESP, e
+    /// confirma o GUID criado antes de considerar a operação bem-sucedida.
+    /// </summary>
+    public sealed partial class BootConfigurationService : IBootConfigurationService
     {
-        public void AddBootEntry(string description)
+        public string AddFirmwareBootEntry(string description, char driveLetter, string efiPathOnVolume)
         {
-            var startInfo = new ProcessStartInfo
+            string script = BuildAddFirmwareBootEntryScript(description, driveLetter, efiPathOnVolume);
+            string output = ElevatedPowerShellRunner.Run(script, "registro da entrada de boot BCD");
+
+            var match = BcdGuidRegex().Match(output);
+            if (!match.Success)
             {
-                FileName = "bcdedit.exe",
-                Verb = "runas",
-                UseShellExecute = true
-            };
+                throw new InvalidOperationException(
+                    $"A entrada BCD pode não ter sido criada corretamente — GUID não encontrado na saída: {output}");
+            }
 
-            // ArgumentList evita montar uma string de shell (cmd.exe /c "...") com o
-            // texto de description interpolado — bcdedit.exe recebe os argumentos
-            // diretamente, sem passar por um interpretador de shell.
-            startInfo.ArgumentList.Add("/create");
-            startInfo.ArgumentList.Add("/d");
-            startInfo.ArgumentList.Add(description);
-            startInfo.ArgumentList.Add("/application");
-            startInfo.ArgumentList.Add("bootsector");
-
-            var process = Process.Start(startInfo);
-
-            if (process is null)
-                throw new InvalidOperationException("Não foi possível iniciar o bcdedit.exe.");
+            return match.Value;
         }
+
+        internal static string BuildAddFirmwareBootEntryScript(string description, char driveLetter, string efiPathOnVolume) => $@"
+$ErrorActionPreference = 'Stop'
+$create = bcdedit /create /d ""{description}"" /application osloader
+if ($LASTEXITCODE -ne 0) {{ throw ""bcdedit /create falhou: $create"" }}
+$match = [regex]::Match($create, '\{{[0-9a-fA-F-]+\}}')
+if (-not $match.Success) {{ throw ""Não foi possível extrair o GUID da entrada BCD criada: $create"" }}
+$guid = $match.Value
+bcdedit /set $guid device partition={driveLetter}:
+if ($LASTEXITCODE -ne 0) {{ throw ""bcdedit /set device falhou"" }}
+bcdedit /set $guid path '{efiPathOnVolume}'
+if ($LASTEXITCODE -ne 0) {{ throw ""bcdedit /set path falhou"" }}
+bcdedit /displayorder $guid /addlast
+if ($LASTEXITCODE -ne 0) {{ throw ""bcdedit /displayorder falhou"" }}
+Write-Output ""BCDGUID:$guid""";
+
+        [GeneratedRegex(@"\{[0-9a-fA-F-]+\}")]
+        private static partial Regex BcdGuidRegex();
     }
 }
