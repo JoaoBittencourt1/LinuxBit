@@ -28,7 +28,13 @@ namespace LinuxHub.Features.InstallWizard.Services
                 partitions.Add(new PartitionInfo
                 {
                     DiskIndex = Convert.ToInt32(partition["DiskIndex"]),
-                    PartitionIndex = Convert.ToInt32(partition["Index"]),
+                    // Win32_DiskPartition.Index é 0-based (documentado assim pela
+                    // Microsoft) — mas diskpart ("select partition N") e parted (número
+                    // de partição no disco.sh Linux-side) numeram 1-based. Sem o +1, o
+                    // shrink (DiskPartitioningService) e a criação da partição Linux
+                    // (disk.sh) mirariam na partição errada em qualquer disco com mais
+                    // de uma partição.
+                    PartitionIndex = Convert.ToInt32(partition["Index"]) + 1,
                     SizeBytes = size,
                     Type = type,
                     IsSystem = isBoot

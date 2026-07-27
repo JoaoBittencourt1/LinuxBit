@@ -2,35 +2,54 @@
 
 Binários GRUB2 pré-compilados consumidos por `IGrubAssetProvider`
 (`Features/InstallWizard/Services/GrubAssetProvider.cs`). Não são gerados pelo
-app em runtime — não há toolchain GRUB (`grub-mkstandalone`, `grub-bios-setup`)
+app em runtime — não há toolchain GRUB (`grub-mkimage`, `grub-bios-setup`)
 nativo no Windows; foram gerados uma vez via WSL/Ubuntu (pacotes
-`grub-efi-amd64-bin`, `grub-pc-bin`, `grub-common`, `grub2-common`) em
-2026-07-27 e commitados aqui.
+`grub-efi-amd64-bin`, `grub-pc-bin`, `grub-common`, `grub2-common`) e
+commitados aqui. Regenerados em 2026-07-27 (v2) depois de um teste real expor
+dois bugs na v1 — ver "Histórico" no fim deste arquivo.
 
-## `uefi/grubx64.efi` — presente, funcional
+## `uefi/grubx64.efi`
 
-Imagem GRUB standalone para x86_64-efi (6.7MB), com os módulos `part_gpt`,
-`part_msdos`, `ntfs`, `loopback`, `iso9660`, `search`, `chain`, `fat`, `normal`,
-`linux`, `configfile` embutidos — não depende de nenhum diretório
-`/boot/grub/x86_64-efi` separado na ESP, só do `grub.cfg` que
-`BootStagingService` escreve ao lado dele. Gerada com:
+Gerada com `grub-mkimage` (não `grub-mkstandalone` — trocado na v2) e um
+**early config embutido**, que roda antes de qualquer outra coisa:
 
-```sh
-grub-mkstandalone \
-  --format=x86_64-efi \
-  --output=grubx64.efi \
-  --modules="part_gpt part_msdos ntfs loopback iso9660 search chain fat normal linux configfile"
+```
+search --no-floppy --file --set=root /EFI/linuxhub/grub.cfg
+configfile /EFI/linuxhub/grub.cfg
 ```
 
-Um `.efi` standalone é auto-contido — isso é o que torna o caminho UEFI
-testável numa VM comum (VirtualBox EFI, Hyper-V Gen2, VMware EFI) hoje.
+```sh
+grub-mkimage -O x86_64-efi -o grubx64.efi -c early-uefi.cfg -p /boot/grub \
+  part_gpt part_msdos ntfs loopback iso9660 search search_fs_file chain fat normal linux configfile
+```
 
-## `bios/boot.img` + `bios/core.img` — presentes, embutimento automatizado
+Por quê: o `grub.cfg` real (com o menu de boot, caminho da ISO etc.) é gerado
+em **runtime** por `GrubConfigBuilder`/`BootStagingService` — não dá pra
+embutir ele no binário no momento do build, porque o conteúdo muda a cada
+instalação. Sem um early config explícito, o GRUB não tem garantia de achar
+esse arquivo sozinho (o prefixo padrão de uma imagem sem `-c`/sem memdisk
+pode cair num shell de rescate em vez de carregar o menu) — o early config
+resolve isso com dois comandos simples e bem documentados (`search` +
+`configfile`), sem depender de nenhum comportamento implícito do GRUB.
 
-Ao contrário da primeira versão deste README, o embutimento do `core.img` no
-gap pós-MBR **agora é automatizado** (`MbrPartitionTableReader` +
-`MbrBackupService.WriteCoreImageToGap`, chamados por
-`BootStagingService.InstallBios`). Como isso foi decidido:
+## `bios/boot.img` + `bios/core.img`
+
+`core.img` segue o mesmo princípio do UEFI — early config embutido via `-c`,
+procurando `/boot/grub/grub.cfg` (onde `BootStagingService` escreve o
+`grub.cfg` real na partição do Windows em BIOS legado):
+
+```sh
+grub-mkimage -O i386-pc -o core.img -c early-bios.cfg -p /boot/grub \
+  biosdisk part_msdos part_gpt ntfs loopback iso9660 search search_fs_file normal linux configfile
+```
+
+`boot.img` (440 bytes) e o embutimento do `core.img` no gap pós-MBR
+(`MbrPartitionTableReader` + `MbrBackupService.WriteCoreImageToGap`, chamados
+por `BootStagingService.InstallBios`) continuam como documentado abaixo — o
+conteúdo de `core.img` mudou (novo early config), mas o formato do patch em
+`boot.img` (onde/como o `core.img` é referenciado) não depende do conteúdo
+dele, só da posição (LBA 1), então `boot.img` não precisou ser regerado —
+reverificado byte a byte contra um `grub-bios-setup` real rodando de novo.
 
 Rodei o `grub-bios-setup` real (via WSL, contra um disco sintético — `losetup`
 + `parted`, formato MBR comum, sem partição `bios_grub` dedicada) e comparei
@@ -55,25 +74,34 @@ Por isso, `Assets/Grub/bios/boot.img` já é o resultado final (440 bytes, com
 o NOP aplicado) — não o `boot.img` cru do pacote — e não precisa de nenhum
 patch adicional em C# antes de ser escrito no MBR real.
 
-`Assets/Grub/bios/core.img` foi gerado com prefixo genérico (não fixo a
-nenhum disco/partição de teste):
-
-```sh
-grub-mkimage -O i386-pc -o core.img -p '/boot/grub' \
-  biosdisk part_msdos part_gpt ntfs fat search search_fs_file normal configfile linux
-```
-
 `BootStagingService.EnsurePostMbrGapFitsCoreImage` lê o MBR real do disco
 alvo, calcula o gap (`MbrPartitionTableReader.GapSectorsAfterMbr`) e **aborta
 antes de qualquer escrita** se ele for pequeno demais — discos com
 alinhamento pré-Vista (partição 1 no LBA 63, ~31KB de gap) não cabem os
-~144KB do `core.img`; discos modernos (alinhamento de 1MiB, LBA 2048, ~1MB de
+~146KB do `core.img`; discos modernos (alinhamento de 1MiB, LBA 2048, ~1MB de
 gap) cabem com folga.
 
 ## Estado atual
 
 Ambos os caminhos (UEFI e BIOS legado) têm todo o código e os assets
-necessários. **Nada disso foi validado por um boot real** — a comparação
-byte a byte contra o `grub-bios-setup` real (WSL, disco sintético em loop
-device) é a validação mais forte disponível sem QEMU/hardware, mas não
-substitui testar de verdade. Ver `TEST_MATRIX.md`.
+necessários, incluindo o early config que resolve como o GRUB acha o
+`grub.cfg` real. **Nada disso foi validado por um boot completo até o menu**
+— só a etapa de chegar até o `grubx64.efi`/entrada BCD foi confirmada em
+teste real (ver Histórico). A comparação byte a byte contra o
+`grub-bios-setup` real (WSL, disco sintético em loop device) é a validação
+mais forte disponível sem QEMU/hardware pro lado BIOS, mas não substitui
+testar de verdade. Ver `TEST_MATRIX.md`.
+
+## Histórico
+
+- **v1 (2026-07-27, manhã)**: primeira geração, via `grub-mkstandalone` sem
+  `-c`/early config. Teste real em VM UEFI (Hyper-V) expôs dois bugs
+  Windows-side não relacionados aos binários em si (BCD registrado como
+  `osloader` em vez de cópia de `{bootmgr}` — `0xc000007b`; ESP desmontada
+  antes do `bcdedit` rodar). Corrigidos em `BootConfigurationService`/
+  `BootStagingService`.
+- **v2 (2026-07-27, tarde)**: ao revisar o restante do pipeline depois desses
+  bugs, identifiquei que a v1 não tinha nenhuma garantia de achar o
+  `grub.cfg` real (nem UEFI nem BIOS) — trocado `grub-mkstandalone` por
+  `grub-mkimage -c` com early config explícito nos dois. `boot.img` (BIOS)
+  não mudou; `core.img` e `grubx64.efi` foram regenerados.

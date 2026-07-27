@@ -215,6 +215,12 @@
   <data name="Wizard_NoDistroSelected" xml:space="preserve">
     <value>No distribution selected</value>
   </data>
+  <data name="Wizard_AccountIncompleteMessage" xml:space="preserve">
+    <value>Fill in username, password and hostname before installing.</value>
+  </data>
+  <data name="Wizard_PasswordMismatchMessage" xml:space="preserve">
+    <value>The passwords entered don't match.</value>
+  </data>
   <data name="Wizard_InstallTypeTitle" xml:space="preserve">
     <value>Installation type</value>
   </data>
@@ -274,7 +280,7 @@ Automatic installation may not work.</value>
     <value>LinuxHub</value>
   </data>
   <data name="Wizard_InstallSuccessMessage" xml:space="preserve">
-    <value>Preparation complete! Restart your computer and choose the LinuxHub boot entry to continue the installation. The full log is at /var/log/linuxhub-install.log inside the Linux environment.</value>
+    <value>Preparation complete! Restart your computer whenever you're ready — the installation continues automatically, no need to choose anything. On the next restarts, it goes back to booting Windows normally. The full log is at /var/log/linuxhub-install.log inside the Linux environment.</value>
   </data>
   <data name="Wizard_InstallErrorTitle" xml:space="preserve">
     <value>Error preparing the installation</value>

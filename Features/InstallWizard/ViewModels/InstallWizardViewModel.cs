@@ -93,6 +93,17 @@ namespace LinuxHub.Features.InstallWizard.ViewModels
                 if (string.IsNullOrWhiteSpace(Iso.ResolvedIsoPath))
                     throw new InvalidOperationException(loc["Wizard_NoIsoSelected"]);
 
+                if (string.IsNullOrWhiteSpace(Account.Username)
+                    || string.IsNullOrWhiteSpace(Account.Password)
+                    || string.IsNullOrWhiteSpace(Account.ConfirmPassword)
+                    || string.IsNullOrWhiteSpace(Account.Hostname))
+                {
+                    throw new InvalidOperationException(loc["Wizard_AccountIncompleteMessage"]);
+                }
+
+                if (Account.Password != Account.ConfirmPassword)
+                    throw new InvalidOperationException(loc["Wizard_PasswordMismatchMessage"]);
+
                 bool isReplace = Target.IsReplaceMode;
 
                 string summary = isReplace

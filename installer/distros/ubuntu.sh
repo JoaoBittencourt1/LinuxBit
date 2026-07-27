@@ -30,7 +30,15 @@ install_base() {
     codename="$(resolve_ubuntu_codename "${DISTRO_VERSION:?DISTRO_VERSION não definido}")"
 
     log "Rodando debootstrap ($codename) em $mountpoint..."
-    debootstrap --arch=amd64 "$codename" "$mountpoint" http://archive.ubuntu.com/ubuntu/ \
+    # --include garante locales/keyboard-configuration/grub-pc|grub-efi-amd64 no
+    # sistema base — um debootstrap mínimo não traz esses pacotes por padrão, e
+    # lib/chroot.sh (locale-gen, dpkg-reconfigure keyboard-configuration) e
+    # lib/boot.sh (grub-install) dependem deles existirem depois.
+    local grub_package="grub-pc"
+    [[ "${BOOT_MODE:-}" == "uefi" ]] && grub_package="grub-efi-amd64"
+
+    debootstrap --arch=amd64 --include="locales,keyboard-configuration,${grub_package}" \
+        "$codename" "$mountpoint" http://archive.ubuntu.com/ubuntu/ \
         || fatal "debootstrap falhou para $codename."
 
     mount --bind /dev "$mountpoint/dev" || fatal "Falha ao bind-mount /dev."

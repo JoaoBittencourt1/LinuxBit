@@ -132,12 +132,23 @@ setup_dualboot() {
         fatal "LINUX_PARTITION_SIZE_GB ($size_gb GB) pequeno demais para caber raiz + swap (${swap_mib}MiB)."
     fi
 
-    # A única região "livre" na tabela de partição existente é o espaço
-    # deixado pelo shrink do Windows-side — nunca há mais de uma nesse
-    # fluxo, já que o Windows só encolhe uma partição por instalação.
+    # O espaço livre que nos interessa é especificamente o que vem logo depois
+    # da partição que o Windows encolheu (TARGET_PARTITION_INDEX) — não "o
+    # último 'free' da tabela": um disco OEM real pode ter uma partição de
+    # recuperação depois do C:, e nesse caso o último 'free' da tabela seria
+    # espaço não relacionado ao shrink (ou nenhum, se a recuperação for até o
+    # fim do disco). `parted -m ... print free` reaproveita o número da
+    # partição adjacente nas linhas "free" (não é um identificador confiável
+    # por si só) — por isso casamos pelo LBA de início/fim, não pelo número.
+    local target_end
+    target_end="$(parted -sm "$TARGET_DISK" unit MiB print free \
+        | awk -F: -v n="$TARGET_PARTITION_INDEX" '$1 == n && $5 != "free;" { s=$3; gsub(/MiB/,"",s); print s }')"
+    [[ -z "$target_end" ]] && fatal "Não foi possível localizar o fim da partição $TARGET_PARTITION_INDEX em $TARGET_DISK."
+
     local free_line
-    free_line="$(parted -sm "$TARGET_DISK" unit MiB print free | grep ':free;' | tail -n 1)"
-    [[ -z "$free_line" ]] && fatal "Nenhum espaço não alocado encontrado em $TARGET_DISK — o shrink do Windows não deixou espaço livre?"
+    free_line="$(parted -sm "$TARGET_DISK" unit MiB print free \
+        | awk -F: -v want="$target_end" '$5=="free;" { s=$2; gsub(/MiB/,"",s); if (s+0 >= want+0 - 1 && s+0 <= want+0 + 1) print }')"
+    [[ -z "$free_line" ]] && fatal "Nenhum espaço não alocado logo após a partição $TARGET_PARTITION_INDEX em $TARGET_DISK — o shrink do Windows não deixou espaço livre ali?"
 
     local free_start
     free_start="$(echo "$free_line" | cut -d: -f2 | tr -d 'MiB')"

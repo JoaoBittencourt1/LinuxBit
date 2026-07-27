@@ -29,7 +29,13 @@ namespace LinuxHub.Features.InstallWizard.Services
                 sb.Append(BuildWindowsChainloadEntry());
             }
 
-            return sb.ToString();
+            // GRUB é um parser de herança Unix — grub.cfg precisa de fim de linha \n puro.
+            // AppendLine() usa Environment.NewLine (\r\n no Windows, onde este código
+            // sempre roda); sem essa normalização, o arquivo sai com CRLF misturado com LF
+            // (dependendo de como os literais multi-linha do .cs foram salvos em disco),
+            // o que pode fazer o GRUB falhar o parse ou deixar um '\r' fantasma no fim de
+            // um valor (ex.: o caminho da ISO em $isofile).
+            return sb.ToString().Replace("\r\n", "\n");
         }
 
         internal static string BuildIsoBootEntry(string distroName, string isoWindowsPath)
