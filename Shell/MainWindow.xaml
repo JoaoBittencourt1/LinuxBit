@@ -20,20 +20,27 @@
 
         <ui:TitleBar Title="{loc:Loc Shell_Title}" Grid.Row="0">
             <ui:TitleBar.TrailingContent>
-                <ui:Button x:Name="LanguageButton"
-                           Appearance="Transparent"
-                           ToolTip="{loc:Loc Shell_LanguageTooltip}"
-                           Click="LanguageButton_Click">
-                    <ui:Button.Icon>
-                        <ui:SymbolIcon Symbol="Translate24"/>
-                    </ui:Button.Icon>
-                    <ui:Button.ContextMenu>
-                        <ContextMenu x:Name="LanguageMenu" Placement="Bottom">
-                            <MenuItem Header="{loc:Loc Shell_LanguagePtBr}" Click="PortugueseMenuItem_Click"/>
-                            <MenuItem Header="{loc:Loc Shell_LanguageEnUs}" Click="EnglishMenuItem_Click"/>
-                        </ContextMenu>
-                    </ui:Button.ContextMenu>
-                </ui:Button>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="VersionText"
+                               VerticalAlignment="Center"
+                               Margin="0,0,8,0"
+                               Opacity="0.6"
+                               FontSize="11"/>
+                    <ui:Button x:Name="LanguageButton"
+                               Appearance="Transparent"
+                               ToolTip="{loc:Loc Shell_LanguageTooltip}"
+                               Click="LanguageButton_Click">
+                        <ui:Button.Icon>
+                            <ui:SymbolIcon Symbol="Translate24"/>
+                        </ui:Button.Icon>
+                        <ui:Button.ContextMenu>
+                            <ContextMenu x:Name="LanguageMenu" Placement="Bottom">
+                                <MenuItem Header="{loc:Loc Shell_LanguagePtBr}" Click="PortugueseMenuItem_Click"/>
+                                <MenuItem Header="{loc:Loc Shell_LanguageEnUs}" Click="EnglishMenuItem_Click"/>
+                            </ContextMenu>
+                        </ui:Button.ContextMenu>
+                    </ui:Button>
+                </StackPanel>
             </ui:TitleBar.TrailingContent>
         </ui:TitleBar>
 
