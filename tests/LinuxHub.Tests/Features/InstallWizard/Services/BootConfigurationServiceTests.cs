@@ -18,8 +18,8 @@ namespace LinuxHub.Tests.Features.InstallWizard.Services
             Assert.DoesNotContain("/application osloader", script);
             Assert.Contains("device partition=S:", script);
             Assert.Contains(@"path '\EFI\linuxhub\grubx64.efi'", script);
-            Assert.Contains("/displayorder $guid /addlast", script);
-            Assert.Contains("/bootsequence $guid", script);
+            Assert.Contains("/set '{fwbootmgr}' displayorder $guid /addlast", script);
+            Assert.Contains("/bootsequence '{fwbootmgr}' $guid", script);
             Assert.DoesNotContain("/deletevalue", script);
         }
     }
