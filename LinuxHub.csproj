@@ -57,6 +57,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Binários GRUB2 pré-compilados que GrubAssetProvider lê ao lado do .exe em runtime
+         (AppContext.BaseDirectory) — ver Assets/Grub/README.md. Sem isso, o publish/build
+         não copia esses arquivos e BootStagingService falha com FileNotFoundException. -->
+    <Content Include="Assets\Grub\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <!-- grubx64.efi é um PE32+ válido (aplicativo EFI) — sem isso, o bundler de
+           PublishSingleFile o identifica como um "PE file" e o descarta em vez de copiá-lo
+           como conteúdo solto, e GrubAssetProvider não o encontra em runtime. -->
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="installer\core\" />
   </ItemGroup>
 

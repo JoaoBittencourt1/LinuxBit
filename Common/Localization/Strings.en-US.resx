@@ -304,8 +304,8 @@ Select a valid Linux ISO.</value>
   <data name="Wizard_DownloadErrorTitle" xml:space="preserve">
     <value>Download error</value>
   </data>
-  <data name="Wizard_ReplaceSystemDiskBlockedMessage" xml:space="preserve">
-    <value>This disk hosts the running Windows installation and cannot be replaced from here. Choose another disk or use dual-boot mode instead.</value>
+  <data name="Wizard_ReplaceSystemDiskWarningMessage" xml:space="preserve">
+    <value>This disk hosts the running Windows installation. It (and Windows) will be completely erased during the Linux installation, after rebooting — the wipe only happens after reboot, once Windows is no longer running.</value>
   </data>
   <data name="Wizard_DiskDetectionErrorMessage" xml:space="preserve">
     <value>Could not list disks: {0}</value>
@@ -318,6 +318,9 @@ Select a valid Linux ISO.</value>
   </data>
   <data name="Wizard_ConfirmReplaceSummary" xml:space="preserve">
     <value>We'll erase ALL data on {0} during the Linux installation, after rebooting. This operation cannot be undone.</value>
+  </data>
+  <data name="Wizard_ConfirmReplaceSystemDiskSummary" xml:space="preserve">
+    <value>We'll erase ALL data on {0} — including the Windows installation currently running — during the Linux installation, after rebooting. There's no going back to Windows after that. This operation cannot be undone.</value>
   </data>
   <data name="Wizard_ConfirmationTypedHint" xml:space="preserve">
     <value>Type the word below to confirm:</value>

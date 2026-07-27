@@ -35,8 +35,11 @@ namespace LinuxHub.Tests.Features.InstallWizard.ViewModels
         };
 
         [Fact]
-        public void ReplaceMode_SystemDisk_IsBlocked()
+        public void ReplaceMode_SystemDisk_IsAllowedButFlaggedForStrongerWarning()
         {
+            // O wipe real só acontece depois do reboot (boot-staging + Linux live), quando o
+            // Windows não está mais rodando — replace no disco de sistema é permitido, só
+            // aciona um aviso mais forte na UI/confirmação (ver design.md D2, revisado).
             var diskInventory = new FakeDiskInventoryService { Disks = TwoDisks() };
 
             var vm = new TargetSelectionViewModel(diskInventory, new FakePartitionInventoryService(), new FakeFirmwareService())
@@ -45,12 +48,11 @@ namespace LinuxHub.Tests.Features.InstallWizard.ViewModels
                 SelectedDisk = diskInventory.Disks[0]
             };
 
-            Assert.True(vm.IsSelectedDiskBlocked);
-            Assert.NotNull(vm.TargetValidationError);
+            Assert.True(vm.IsReplacingSystemDisk);
         }
 
         [Fact]
-        public void ReplaceMode_SecondaryDisk_IsNotBlocked()
+        public void ReplaceMode_SecondaryDisk_IsNotFlagged()
         {
             var diskInventory = new FakeDiskInventoryService { Disks = TwoDisks() };
 
@@ -60,8 +62,7 @@ namespace LinuxHub.Tests.Features.InstallWizard.ViewModels
                 SelectedDisk = diskInventory.Disks[1]
             };
 
-            Assert.False(vm.IsSelectedDiskBlocked);
-            Assert.Null(vm.TargetValidationError);
+            Assert.False(vm.IsReplacingSystemDisk);
         }
 
         [Fact]

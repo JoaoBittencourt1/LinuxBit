@@ -5,9 +5,14 @@
       (via `Win32_LogicalDiskToPartition` → `Win32_DiskPartition` →
       `Win32_DiskDrive`, não um índice assumido), adicionando
       `DiskInfo.IsSystemDisk`.
-- [x] 1.2 Bloquear a seleção desse disco no modo substituir na UI/ViewModel,
-      com mensagem explicando o motivo (spec `disk-provisioning` —
-      "Recusar o modo substituir no disco de sistema em uso").
+- [x] 1.2 ~~Bloquear a seleção desse disco no modo substituir~~ **Revisado na
+      Fase 2**: a seleção não é mais bloqueada — o wipe real só acontece
+      depois do reboot (Linux), quando o Windows não está mais rodando,
+      então bloquear não protegia nada e impedia o caso de uso mais comum
+      (notebook com um disco só). `TargetSelectionViewModel.
+      IsReplacingSystemDisk` agora só liga um aviso mais forte na UI e na
+      confirmação destrutiva. Ver design.md D2 (revisado) para o raciocínio
+      completo.
 - [x] 1.3 Reescrever `IDiskPartitioningService`/`DiskPartitioningService`
       para receber o disco/partição alvo real do wizard (não hardcoded em
       `select volume C`) e restringir sua única operação a shrink de uma

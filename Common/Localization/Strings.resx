@@ -304,8 +304,8 @@ Selecione uma ISO Linux válida.</value>
   <data name="Wizard_DownloadErrorTitle" xml:space="preserve">
     <value>Erro no download</value>
   </data>
-  <data name="Wizard_ReplaceSystemDiskBlockedMessage" xml:space="preserve">
-    <value>Este disco hospeda o Windows em execução e não pode ser substituído por aqui. Escolha outro disco ou use o modo dual-boot.</value>
+  <data name="Wizard_ReplaceSystemDiskWarningMessage" xml:space="preserve">
+    <value>Este disco hospeda o Windows em execução. Ele (e o Windows) será completamente apagado durante a instalação do Linux, após reiniciar — o wipe só acontece depois do reboot, quando o Windows não estiver mais rodando.</value>
   </data>
   <data name="Wizard_DiskDetectionErrorMessage" xml:space="preserve">
     <value>Não foi possível listar os discos: {0}</value>
@@ -318,6 +318,9 @@ Selecione uma ISO Linux válida.</value>
   </data>
   <data name="Wizard_ConfirmReplaceSummary" xml:space="preserve">
     <value>Vamos apagar TODOS os dados de {0} durante a instalação do Linux, após reiniciar. Essa operação não pode ser desfeita.</value>
+  </data>
+  <data name="Wizard_ConfirmReplaceSystemDiskSummary" xml:space="preserve">
+    <value>Vamos apagar TODOS os dados de {0} — incluindo o Windows que está rodando agora — durante a instalação do Linux, após reiniciar. Depois disso não há como voltar ao Windows. Essa operação não pode ser desfeita.</value>
   </data>
   <data name="Wizard_ConfirmationTypedHint" xml:space="preserve">
     <value>Digite a palavra abaixo para confirmar:</value>
