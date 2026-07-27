@@ -1,0 +1,30 @@
+<UserControl x:Class="LinuxHub.Features.InstallWizard.Views.ConfirmationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sys="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:loc="clr-namespace:LinuxHub.Common.Localization">
+
+    <UserControl.Resources>
+        <sys:BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+
+    <ui:Card Margin="0,0,0,16" BorderBrush="#FF5C5C" BorderThickness="1">
+        <StackPanel>
+            <TextBlock Text="{loc:Loc Wizard_ConfirmationTitle}" FontWeight="SemiBold" Opacity="0.85" Margin="0,0,0,10"/>
+            <TextBlock Text="{Binding Summary}" TextWrapping="Wrap" Margin="0,0,0,12"/>
+
+            <StackPanel Visibility="{Binding RequiresTypedConfirmation, Converter={StaticResource BoolToVis}}"
+                        Margin="0,0,0,12">
+                <TextBlock Text="{loc:Loc Wizard_ConfirmationTypedHint}" Opacity="0.7" Margin="0,0,0,4"/>
+                <TextBlock Text="{Binding ConfirmationWord}" FontWeight="Bold" Margin="0,0,0,8"/>
+                <ui:TextBox Text="{Binding TypedConfirmation, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <ui:Button Content="{loc:Loc Wizard_CancelButton}" Margin="0,0,8,0" Command="{Binding CancelCommand}"/>
+                <ui:Button Content="{loc:Loc Wizard_ConfirmButton}" Appearance="Danger" Command="{Binding ConfirmCommand}"/>
+            </StackPanel>
+        </StackPanel>
+    </ui:Card>
+</UserControl>

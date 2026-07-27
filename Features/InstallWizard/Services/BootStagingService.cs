@@ -1,0 +1,153 @@
+using System.IO;
+using System.Linq;
+
+namespace LinuxHub.Features.InstallWizard.Services
+{
+    public sealed class BootStagingService : IBootStagingService
+    {
+        private readonly IEspLocatorService _espLocator;
+        private readonly IGrubAssetProvider _grubAssets;
+        private readonly IMbrBackupService _mbrBackup;
+        private readonly IBootConfigurationService _bootConfiguration;
+
+        public BootStagingService(
+            IEspLocatorService espLocator,
+            IGrubAssetProvider grubAssets,
+            IMbrBackupService mbrBackup,
+            IBootConfigurationService bootConfiguration)
+        {
+            _espLocator = espLocator ?? throw new ArgumentNullException(nameof(espLocator));
+            _grubAssets = grubAssets ?? throw new ArgumentNullException(nameof(grubAssets));
+            _mbrBackup = mbrBackup ?? throw new ArgumentNullException(nameof(mbrBackup));
+            _bootConfiguration = bootConfiguration ?? throw new ArgumentNullException(nameof(bootConfiguration));
+        }
+
+        public void InstallStagingBootloader(BootStagingRequest request)
+        {
+            ArgumentNullException.ThrowIfNull(request);
+
+            if (!File.Exists(request.IsoPath))
+            {
+                throw new InvalidOperationException(
+                    $"ISO de staging não encontrada em '{request.IsoPath}' — o boot-staging usa o " +
+                    "arquivo já baixado pelo install-wizard diretamente, sem copiá-lo (design.md D4).");
+            }
+
+            string grubCfg = GrubConfigBuilder.BuildConfig(
+                request.DistroName,
+                request.IsoPath,
+                includeWindowsChainload: !request.IsUefi);
+
+            if (request.IsUefi)
+                InstallUefi(request, grubCfg);
+            else
+                InstallBios(request, grubCfg);
+        }
+
+        private void InstallUefi(BootStagingRequest request, string grubCfg)
+        {
+            int? espIndex = _espLocator.FindEfiSystemPartitionIndex(request.TargetDiskIndex);
+            if (espIndex is null)
+            {
+                throw new InvalidOperationException(
+                    $"Não foi possível localizar a EFI System Partition no disco {request.TargetDiskIndex}.");
+            }
+
+            char driveLetter = PickFreeDriveLetter();
+            string grubEfiSource = _grubAssets.GetUefiBootloaderPath();
+
+            string script = BuildEspStagingScript(
+                request.TargetDiskIndex, espIndex.Value, driveLetter, grubEfiSource, grubCfg);
+            ElevatedPowerShellRunner.Run(script, "instalação do GRUB2 na EFI System Partition");
+
+            _bootConfiguration.AddFirmwareBootEntry(
+                description: $"{request.DistroName} (LinuxHub staging)",
+                driveLetter: driveLetter,
+                efiPathOnVolume: @"\EFI\linuxhub\grubx64.efi");
+        }
+
+        private void InstallBios(BootStagingRequest request, string grubCfg)
+        {
+            string backupPath = Path.Combine(
+                Path.GetTempPath(), $"linuxhub_mbr_backup_disk{request.TargetDiskIndex}.bin");
+            _mbrBackup.BackupMbr(request.TargetDiskIndex, backupPath);
+
+            string coreImagePath = _grubAssets.GetBiosCoreImagePath();
+            EnsurePostMbrGapFitsCoreImage(request.TargetDiskIndex, coreImagePath);
+
+            string systemDrive = Path.GetPathRoot(Environment.SystemDirectory) ?? @"C:\";
+            ElevatedPowerShellRunner.Run(
+                BuildGrubCfgWriteScript(systemDrive, grubCfg), "gravação do grub.cfg na partição do Windows");
+
+            // Ordem importa: o core.img precisa estar no gap ANTES do boot.img ser escrito no
+            // MBR, porque assim que o boot.img novo está lá, o disco já está "GRUB-aware" —
+            // se faltasse o core.img nesse meio-tempo, um boot acidental encontraria um GRUB
+            // incompleto. O backup do MBR (acima) já aconteceu antes de qualquer uma dessas
+            // duas escritas, como a spec exige.
+            _mbrBackup.WriteCoreImageToGap(request.TargetDiskIndex, coreImagePath);
+            _mbrBackup.WriteBootCode(request.TargetDiskIndex, _grubAssets.GetBiosBootSectorPath());
+        }
+
+        /// <summary>
+        /// O <c>core.img</c> é sempre embutido a partir do LBA 1 (logo após o MBR) — mesmo
+        /// comportamento do <c>grub-bios-setup</c> real num disco MBR comum sem partição
+        /// <c>bios_grub</c> dedicada (verificado via WSL, ver Assets/Grub/README.md). Aborta
+        /// antes de qualquer escrita se o espaço não alocado entre o MBR e a primeira
+        /// partição (o gap que o Windows deixa por alinhamento de 1MiB desde o Vista SP1) for
+        /// pequeno demais — nunca escreve por cima de uma partição existente.
+        /// </summary>
+        internal void EnsurePostMbrGapFitsCoreImage(int diskIndex, string coreImagePath)
+        {
+            byte[] mbr = _mbrBackup.ReadMbr(diskIndex);
+            uint gapSectors = MbrPartitionTableReader.GapSectorsAfterMbr(mbr);
+
+            long coreImageSize = new FileInfo(coreImagePath).Length;
+            long requiredSectors = (coreImageSize + 511) / 512;
+
+            if (gapSectors < requiredSectors)
+            {
+                throw new InvalidOperationException(
+                    $"Espaço não alocado entre o MBR e a primeira partição do disco {diskIndex} " +
+                    $"({gapSectors} setores) é pequeno demais para o core.img do GRUB " +
+                    $"({requiredSectors} setores necessários) — abortando antes de qualquer escrita.");
+            }
+        }
+
+        internal static char PickFreeDriveLetter()
+        {
+            var used = DriveInfo.GetDrives()
+                .Select(d => char.ToUpperInvariant(d.Name[0]))
+                .ToHashSet();
+
+            for (char letter = 'Z'; letter >= 'D'; letter--)
+            {
+                if (!used.Contains(letter))
+                    return letter;
+            }
+
+            throw new InvalidOperationException(
+                "Nenhuma letra de unidade livre para montar a EFI System Partition temporariamente.");
+        }
+
+        internal static string BuildEspStagingScript(
+            int diskIndex, int partitionIndex, char driveLetter, string grubEfiSourcePath, string grubCfgContent) => $@"
+$ErrorActionPreference = 'Stop'
+Add-PartitionAccessPath -DiskNumber {diskIndex} -PartitionNumber {partitionIndex} -AccessPath '{driveLetter}:\'
+try {{
+    New-Item -ItemType Directory -Force -Path '{driveLetter}:\EFI\linuxhub' | Out-Null
+    Copy-Item -Path '{grubEfiSourcePath}' -Destination '{driveLetter}:\EFI\linuxhub\grubx64.efi' -Force
+    Set-Content -LiteralPath '{driveLetter}:\EFI\linuxhub\grub.cfg' -Value @'
+{grubCfgContent}
+'@ -NoNewline -Encoding ASCII
+}} finally {{
+    Remove-PartitionAccessPath -DiskNumber {diskIndex} -PartitionNumber {partitionIndex} -AccessPath '{driveLetter}:\'
+}}";
+
+        internal static string BuildGrubCfgWriteScript(string systemDrive, string grubCfgContent) => $@"
+$ErrorActionPreference = 'Stop'
+New-Item -ItemType Directory -Force -Path '{systemDrive}boot\grub' | Out-Null
+Set-Content -LiteralPath '{systemDrive}boot\grub\grub.cfg' -Value @'
+{grubCfgContent}
+'@ -NoNewline -Encoding ASCII";
+    }
+}

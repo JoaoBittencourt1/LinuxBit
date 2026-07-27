@@ -1,3 +1,4 @@
+using System.IO;
 using System.Management;
 using LinuxHub.Common.Models;
 
@@ -7,6 +8,8 @@ namespace LinuxHub.Features.InstallWizard.Services
     {
         public IReadOnlyList<DiskInfo> GetDisks()
         {
+            int systemDiskIndex = FindSystemDiskIndex();
+
             var disks = new List<DiskInfo>();
 
             using var searcher = new ManagementObjectSearcher(
@@ -17,15 +20,45 @@ namespace LinuxHub.Features.InstallWizard.Services
                 if (disk["Size"] == null)
                     continue;
 
+                int index = Convert.ToInt32(disk["Index"]);
+
                 disks.Add(new DiskInfo
                 {
-                    Index = Convert.ToInt32(disk["Index"]),
+                    Index = index,
                     Model = disk["Model"]?.ToString() ?? "Desconhecido",
-                    SizeBytes = Convert.ToInt64(disk["Size"])
+                    SizeBytes = Convert.ToInt64(disk["Size"]),
+                    IsSystemDisk = index == systemDiskIndex
                 });
             }
 
             return disks;
+        }
+
+        /// <summary>
+        /// Encontra o disco físico que hospeda o volume de boot do Windows em execução,
+        /// via associação WMI (Win32_LogicalDisk → Win32_DiskPartition → Win32_DiskDrive)
+        /// — nunca um índice assumido, já que a ordem dos discos varia por máquina.
+        /// </summary>
+        private static int FindSystemDiskIndex()
+        {
+            string systemDrive = Path.GetPathRoot(Environment.SystemDirectory)?.TrimEnd('\\') ?? "C:";
+
+            using var partitionSearcher = new ManagementObjectSearcher(
+                $"ASSOCIATORS OF {{Win32_LogicalDisk.DeviceID='{systemDrive}'}} WHERE AssocClass=Win32_LogicalDiskToPartition");
+
+            foreach (ManagementBaseObject partition in partitionSearcher.Get())
+            {
+                string partitionDeviceId = partition["DeviceID"]?.ToString() ?? string.Empty;
+
+                using var diskSearcher = new ManagementObjectSearcher(
+                    $"ASSOCIATORS OF {{Win32_DiskPartition.DeviceID='{partitionDeviceId}'}} WHERE AssocClass=Win32_DiskDriveToDiskPartition");
+
+                foreach (ManagementBaseObject diskDrive in diskSearcher.Get())
+                    return Convert.ToInt32(diskDrive["Index"]);
+            }
+
+            throw new InvalidOperationException(
+                "Não foi possível determinar o disco físico que hospeda o Windows em execução.");
         }
     }
 }
