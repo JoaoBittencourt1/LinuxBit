@@ -24,7 +24,10 @@ namespace LinuxHub.Features.InstallWizard.Services
                 FileName = "cmd.exe",
                 Arguments = $"/c diskpart.exe /s \"{scriptPath}\" > \"{logPath}\" 2>&1",
                 Verb = "runas",
-                CreateNoWindow = true,
+                // CreateNoWindow só tem efeito com UseShellExecute=false — incompatível com
+                // Verb=runas (elevação via UAC exige ShellExecute). WindowStyle é o que
+                // realmente esconde a janela do cmd.exe nesse caso.
+                WindowStyle = ProcessWindowStyle.Hidden,
                 UseShellExecute = true
             };
 

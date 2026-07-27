@@ -55,15 +55,19 @@ namespace LinuxHub.Features.InstallWizard.Services
 
             char driveLetter = PickFreeDriveLetter();
             string grubEfiSource = _grubAssets.GetUefiBootloaderPath();
+            const string efiPathOnVolume = @"\EFI\linuxhub\grubx64.efi";
 
-            string script = BuildEspStagingScript(
-                request.TargetDiskIndex, espIndex.Value, driveLetter, grubEfiSource, grubCfg);
-            ElevatedPowerShellRunner.Run(script, "instalação do GRUB2 na EFI System Partition");
-
-            _bootConfiguration.AddFirmwareBootEntry(
+            // Montagem, cópia e registro BCD precisam rodar no MESMO script elevado, com o
+            // registro BCD ANTES de desmontar a ESP — bcdedit resolve `device partition=X:`
+            // consultando a letra de unidade montada; se ela já tiver sido desmontada, falha
+            // com "dispositivo não é válido como especificado" (bug encontrado em teste real).
+            string script = BuildEspStagingAndBcdScript(
+                request.TargetDiskIndex, espIndex.Value, driveLetter, grubEfiSource, grubCfg,
                 description: $"{request.DistroName} (LinuxHub staging)",
-                driveLetter: driveLetter,
-                efiPathOnVolume: @"\EFI\linuxhub\grubx64.efi");
+                efiPathOnVolume: efiPathOnVolume);
+
+            string output = ElevatedPowerShellRunner.Run(script, "instalação do GRUB2 na EFI System Partition e registro da entrada BCD");
+            BootConfigurationService.ExtractGuidOrThrow(output);
         }
 
         private void InstallBios(BootStagingRequest request, string grubCfg)
@@ -139,6 +143,29 @@ try {{
     Set-Content -LiteralPath '{driveLetter}:\EFI\linuxhub\grub.cfg' -Value @'
 {grubCfgContent}
 '@ -NoNewline -Encoding ASCII
+}} finally {{
+    Remove-PartitionAccessPath -DiskNumber {diskIndex} -PartitionNumber {partitionIndex} -AccessPath '{driveLetter}:\'
+}}";
+
+        /// <summary>
+        /// Igual a <see cref="BuildEspStagingScript"/>, mas roda os comandos <c>bcdedit</c>
+        /// (<see cref="BootConfigurationService.BuildAddFirmwareBootEntryCommands"/>) DENTRO
+        /// do mesmo <c>try</c>, antes do <c>finally</c> desmontar a ESP — precisa ser um
+        /// script só, não duas execuções elevadas separadas (ver InstallUefi).
+        /// </summary>
+        internal static string BuildEspStagingAndBcdScript(
+            int diskIndex, int partitionIndex, char driveLetter, string grubEfiSourcePath, string grubCfgContent,
+            string description, string efiPathOnVolume) => $@"
+$ErrorActionPreference = 'Stop'
+Add-PartitionAccessPath -DiskNumber {diskIndex} -PartitionNumber {partitionIndex} -AccessPath '{driveLetter}:\'
+try {{
+    New-Item -ItemType Directory -Force -Path '{driveLetter}:\EFI\linuxhub' | Out-Null
+    Copy-Item -Path '{grubEfiSourcePath}' -Destination '{driveLetter}:\EFI\linuxhub\grubx64.efi' -Force
+    Set-Content -LiteralPath '{driveLetter}:\EFI\linuxhub\grub.cfg' -Value @'
+{grubCfgContent}
+'@ -NoNewline -Encoding ASCII
+
+{BootConfigurationService.BuildAddFirmwareBootEntryCommands(description, driveLetter, efiPathOnVolume)}
 }} finally {{
     Remove-PartitionAccessPath -DiskNumber {diskIndex} -PartitionNumber {partitionIndex} -AccessPath '{driveLetter}:\'
 }}";

@@ -85,6 +85,32 @@ namespace LinuxHub.Tests.Features.InstallWizard.Services
         }
 
         [Fact]
+        public void BuildEspStagingAndBcdScript_RegistersBcdEntryBeforeUnmountingEsp()
+        {
+            // Bug real encontrado em teste: bcdedit falhava com "dispositivo não é válido
+            // como especificado" porque a ESP já tinha sido desmontada antes do bcdedit
+            // rodar (eram duas execuções elevadas separadas). Precisa ser uma só, com o
+            // bcdedit dentro do mesmo try, antes do Remove-PartitionAccessPath.
+            string script = BootStagingService.BuildEspStagingAndBcdScript(
+                diskIndex: 0, partitionIndex: 1, driveLetter: 'S',
+                grubEfiSourcePath: @"C:\App\Assets\Grub\uefi\grubx64.efi",
+                grubCfgContent: "menuentry \"x\" {}\n",
+                description: "Ubuntu (LinuxHub staging)",
+                efiPathOnVolume: @"\EFI\linuxhub\grubx64.efi");
+
+            int bcdCreateIndex = script.IndexOf("bcdedit /create", StringComparison.Ordinal);
+            int removeAccessPathIndex = script.IndexOf("Remove-PartitionAccessPath", StringComparison.Ordinal);
+
+            Assert.True(bcdCreateIndex >= 0, "bcdedit /create deveria estar no script.");
+            Assert.True(removeAccessPathIndex >= 0, "Remove-PartitionAccessPath deveria estar no script.");
+            Assert.True(bcdCreateIndex < removeAccessPathIndex,
+                "bcdedit precisa rodar ANTES de desmontar a ESP, senão 'device partition=S:' falha.");
+
+            Assert.Contains("device partition=S:", script);
+            Assert.Contains(@"path '\EFI\linuxhub\grubx64.efi'", script);
+        }
+
+        [Fact]
         public void BuildGrubCfgWriteScript_WritesUnderSystemDriveBootGrub()
         {
             string script = BootStagingService.BuildGrubCfgWriteScript(@"C:\", "set timeout=10\n");

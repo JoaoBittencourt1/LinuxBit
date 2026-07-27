@@ -25,9 +25,12 @@ namespace LinuxHub.Features.InstallWizard.Services
             var startInfo = new ProcessStartInfo
             {
                 FileName = "cmd.exe",
-                Arguments = $"/c powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"{scriptPath}\" > \"{logPath}\" 2>&1",
+                Arguments = $"/c powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"{scriptPath}\" > \"{logPath}\" 2>&1",
                 Verb = "runas",
-                CreateNoWindow = true,
+                // CreateNoWindow só tem efeito com UseShellExecute=false — incompatível com
+                // Verb=runas (elevação via UAC exige ShellExecute). WindowStyle é o que
+                // realmente esconde a janela nesse caso (honrado pelo ShellExecuteEx).
+                WindowStyle = ProcessWindowStyle.Hidden,
                 UseShellExecute = true
             };
 
