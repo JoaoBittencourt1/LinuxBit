@@ -55,19 +55,32 @@ partição de um tipo/GUID que o Linux vai reformatar de qualquer forma não
 adiciona segurança nem controle, só duplica lógica de particionamento nos
 dois lados (violação de DRY) e ainda deixa o modo replace sem solução.
 
-### D2 — Modo replace no disco de sistema é recusado, não tentado
+### D2 — Modo replace no disco de sistema (revisado na Fase 2: permitido, não recusado)
 
-Não existe forma segura de o app "tentar e ver se falha" quando o disco alvo
-hospeda o Windows em execução. Decisão: `TargetSelectionViewModel` compara o
-disco alvo contra o disco físico que contém o volume de boot do Windows (via
-`Win32_LogicalDiskToPartition`/`Win32_DiskPartition`→`Win32_DiskDrive`, não
-assumindo índice fixo) e desabilita/rejeita a seleção com mensagem
-explicativa. Replace continua permitido em discos secundários — Windows
-consegue `clean` um disco não-boot enquanto está rodando, então não há
-motivo para adiar isso para o Linux nesse caso específico; mas por
-consistência e para manter uma única implementação de `setup_replace`,
-**mesmo em disco secundário, o wipe real acontece no `lib/disk.sh`** — o
-Windows só valida elegibilidade e grava o plano.
+Decisão original da Fase 1: recusar replace quando o disco alvo hospeda o
+Windows em execução, com a justificativa "não existe forma segura de tentar
+e ver se falha". **Essa justificativa só vale para tentar o wipe enquanto o
+Windows está rodando** — e o Windows nunca faz isso; ele só grava o plano em
+`install.conf` e prepara o boot-staging (D4). O wipe de verdade
+(`setup_replace` em `lib/disk.sh`) só acontece depois do reboot, dentro do
+ambiente Ubuntu live carregado via boot-staging — nesse ponto o Windows não
+está mais rodando, e apagar o disco (mesmo sendo o único disco da máquina,
+mesmo sendo o que tinha o Windows) é tão seguro quanto apagar qualquer disco
+a partir de um Linux live comum (mesmo princípio de qualquer instalador
+Ubuntu bootado de pendrive substituindo o Windows de um notebook com um
+disco só).
+
+Bloquear a seleção nunca protegeu nada nesse fluxo — só impedia o caso de
+uso mais comum do produto (notebook com um disco, trocar Windows por
+Linux). **Revisão (Fase 2, após validar a arquitetura do boot-staging):**
+`TargetSelectionViewModel.IsReplacingSystemDisk` deixa de bloquear a seleção
+e passa a ser só informativo — liga um aviso mais forte na UI
+(`Wizard_ReplaceSystemDiskWarningMessage`) e na confirmação destrutiva
+(`Wizard_ConfirmReplaceSystemDiskSummary`, deixando explícito que não há
+volta pro Windows depois do reboot), mas não impede a operação. Replace
+continua permitido em discos secundários também, pelo mesmo motivo de
+sempre — e, por consistência, **o wipe real sempre acontece no
+`lib/disk.sh`**, nunca no Windows, seja disco de sistema ou não.
 
 ### D3 — Detecção de firmware e ESP via API real, não heurística de caminho
 

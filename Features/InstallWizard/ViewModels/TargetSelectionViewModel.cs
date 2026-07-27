@@ -52,8 +52,7 @@ namespace LinuxHub.Features.InstallWizard.ViewModels
 
                 OnPropertyChanged(nameof(IsReplaceMode));
                 OnPropertyChanged(nameof(IsDualBootMode));
-                OnPropertyChanged(nameof(IsSelectedDiskBlocked));
-                OnPropertyChanged(nameof(TargetValidationError));
+                OnPropertyChanged(nameof(IsReplacingSystemDisk));
 
                 if (value == InstallMode.Replace)
                     ReloadDisks();
@@ -84,13 +83,11 @@ namespace LinuxHub.Features.InstallWizard.ViewModels
         public bool HasDiskDetectionError => DiskDetectionError is not null;
 
         /// <summary>Modo substituir no disco físico que hospeda o Windows em execução —
-        /// nunca permitido (ver spec disk-provisioning, "Recusar o modo substituir no
-        /// disco de sistema em uso").</summary>
-        public bool IsSelectedDiskBlocked => IsReplaceMode && SelectedDisk?.IsSystemDisk == true;
-
-        public string? TargetValidationError => IsSelectedDiskBlocked
-            ? LocalizationManager.Instance["Wizard_ReplaceSystemDiskBlockedMessage"]
-            : null;
+        /// permitido (o wipe real só acontece depois do reboot, via boot-staging + Linux
+        /// live, quando o Windows não está mais rodando — ver design.md D2, revisado).
+        /// Só informativo: liga um aviso mais forte na UI e na confirmação destrutiva,
+        /// nunca bloqueia a seleção.</summary>
+        public bool IsReplacingSystemDisk => IsReplaceMode && SelectedDisk?.IsSystemDisk == true;
 
         public DiskInfo? SelectedDisk
         {
@@ -100,8 +97,7 @@ namespace LinuxHub.Features.InstallWizard.ViewModels
                 if (!SetProperty(ref _selectedDisk, value))
                     return;
 
-                OnPropertyChanged(nameof(IsSelectedDiskBlocked));
-                OnPropertyChanged(nameof(TargetValidationError));
+                OnPropertyChanged(nameof(IsReplacingSystemDisk));
             }
         }
 

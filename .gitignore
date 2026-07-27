@@ -4,6 +4,8 @@
 # Build outputs
 bin/
 obj/
+publish/
+*.zip
 
 # Temporary files
 *.user

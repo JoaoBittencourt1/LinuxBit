@@ -26,7 +26,7 @@ caso poder ser executado.
 
 | # | Cenário | Resultado esperado | Resultado real |
 |---|---|---|---|
-| 5 | Modo replace selecionado no disco de sistema em uso | `TargetSelectionViewModel.IsSelectedDiskBlocked=true`; UI bloqueia seleção com `Wizard_ReplaceSystemDiskBlockedMessage`; `InstallCommand` nunca chega a `ExecuteInstall` | — |
+| 5 | Modo replace selecionado no disco de sistema em uso (ex.: VM com um disco só) | **Permitido** (revisado — ver design.md D2): `TargetSelectionViewModel.IsReplacingSystemDisk=true` liga um `InfoBar` de aviso (`Wizard_ReplaceSystemDiskWarningMessage`) e a confirmação usa o texto mais forte (`Wizard_ConfirmReplaceSystemDiskSummary`), mas a seleção e a instalação prosseguem normalmente | — |
 | 6 | Usuário cancela a confirmação destrutiva (`ConfirmationViewModel.Cancelled`) | `PendingConfirmation` volta a `null`; nenhuma operação de disco/boot executada | — |
 | 7 | Modo replace, usuário não digita a palavra de confirmação corretamente | `ConfirmationViewModel` não dispara `Confirmed`; instalação não prossegue | — |
 

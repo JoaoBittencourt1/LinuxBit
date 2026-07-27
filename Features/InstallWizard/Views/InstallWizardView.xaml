@@ -118,17 +118,7 @@
                 <StackPanel>
                     <TextBlock Text="{loc:Loc Wizard_TargetDiskTitle}" FontWeight="SemiBold" Opacity="0.7" Margin="0,0,0,6"/>
                     <TextBlock Text="{loc:Loc Wizard_TargetDiskHint}" Opacity="0.6" TextWrapping="Wrap" Margin="0,0,0,8"/>
-                    <ComboBox ItemsSource="{Binding Target.Disks}" SelectedItem="{Binding Target.SelectedDisk}">
-                        <ComboBox.ItemContainerStyle>
-                            <Style TargetType="ComboBoxItem">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsSystemDisk}" Value="True">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ComboBox.ItemContainerStyle>
-                    </ComboBox>
+                    <ComboBox ItemsSource="{Binding Target.Disks}" SelectedItem="{Binding Target.SelectedDisk}"/>
 
                     <ui:InfoBar IsOpen="{Binding Target.HasDiskDetectionError}"
                                 IsClosable="False"
@@ -136,10 +126,10 @@
                                 Message="{Binding Target.DiskDetectionError}"
                                 Margin="0,8,0,0"/>
 
-                    <ui:InfoBar IsOpen="{Binding Target.IsSelectedDiskBlocked}"
+                    <ui:InfoBar IsOpen="{Binding Target.IsReplacingSystemDisk}"
                                 IsClosable="False"
-                                Severity="Error"
-                                Message="{Binding Target.TargetValidationError}"
+                                Severity="Warning"
+                                Message="{loc:Loc Wizard_ReplaceSystemDiskWarningMessage}"
                                 Margin="0,8,0,0"/>
                 </StackPanel>
             </ui:Card>

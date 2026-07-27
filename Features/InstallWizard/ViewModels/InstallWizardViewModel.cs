@@ -93,13 +93,12 @@ namespace LinuxHub.Features.InstallWizard.ViewModels
                 if (string.IsNullOrWhiteSpace(Iso.ResolvedIsoPath))
                     throw new InvalidOperationException(loc["Wizard_NoIsoSelected"]);
 
-                if (Target.IsSelectedDiskBlocked)
-                    throw new InvalidOperationException(loc["Wizard_ReplaceSystemDiskBlockedMessage"]);
-
                 bool isReplace = Target.IsReplaceMode;
 
                 string summary = isReplace
-                    ? loc.Format("Wizard_ConfirmReplaceSummary", Target.SelectedDisk?.ToString() ?? string.Empty)
+                    ? loc.Format(
+                        Target.IsReplacingSystemDisk ? "Wizard_ConfirmReplaceSystemDiskSummary" : "Wizard_ConfirmReplaceSummary",
+                        Target.SelectedDisk?.ToString() ?? string.Empty)
                     : loc.Format(
                         "Wizard_ConfirmShrinkSummary",
                         Target.SelectedPartition?.ToString() ?? string.Empty,
