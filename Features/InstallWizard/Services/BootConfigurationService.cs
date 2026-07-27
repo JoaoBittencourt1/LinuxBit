@@ -35,6 +35,14 @@ namespace LinuxHub.Features.InstallWizard.Services
         /// LinuxHub, sem o usuário precisar escolher nada num menu de boot; da reinicialização
         /// seguinte em diante volta sozinho a bootar o Windows por padrão (mesma proteção que
         /// o "boot único" do Windows usa pra firmware setup/recovery).
+        ///
+        /// IMPORTANTE: <c>/displayorder</c> e <c>/bootsequence</c> precisam mirar
+        /// explicitamente <c>{fwbootmgr}</c> (a lista de boot da FIRMWARE/UEFI). Sem isso,
+        /// bcdedit usa o store padrão do objeto <c>{bootmgr}</c> — aí a entrada do GRUB entra
+        /// na lista de OS do próprio Windows Boot Manager, que tenta encadear pra ela como se
+        /// fosse um loader NT e falha com <c>0xc000007b</c> (bug encontrado em teste real: a
+        /// tela de erro mostrava "Gerenciador de Inicialização do Windows" tentando carregar o
+        /// grubx64.efi).
         /// </summary>
         internal static string BuildAddFirmwareBootEntryCommands(string description, char driveLetter, string efiPathOnVolume) => $@"
 $create = bcdedit /copy '{{bootmgr}}' /d ""{description}""
@@ -46,9 +54,9 @@ bcdedit /set $guid device partition={driveLetter}:
 if ($LASTEXITCODE -ne 0) {{ throw ""bcdedit /set device falhou"" }}
 bcdedit /set $guid path '{efiPathOnVolume}'
 if ($LASTEXITCODE -ne 0) {{ throw ""bcdedit /set path falhou"" }}
-bcdedit /displayorder $guid /addlast
-if ($LASTEXITCODE -ne 0) {{ throw ""bcdedit /displayorder falhou"" }}
-bcdedit /bootsequence $guid
+bcdedit /set '{{fwbootmgr}}' displayorder $guid /addlast
+if ($LASTEXITCODE -ne 0) {{ throw ""bcdedit /set {{fwbootmgr}} displayorder falhou"" }}
+bcdedit /bootsequence '{{fwbootmgr}}' $guid
 if ($LASTEXITCODE -ne 0) {{ throw ""bcdedit /bootsequence falhou"" }}
 Write-Output ""BCDGUID:$guid""";
 
