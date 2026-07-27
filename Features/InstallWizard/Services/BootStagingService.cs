@@ -63,7 +63,7 @@ namespace LinuxHub.Features.InstallWizard.Services
             // com "dispositivo não é válido como especificado" (bug encontrado em teste real).
             string script = BuildEspStagingAndBcdScript(
                 request.TargetDiskIndex, espIndex.Value, driveLetter, grubEfiSource, grubCfg,
-                description: $"{request.DistroName} (LinuxHub staging)",
+                description: $"{request.DistroName} ({BootConfigurationService.StagingEntryMarker})",
                 efiPathOnVolume: efiPathOnVolume);
 
             string output = ElevatedPowerShellRunner.Run(script, "instalação do GRUB2 na EFI System Partition e registro da entrada BCD");

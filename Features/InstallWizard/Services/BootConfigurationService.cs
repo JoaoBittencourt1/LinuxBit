@@ -15,6 +15,49 @@ namespace LinuxHub.Features.InstallWizard.Services
     /// </summary>
     public sealed partial class BootConfigurationService : IBootConfigurationService
     {
+        /// <summary>Sufixo que <see cref="BootStagingService"/> põe na descrição de toda
+        /// entrada de staging, e por onde <see cref="RemoveStaleStagingEntriesCommands"/> as
+        /// reconhece pra apagar.</summary>
+        internal const string StagingEntryMarker = "LinuxHub staging";
+
+        /// <summary>
+        /// Apaga entradas de staging de execuções anteriores antes de criar a nova. Sem isso
+        /// cada tentativa deixava um <c>bcdedit /copy</c> órfão pra trás — inclusive as
+        /// quebradas das versões que registravam no <c>{bootmgr}</c>, que continuam
+        /// aparecendo (e falhando) no menu de boot do Windows pra sempre.
+        ///
+        /// Agrupa a saída de <c>bcdedit /enum all</c> em blocos separados por linha em branco
+        /// em vez de casar regex na saída inteira: os RÓTULOS do bcdedit são traduzidos pro
+        /// idioma do Windows, mas os nomes de datatype (<c>identifier</c>, <c>description</c>)
+        /// não são — então casar por eles funciona em qualquer locale. O regex de GUID não
+        /// pega ids conhecidos como <c>{bootmgr}</c>/<c>{fwbootmgr}</c> porque as letras deles
+        /// não são todas hexadecimais. Falhas aqui são ignoradas de propósito (sem checar
+        /// <c>$LASTEXITCODE</c>): não conseguir limpar lixo antigo não é motivo pra abortar a
+        /// instalação.
+        /// </summary>
+        private const string RemoveStaleStagingEntriesCommands = @"
+$blocks = @()
+$current = @()
+foreach ($line in (bcdedit /enum all)) {
+    if ($line.Trim() -eq '') {
+        if ($current.Count -gt 0) { $blocks += ,@($current); $current = @() }
+    } else {
+        $current += $line
+    }
+}
+if ($current.Count -gt 0) { $blocks += ,@($current) }
+foreach ($block in $blocks) {
+    $text = $block -join ""`n""
+    if ($text -notmatch '" + StagingEntryMarker + @"') { continue }
+    $found = [regex]::Match($text, 'identifier\s+(\{[0-9a-fA-F-]+\})')
+    if (-not $found.Success) { continue }
+    $stale = $found.Groups[1].Value
+    bcdedit /set '{fwbootmgr}' displayorder $stale /remove
+    bcdedit /displayorder $stale /remove
+    bcdedit /delete $stale /f
+}
+";
+
         public string AddFirmwareBootEntry(string description, char driveLetter, string efiPathOnVolume)
         {
             string script = $"$ErrorActionPreference = 'Stop'\n{BuildAddFirmwareBootEntryCommands(description, driveLetter, efiPathOnVolume)}";
@@ -30,21 +73,29 @@ namespace LinuxHub.Features.InstallWizard.Services
         /// referenciada em <paramref name="driveLetter"/> precisa continuar montada até
         /// esses comandos terminarem — chamar isso DEPOIS de desmontar a ESP falha com
         /// "dispositivo não é válido como especificado" (bcdedit não resolve uma letra que
-        /// não existe mais). Usa <c>bcdedit /bootsequence</c> (boot único) em vez de só
-        /// <c>/displayorder</c> — a próxima reinicialização entra direto na entrada do
+        /// não existe mais). Define <c>bootsequence</c> (boot único) além de
+        /// <c>displayorder</c> — a próxima reinicialização entra direto na entrada do
         /// LinuxHub, sem o usuário precisar escolher nada num menu de boot; da reinicialização
         /// seguinte em diante volta sozinho a bootar o Windows por padrão (mesma proteção que
         /// o "boot único" do Windows usa pra firmware setup/recovery).
         ///
-        /// IMPORTANTE: <c>/displayorder</c> e <c>/bootsequence</c> precisam mirar
-        /// explicitamente <c>{fwbootmgr}</c> (a lista de boot da FIRMWARE/UEFI). Sem isso,
-        /// bcdedit usa o store padrão do objeto <c>{bootmgr}</c> — aí a entrada do GRUB entra
-        /// na lista de OS do próprio Windows Boot Manager, que tenta encadear pra ela como se
-        /// fosse um loader NT e falha com <c>0xc000007b</c> (bug encontrado em teste real: a
-        /// tela de erro mostrava "Gerenciador de Inicialização do Windows" tentando carregar o
-        /// grubx64.efi).
+        /// IMPORTANTE: a entrada precisa entrar na lista de boot da FIRMWARE/UEFI
+        /// (<c>{fwbootmgr}</c>), não na do Windows Boot Manager (<c>{bootmgr}</c>). Os
+        /// subcomandos <c>bcdedit /displayorder</c> e <c>bcdedit /bootsequence</c> NÃO aceitam
+        /// objeto-alvo — a própria ajuda do bcdedit diz que eles agem sobre "o gerenciador de
+        /// inicialização", ou seja, sempre <c>{bootmgr}</c>. Passar <c>{fwbootmgr}</c> como
+        /// primeiro argumento não redireciona o alvo: ele vira só mais um id DENTRO da lista.
+        /// O jeito certo de mexer no <c>{fwbootmgr}</c> é <c>bcdedit /set {fwbootmgr} …</c>,
+        /// que aceita o id do objeto a modificar. Com a forma errada, o GRUB acabava na lista
+        /// do Windows Boot Manager, que tenta carregá-lo como um loader NT e falha com
+        /// <c>0xc000007b</c> (tela de erro do "Gerenciador de Inicialização do Windows"
+        /// apontando pro grubx64.efi — bug encontrado em teste real, duas vezes).
+        ///
+        /// <c>displayorder</c> deixa a entrada permanente no menu da firmware; <c>bootsequence</c>
+        /// no <c>{fwbootmgr}</c> é o <c>BootNext</c> da UEFI (boot único).
         /// </summary>
-        internal static string BuildAddFirmwareBootEntryCommands(string description, char driveLetter, string efiPathOnVolume) => $@"
+        internal static string BuildAddFirmwareBootEntryCommands(string description, char driveLetter, string efiPathOnVolume) =>
+            RemoveStaleStagingEntriesCommands + $@"
 $create = bcdedit /copy '{{bootmgr}}' /d ""{description}""
 if ($LASTEXITCODE -ne 0) {{ throw ""bcdedit /copy falhou: $create"" }}
 $match = [regex]::Match($create, '\{{[0-9a-fA-F-]+\}}')
@@ -56,17 +107,20 @@ bcdedit /set $guid path '{efiPathOnVolume}'
 if ($LASTEXITCODE -ne 0) {{ throw ""bcdedit /set path falhou"" }}
 bcdedit /set '{{fwbootmgr}}' displayorder $guid /addlast
 if ($LASTEXITCODE -ne 0) {{ throw ""bcdedit /set {{fwbootmgr}} displayorder falhou"" }}
-bcdedit /bootsequence '{{fwbootmgr}}' $guid
-if ($LASTEXITCODE -ne 0) {{ throw ""bcdedit /bootsequence falhou"" }}
+bcdedit /set '{{fwbootmgr}}' bootsequence $guid
+if ($LASTEXITCODE -ne 0) {{ throw ""bcdedit /set {{fwbootmgr}} bootsequence falhou"" }}
 Write-Output ""BCDGUID:$guid""";
 
         internal static string BuildAddFirmwareBootEntryScript(string description, char driveLetter, string efiPathOnVolume) =>
             $"$ErrorActionPreference = 'Stop'\n{BuildAddFirmwareBootEntryCommands(description, driveLetter, efiPathOnVolume)}";
 
-        /// <summary>Extrai o GUID BCD (<c>{...}</c>) da saída de <see cref="ElevatedPowerShellRunner.Run"/>
+        /// <summary>Extrai o GUID BCD da saída de <see cref="ElevatedPowerShellRunner.Run"/>
         /// depois de rodar <see cref="BuildAddFirmwareBootEntryCommands"/> — usado tanto pela
         /// execução standalone (<see cref="AddFirmwareBootEntry"/>) quanto pela embutida em
-        /// <see cref="BootStagingService"/>.</summary>
+        /// <see cref="BootStagingService"/>. Casa a linha <c>BCDGUID:</c> especificamente, e não
+        /// o primeiro <c>{...}</c> qualquer da saída: os comandos de limpeza que rodam antes
+        /// (<see cref="RemoveStaleStagingEntriesCommands"/>) também imprimem saída do bcdedit,
+        /// que pode conter GUIDs de entradas antigas.</summary>
         internal static string ExtractGuidOrThrow(string scriptOutput)
         {
             var match = BcdGuidRegex().Match(scriptOutput);
@@ -76,10 +130,10 @@ Write-Output ""BCDGUID:$guid""";
                     $"A entrada BCD pode não ter sido criada corretamente — GUID não encontrado na saída: {scriptOutput}");
             }
 
-            return match.Value;
+            return match.Groups[1].Value;
         }
 
-        [GeneratedRegex(@"\{[0-9a-fA-F-]+\}")]
+        [GeneratedRegex(@"BCDGUID:(\{[0-9a-fA-F-]+\})")]
         private static partial Regex BcdGuidRegex();
     }
 }
