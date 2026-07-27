@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Reflection;
 using System.Windows;
 using LinuxHub.Common.Localization;
 using LinuxHub.Features.Catalog.ViewModels;
@@ -27,6 +28,9 @@ namespace LinuxHub.Shell
             ArgumentNullException.ThrowIfNull(installWizardViewModel);
 
             InitializeComponent();
+
+            Version? version = Assembly.GetExecutingAssembly().GetName().Version;
+            VersionText.Text = version is null ? string.Empty : $"v{version.Major}.{version.Minor}.{version.Build}";
 
             _catalogView = new CatalogView { DataContext = catalogViewModel };
             _installWizardView = new InstallWizardView { DataContext = installWizardViewModel };
